@@ -114,6 +114,9 @@ const sendOpportunityUpdate = async (reqId) => {
       poDate: moment(quote.poDate, "DD-MMM-YY").format("YYYY-MM-DD"),
       poNumber: quote.poRefNo,
       poValue: quote.totalPrice,
+      fileName: "OSPILL_" + reqId + ".pdf",
+      poDocumentUrl: `${process.env.APP_PATH}/onesify/docusign/api/v1/view/signed-file/ILL-SO-${reqId}`,
+
     };
     console.log("Opportunity Update API Payload:", payload);
 
@@ -623,7 +626,7 @@ exports.change_quote_status = async (req, res, next) => {
     }
 
     sendOpportunityUpdate(reqID);
-     common.updateOpportunity(parseInt(reqID));
+    common.updateOpportunity(parseInt(reqID));
 
     logger.info(`${req.path} -- ${req.method} -- Success`);
     res.send({ status: "Success" });
@@ -640,14 +643,14 @@ exports.post_updated_feasibility = async (req, res, next) => {
     console.log(typeof feasibilityId);
     const feasibilityIds = await db.collection("feasibilityids").findOne({ feasibilityId });
     console.log(feasibilityIds);
-    
+
     // If feasibility ID not found, forward to third-party API
     if (!feasibilityIds) {
       console.log("Feasibility ID not found in database, forwarding to third-party API");
-      
+
       // Third-party API URL
       const apiUrl = `${process.env.APP_PATH}/onesify/cp-dia-quickproposal/common/post_updated_feasibility`;
-      
+
       try {
         // Forward the request to third-party API
         const thirdPartyResponse = await axios.post(apiUrl, data, {
@@ -657,14 +660,14 @@ exports.post_updated_feasibility = async (req, res, next) => {
             ...(req.headers.authorization && { 'Authorization': req.headers.authorization })
           }
         });
-        
+
         console.log("Third-party API response:", thirdPartyResponse.data);
-        
+
         // Return the response from third-party API
         return res.status(thirdPartyResponse.status).send(thirdPartyResponse.data);
       } catch (thirdPartyError) {
         console.error("Error calling third-party API:", thirdPartyError.response?.data || thirdPartyError.message);
-        
+
         // If third-party API call fails, return appropriate error
         return res.status(thirdPartyError.response?.status || 500).send({
           status: "Error",
@@ -699,20 +702,20 @@ exports.post_updated_feasibility = async (req, res, next) => {
       };
       console.log("connectionType", connectionType, "serviceProvider", serviceProvider);
       if (connectionType === "Other ISP") {
-        const { 
-          fcfl_otc_install = defaultValues.otherIspOtc, 
-          fcfl_rc_ll = defaultValues.otherIspArc, 
-          fcfl_total_otc = defaultValues.otherIspOtc, 
-          fcfl_total_arc = defaultValues.otherIspArc, 
-          fcfl_created_on = defaultValues.feasibilityUpdatedDate, 
-          fcfl_modified_on = defaultValues.feasibilityUpdatedDate, 
-          fcfl_status = "", 
-          fcfl_feasible_status = defaultValues.fusionFeasibilityStatus, 
-          fcfl_task_id = "", 
-          fcfl_vendor_id = defaultValues.vendorId, 
-          fcfl_lmt_remarks = "", 
-          fcfl_vsf_id = "", 
-          fcfb_cxm_feasibility_status = defaultValues.cxmFeasibilityStatus 
+        const {
+          fcfl_otc_install = defaultValues.otherIspOtc,
+          fcfl_rc_ll = defaultValues.otherIspArc,
+          fcfl_total_otc = defaultValues.otherIspOtc,
+          fcfl_total_arc = defaultValues.otherIspArc,
+          fcfl_created_on = defaultValues.feasibilityUpdatedDate,
+          fcfl_modified_on = defaultValues.feasibilityUpdatedDate,
+          fcfl_status = "",
+          fcfl_feasible_status = defaultValues.fusionFeasibilityStatus,
+          fcfl_task_id = "",
+          fcfl_vendor_id = defaultValues.vendorId,
+          fcfl_lmt_remarks = "",
+          fcfl_vsf_id = "",
+          fcfb_cxm_feasibility_status = defaultValues.cxmFeasibilityStatus
         } = data;
 
         const match = serviceProvider.match(/\[(.*?)\]/);
@@ -732,19 +735,19 @@ exports.post_updated_feasibility = async (req, res, next) => {
           };
         }
       } else {
-        const { 
-          fcff_cxm_feasibility_status = defaultValues.cxmFiberFeasibilityStatus, 
-          fcfb_cxm_feasibility_status = defaultValues.cxmWirelessFeasibilityStatus, 
-          fcfb_wireless_option = defaultValues.wirelessFeasibilityStatus, 
-          fcf_date_time = defaultValues.wirelessFeasibilityUpdatedDate, 
-          fcff_date_time = defaultValues.fiberFeasibilityUpdatedDate, 
-          fcff_tot_opex = defaultValues.opex, 
-          fcff_tot_capex = defaultValues.capex, 
-          fcfb_mast_height = defaultValues.mastHeight, 
-          fcfb_building_height = defaultValues.buildingHeight, 
-          fcfb_mast_type = defaultValues.mastType, 
-          fcf_feasibility_id = defaultValues.feasibilityId, 
-          fcff_fiber_selection = defaultValues.wirelessFeasibilityStatus 
+        const {
+          fcff_cxm_feasibility_status = defaultValues.cxmFiberFeasibilityStatus,
+          fcfb_cxm_feasibility_status = defaultValues.cxmWirelessFeasibilityStatus,
+          fcfb_wireless_option = defaultValues.wirelessFeasibilityStatus,
+          fcf_date_time = defaultValues.wirelessFeasibilityUpdatedDate,
+          fcff_date_time = defaultValues.fiberFeasibilityUpdatedDate,
+          fcff_tot_opex = defaultValues.opex,
+          fcff_tot_capex = defaultValues.capex,
+          fcfb_mast_height = defaultValues.mastHeight,
+          fcfb_building_height = defaultValues.buildingHeight,
+          fcfb_mast_type = defaultValues.mastType,
+          fcf_feasibility_id = defaultValues.feasibilityId,
+          fcff_fiber_selection = defaultValues.wirelessFeasibilityStatus
         } = data;
 
         connectionType = connectionType.toLowerCase();
@@ -869,7 +872,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
       const collectionName = feasibilityIds.serviceType === "DIA" ? "quoteills" : "quotempls";
       const query = { isActive: true, "locationDetails.feasibilityId": feasibilityId };
       const quoteDocument = await db.collection(collectionName).findOne(query);
-      
+
       if (!quoteDocument) {
         throw new Error("Quote document not found");
       }
@@ -879,20 +882,20 @@ exports.post_updated_feasibility = async (req, res, next) => {
       const { connectionType, serviceProvider } = currentLocationDetails;
 
       const { feasibilityUpdatedDate, cxmFeasibilityStatus, otherIspOtc, otherIspArc, opex, capex, mastHeight, buildingHeight, fusionFeasibilityStatus, mastType } = await getPayload(connectionType, serviceProvider);
-      
+
       // Check if getPayload returned early (for Other ISP mismatch case)
       if (!fusionFeasibilityStatus) {
         return; // Response already sent in getPayload
       }
-      
+
       const cxmConformation = await postTowerPrice(collectionName, quoteDocument, mastHeight, mastType, opex, capex);
-      
+
       if (fusionFeasibilityStatus === "Pending") throw new Error("Nothing To Update");
 
       const feasibilityStatus = hasRateCard ? (cxmConformation ? "CHECKING FEASIBILITY" : fusionFeasibilityStatus) : fusionFeasibilityStatus;
 
       console.log(hasRateCard ? (cxmConformation ? "CHECKING FEASIBILITY" : fusionFeasibilityStatus) : fusionFeasibilityStatus);
-      
+
       const updateQuote = await db.collection(collectionName).findOneAndUpdate(
         query,
         {
@@ -916,18 +919,18 @@ exports.post_updated_feasibility = async (req, res, next) => {
           returnDocument: "after",
         }
       );
-      
+
       const { lastErrorObject, value: quote, ok } = updateQuote;
-      
+
       if (!quote || lastErrorObject?.n === 0) {
         throw new Error("Error updating locationDetails");
       }
-      
+
       const { locationDetails, reqId, parentRole } = quote;
 
       const checkFeas = locationDetails.map((data) => data.feasibilityStatus);
       console.log(reqId, checkFeas);
-      
+
       let status = "CHECKING FEASIBILITY";
       if (checkFeas.every((status) => status === "Feasible")) {
         status = "Feasible";
@@ -940,12 +943,12 @@ exports.post_updated_feasibility = async (req, res, next) => {
       }
 
       const updateStatusFeab = await db.collection(collectionName).findOneAndUpdate(
-        { reqId: quote.reqId }, 
+        { reqId: quote.reqId },
         { $set: { status: status, cxmCommonStatus: "CHECKING FEASIBILITY" } }
       );
-      
+
       console.log("updateStatusFeab In function", updateStatusFeab);
-      
+
       const allFeasibilityStatus = quote.locationDetails.every((e) => e.feasibilityStatus !== "CHECKING FEASIBILITY");
       console.log(
         "Feasibility Status:",
@@ -964,13 +967,13 @@ exports.post_updated_feasibility = async (req, res, next) => {
           let templateSource;
 
           const subject = `One Sify - Request ID: ${quote.reqId} - Feasibility Update for ${feasibilityIds.serviceType} Services`;
-          
+
           if (parentRole === "CP + Customer") {
             templateSource = fs.readFileSync(`${appRoot}/template/FeasibilityUpdateCp.hbs`, "utf-8");
           } else {
             templateSource = fs.readFileSync(`${appRoot}/template/Feasibility_Updated.hbs`, "utf-8");
           }
-          
+
           // Register Handlebars helpers
           const handlebarsInstance = handlebars.create();
           handlebarsInstance.registerHelper("add", function (a, b) {
@@ -1006,7 +1009,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
           function capitalizeFirstLetter(str) {
             return str.replace(/\b\w/g, (char) => char.toUpperCase());
           }
-          
+
           const templateData = {
             reqId: quote.reqId,
             quoteType: quote.quoteType === "New" ? "New-Link" : capitalizeFirstLetter(quote.quoteType.replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase()),
@@ -1021,7 +1024,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
             notFeasibleCount: quote.locationDetails.filter((data) => data.feasibilityStatus === "Not Feasible").length,
             isNew: quote.quoteType === "New",
           };
-          
+
           const html = template(templateData);
 
           // Assuming common.sendMailUntilSuccess is available
@@ -1034,17 +1037,17 @@ exports.post_updated_feasibility = async (req, res, next) => {
       }
 
       await db.collection("opportunityDetails").findOneAndUpdate(
-        { reqId }, 
+        { reqId },
         { $set: { status, pageTracker: null, updatedDate: moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ") } }
       );
 
       await db.collection("feasibilityids").findOneAndUpdate(
-        { feasibilityId }, 
+        { feasibilityId },
         { $set: { status: "completed" } }
       );
 
       res.send({ status: "Success" });
-      
+
     } else if (feasibilityIds.serviceType === "P2P" && feasibilityIds.status === "Pending") {
       const getQuote = await db.collection("quotep2ps").findOne({
         $or: [
@@ -1062,7 +1065,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
       const connectionDetails = isConnectionA ? getQuote.feasibilityStatusNewConnectionA : getQuote.feasibilityStatusNewConnectionB;
 
       const { feasibilityUpdatedDate, cxmFeasibilityStatus, otherIspOtc, otherIspArc, opex, capex, mastHeight, buildingHeight, fusionFeasibilityStatus, mastType } = await getPayload(getQuote.connectionType, serviceProvider);
-      
+
       if (fusionFeasibilityStatus === "Pending") throw new Error("Nothing To Update");
 
       const updateData = {
@@ -1092,15 +1095,15 @@ exports.post_updated_feasibility = async (req, res, next) => {
             ...updateData,
           },
         };
-        
+
       const updateQuote = await db.collection("quotep2ps").findOneAndUpdate(
-        { reqId: getQuote.reqId }, 
+        { reqId: getQuote.reqId },
         { $set: updateField },
         { returnDocument: "after" }
       );
 
       const updatedQuote = updateQuote.value || await db.collection("quotep2ps").findOne({ reqId: getQuote.reqId });
-      
+
       let status;
       if (updatedQuote?.feasibilityStatusA === "Feasible" && updatedQuote.feasibilityStatusB === "Feasible") {
         status = "Feasible";
@@ -1169,11 +1172,11 @@ exports.post_updated_feasibility = async (req, res, next) => {
             url: process.env.APP_PATH,
             isNew: true,
           };
-          
+
           const html = template(templateData);
 
           if (typeof common !== 'undefined' && common.sendMailUntilSuccess) {
-          common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null);
+            common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null);
           }
         } catch (error) {
           console.log("Error in send mail", error);
@@ -1181,38 +1184,38 @@ exports.post_updated_feasibility = async (req, res, next) => {
       }
 
       await db.collection("quotep2ps").findOneAndUpdate(
-        { reqId: updatedQuote.reqId }, 
+        { reqId: updatedQuote.reqId },
         { $set: { status } }
       );
-      
+
       await db.collection("opportunityDetails").findOneAndUpdate(
-        { reqId: updatedQuote.reqId }, 
+        { reqId: updatedQuote.reqId },
         { $set: { status, updatedDate: moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ") } }
       );
-      
+
       await db.collection("feasibilityids").findOneAndUpdate(
-        { feasibilityId }, 
+        { feasibilityId },
         { $set: { status: "completed" } }
       );
 
       res.send({ status: "Success" });
-      
+
     } else if (feasibilityIds.serviceType === "GCC" && feasibilityIds.status === "Pending") {
       const gccCollection = db.collection("quotegccs");
-      const quote = await gccCollection.findOne({ 
-        isActive: true, 
-        status: "CHECKING FEASIBILITY", 
-        feasibilityId: feasibilityId 
+      const quote = await gccCollection.findOne({
+        isActive: true,
+        status: "CHECKING FEASIBILITY",
+        feasibilityId: feasibilityId
       });
-      
+
       if (!quote) {
         throw new Error("GCC quote not found");
       }
-      
+
       const { reqId, connectionDetails, implementationAddress, customermail, customerNumber, customerName } = quote;
       const { connectionType } = quote.connectionDetails;
 
-      const { feasibilityUpdatedDate, cxmFeasibilityStatus, otherIspOtc, otherIspArc, opex, capex, mastHeight, buildingHeight, fusionFeasibilityStatus, mastType } = await getPayload(connectionType);     
+      const { feasibilityUpdatedDate, cxmFeasibilityStatus, otherIspOtc, otherIspArc, opex, capex, mastHeight, buildingHeight, fusionFeasibilityStatus, mastType } = await getPayload(connectionType);
       if (fusionFeasibilityStatus === "Pending") throw new Error("Nothing To Update");
 
       const updateStatusFeab = await gccCollection.findOneAndUpdate(
@@ -1230,9 +1233,9 @@ exports.post_updated_feasibility = async (req, res, next) => {
         },
         { returnDocument: "after" }
       );
-      
+
       console.log("updateStatusFeab In function", updateStatusFeab);
-      
+
       if (updateStatusFeab.value) {
         try {
           const toArray = [customermail].filter(Boolean);
@@ -1285,11 +1288,11 @@ exports.post_updated_feasibility = async (req, res, next) => {
             url: process.env.APP_PATH,
             isNew: true,
           };
-          
+
           const html = template(templateData);
 
           if (typeof common !== 'undefined' && common.sendMailUntilSuccess) {
-          common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null);
+            common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null);
           }
         } catch (error) {
           console.log("Error in send mail", error);
@@ -1297,21 +1300,21 @@ exports.post_updated_feasibility = async (req, res, next) => {
       }
 
       await db.collection("feasibilityids").findOneAndUpdate(
-        { feasibilityId }, 
+        { feasibilityId },
         { $set: { status: "completed" } }
       );
-      
+
       await db.collection("opportunityDetails").findOneAndUpdate(
-        { reqId }, 
+        { reqId },
         { $set: { status: fusionFeasibilityStatus, updatedDate: moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ") } }
       );
-      
+
       res.send({ status: "Success" });
-      
+
     } else {
       throw new Error("Nothing To Update");
     }
-    
+
   } catch (error) {
     next(error);
   }
