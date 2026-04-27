@@ -1,0 +1,202 @@
+swagger: "2.0"
+info:
+  title: One Sify Network ILL API
+  description: One Sify Network ILL API
+  version: 1.0.1
+  contact:
+    email: technical@kstinfotech.com, gomathi.sitaram@sifycorp.com
+    name: Anusuya P, Gomathi S
+
+host: cbjl-test.fa.us2.oraclecloud.com
+basePath: /
+schemes:
+  - https
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+paths:
+  /crmRestApi/resources/11.13.18.05/opportunities:
+    post:
+      tags:
+        - opportunities
+      summary: post_new_connection
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              ProposalId_c:
+                type: integer
+              SalesMethodId:
+                type: string
+              SalesStageId:
+                type: string
+              Name:
+                type: string
+              OwnerResourcePartyId:
+                type: string
+              TargetPartyId:
+                type: string
+              XXSI_OptyLeadBU_c:
+                type: string
+              KeyContactId:
+                type: string
+              OpportunityTypeCode:
+                type: string
+              ChildRevenue:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ProdGroupId:
+                      type: integer
+                    UnitPrice:
+                      type: number
+                    Quantity:
+                      type: integer
+          example:
+            ProposalId_c: 16749
+            SalesMethodId: "300000665373397"
+            SalesStageId: "300000665373398"
+            Name: "OSP_261125_5972"
+            OwnerResourcePartyId: "300000625001288"
+            TargetPartyId: "300000626568096"
+            XXSI_OptyLeadBU_c: "300000659806456"
+            KeyContactId: "300000669234358"
+            OpportunityTypeCode: "EXPANSION"
+            ChildRevenue:
+              - ProdGroupId: 300000659806472
+                UnitPrice: 112065
+                Quantity: 1
+      security:
+        - Bearer: []
+      responses:
+        201:
+          description: Success
+
+  /crmRestApi/resources/11.13.18.05/opportunities/{opportunityNo}/child/ChildRevenue:
+    post:
+      tags:
+        - opportunities
+      summary: post_feasibile_to_new_reqId
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: opportunityNo
+          in: path
+          required: true
+          type: string
+        - in: query
+          name: onlyData
+          type: boolean
+        - in: query
+          name: fields
+          type: string
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              ProdGroupId:
+                type: integer
+              UnitPrice:
+                type: number
+              TCV_c:
+                type: number
+              Quantity:
+                type: integer
+          example:
+            ProdGroupId: 300000659806472
+            UnitPrice: 112065
+            TCV_c: 112065
+            Quantity: 1
+      security:
+        - Bearer: []
+      responses:
+        201:
+          description: Success
+
+  /crmRestApi/resources/11.13.18.05/opportunities/{opportunityNo}:
+    patch:
+      tags:
+        - opportunities
+      summary: update_submission_date
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: opportunityNo
+          required: true
+          type: string
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              XXSF_ProposalSubmissionDate_c:
+                type: string
+              SalesStageId:
+                type: string
+          example:
+            XXSF_ProposalSubmissionDate_c: "2025-11-11"
+            SalesStageId: "300000665373399"
+      security:
+        - Bearer: []
+      responses:
+        201:
+          description: Success
+
+  /crmRestApi/resources/11.13.18.05/salesOrders:
+    post:
+      tags:
+        - New Connection
+      summary: create_sales_order
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              CurrencyCode: { type: string }
+              Name: { type: string }
+              OptyId: { type: string }
+              OrderTotal: { type: string }
+              Status: { type: string }
+              QuoteTCV_c: { type: string, nullable: true }
+              SoldCustomerPartyId: { type: string }
+              XXSF_QuoteNumber_c: { type: string, nullable: true }
+              VersionNumber: { type: string }
+              SourceInternalSystem_c: { type: string }
+              QuoteValidityDate_c:
+                type: string
+                format: date
+          example:
+            CurrencyCode: "INR"
+            Name: "Test_Sync_V1"
+            OptyId: "300000668380376"
+            OrderTotal: "2500"
+            Status: "CREATED"
+            QuoteTCV_c: ""
+            SoldCustomerPartyId: "300000619423448"
+            XXSF_QuoteNumber_c: ""
+            VersionNumber: "1"
+            SourceInternalSystem_c: "OSP"
+            QuoteValidityDate_c: "2025-10-16"
+      security:
+        - Bearer: []
+      responses:
+        201:
+          description: Success

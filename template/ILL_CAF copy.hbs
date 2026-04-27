@@ -1,0 +1,3287 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CAF</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style>
+    html {
+      -webkit-print-color-adjust: exact;
+    }
+
+    .border-none {
+      border: none !important;
+    }
+
+    .border-right {
+      border-left: 0pt !important;
+      border-right: 1pt solid #ddd !important;
+    }
+
+    .border-top-bottom {
+      border-top: 0pt !important;
+      border-bottom: 0pt !important;
+    }
+
+    .container {
+      height: 842pt !important;
+      width: 595pt !important;
+      /* to centre page on screen*/
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    body {
+      font-size: 7pt !important;
+    }
+
+    body ul {
+      list-style: none;
+      padding: 0pt;
+      margin-bottom: 0pt;
+    }
+
+    body ol {
+      padding: 0pt;
+      margin-bottom: 0pt;
+      margin-left: 9pt;
+      line-height: 15pt;
+    }
+
+    body ol span {
+      color: #0045AC;
+      cursor: poi;
+    }
+
+    .flex {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .flex2 {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .logo {
+      text-align: right;
+    }
+
+    .logo svg {
+      width: 55pt;
+    }
+
+    .vl {
+      border-left: 1pt solid #CBD0D2;
+      height: auto;
+    }
+
+    .main-heading {
+      margin-bottom: 30pt;
+    }
+
+    .main-heading h1 {
+      color: #0E3346;
+      text-align: center;
+      font-size: 18pt;
+      font-weight: 600;
+      margin: 0pt;
+    }
+
+    .main-heading2 h1 {
+      color: #0E3346;
+      font-size: 10pt;
+      font-weight: 600;
+      margin-bottom: 0pt;
+    }
+
+    .main-heading2 {
+      margin-bottom: 13pt;
+    }
+
+    .sub-heading {
+      color: var(--black-1, #1E2122);
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+
+    .sub-heading2 h1 {
+      color: var(--primary, #0E3346);
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      font-size: 10pt;
+    }
+
+    .address {
+      padding: 0pt;
+    }
+
+    /* .contact {
+      border-radius: 6pt;
+      background: #F7F9FA;
+      padding: 12pt 20pt;
+    } */
+
+    .contact svg {
+      margin-bottom: -3pt;
+    }
+
+    .main-content {
+      padding: 33pt 0pt;
+    }
+
+    /* ************** TABLE 2 ************ */
+    .billing ul {
+      list-style: none;
+      margin-bottom: 0pt;
+    }
+
+    .billing .right {
+      margin-left: 5pt;
+    }
+
+    .site-network table tbody {
+      border: 1pt solid #000000 !important;
+    }
+
+    .site-network table tbody tr td {
+      border: 1pt solid #000000 !important;
+      padding: 4pt 10pt !important;
+      width: 50%;
+
+    }
+
+    .specify-currency {
+      margin-bottom: 16pt;
+    }
+
+    .special-comment {
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .special-comment hr {
+      margin: 0pt;
+      border-width: 1pt;
+      border: 0.5pt solid #000000;
+    }
+
+    /* ********************** TERMS AND CONDITION   ***************** */
+    .content ol {
+      list-style-type: none;
+      counter-reset: item;
+      margin: 0;
+      padding: 0;
+    }
+
+    .content li {
+      display: table;
+      counter-increment: item;
+      margin-bottom: 0.6em;
+    }
+
+    .content li:before {
+      content: counters(item, ".") ". ";
+      display: table-cell;
+      padding-right: 0.6em;
+    }
+
+    .content li li {
+      margin: 0;
+    }
+
+    .content li li:before {
+      content: counters(item, ".") " ";
+    }
+
+    .signature {
+      margin-top: 70pt;
+    }
+
+    .signature p {
+      margin-bottom: 6pt;
+    }
+
+    .terms-conditions .heading {
+      font-weight: 600;
+      margin-bottom: 6pt;
+    }
+
+    .special-notes {
+      margin-bottom: 40pt;
+    }
+
+    .padding td {
+      padding: 4pt 0pt !important;
+    }
+
+    .terms-conditions p {
+      margin-bottom: 4pt !important;
+    }
+
+    .terms-conditions .content {
+      line-height: 1.7;
+    }
+
+    /* ************** TABLE ************ */
+
+    .charge-description table tr th {
+      background: rgba(14, 51, 70, 0.70) !important;
+      color: #fff;
+      border: none !important;
+    }
+
+    .charge-description thead tr th {
+      padding: 8pt 20pt !important;
+    }
+
+    .charge-description thead tr th:first-child {
+      border-top-left-radius: 5pt;
+      border-bottom-left-radius: 5pt;
+    }
+
+    .charge-description thead tr th:last-child {
+      border-top-right-radius: 5pt;
+      border-bottom-right-radius: 5pt;
+    }
+
+    .charge-description tbody tr td {
+      padding: 9pt 20pt !important;
+      border: none;
+    }
+
+    .charge-description tbody tr td:nth-child(2) {
+      text-align: right;
+    }
+
+    .charge-description tbody tr td:nth-child(3) {
+      text-align: right;
+    }
+
+    .charge-description thead tr th:nth-child(2) {
+      text-align: right;
+    }
+
+    .charge-description thead tr th:nth-child(3) {
+      text-align: right;
+    }
+
+    .charge-description tbody tr:last-child {
+      border-top: 1.5pt solid #dddddd;
+    }
+
+    .charge-description tbody tr:last-child td {
+      font-size: 10pt;
+      font-weight: 500;
+    }
+
+    .charge-description .table-2 thead tr th {
+      padding: 14pt 7pt !important;
+    }
+
+    .charge-description .table-2 tbody tr td {
+      padding: 14pt 5pt !important;
+    }
+
+    .charge-description {
+      border-radius: 6pt;
+      background: #F7F9FA;
+      padding: 20pt;
+      margin-bottom: 20pt;
+    }
+
+    .charge-description .heading {
+      font-size: 8pt;
+      font-weight: 500;
+      margin-bottom: 7pt;
+    }
+
+    /* ************** TABLE ************ */
+    /* ************** TABLE ************ */
+    table {
+      margin-bottom: 35pt;
+    }
+
+    table,
+    th,
+    td {
+      border-collapse: collapse;
+    }
+
+    .address-detail table tr th {
+      background: #fff !important;
+      color: #333;
+    }
+
+    table tr th {
+      background: rgba(14, 51, 70, 0.70) !important;
+      color: #fff;
+    }
+
+    thead tr th {
+      padding: 10pt 8pt !important;
+    }
+
+    tbody tr td {
+      padding: 10pt 8pt !important;
+    }
+
+    .table-2 thead tr th {
+      padding: 14pt 7pt !important;
+    }
+
+    .table-2 tbody tr td {
+      padding: 14pt 5pt !important;
+    }
+
+    /* ************** TABLE 2 ************ */
+    .contact table thead {
+      border-top: 1pt solid #000000;
+    }
+
+    .contact table thead tr th {
+      border-bottom-width: 1pt;
+    }
+
+    .contact table tbody td {
+      border-left: 1pt solid #000000;
+      border-right: 1pt solid #000000;
+    }
+
+    .contact table tbody td {
+      border-bottom: none;
+      padding: 4pt 10pt !important;
+    }
+
+    .contact table tbody tr:last-child {
+      border-bottom: 1pt solid #000000 !important;
+    }
+
+    .contact table tbody th {
+      border: 1pt solid #000000 !important;
+    }
+
+    .contact table thead tr th {
+      border: 1pt solid #000000 !important;
+    }
+
+    .contact thead tr th {
+      padding: 7pt !important;
+    }
+
+    .contact .flex2 {
+      justify-content: left;
+    }
+
+    /* ************** TABLE 2 ************ */
+    /* ************** TABLE
+      ************ */
+    .bottom-address {
+      background: #F7F9FA;
+      padding: 20pt;
+    }
+
+    .bottom-content {
+      background: #F7F9FA;
+      padding: 16pt;
+    }
+
+    .sub-text h1 {
+      color: var(--black-1, #1E2122);
+      font-size: 8pt;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin: 0pt;
+      margin-top: 6pt;
+    }
+
+    .Date-time {
+      margin-top: 90pt;
+    }
+
+    .Date-time p {
+      margin-bottom: 4pt;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .sify-service table tbody tr td:nth-child(5) {
+      text-align: right !important;
+    }
+
+    .sify-service table tbody tr td:nth-child(6) {
+      text-align: right !important;
+    }
+
+    .sify-service table tbody tr td:nth-child(18) {
+      text-align: right !important;
+    }
+
+    .sify-service table thead tr th:nth-child(5) {
+      text-align: right !important;
+    }
+
+    .sify-service table thead tr th:nth-child(6) {
+      text-align: right !important;
+    }
+
+    .sify-service table thead tr th:nth-child(4) {
+      text-align: left !important;
+    }
+
+    .summary-net table tbody tr td:nth-child(2) {
+      text-align: right !important;
+    }
+
+    .summary-net table tbody tr td:nth-child(3) {
+      text-align: right !important;
+    }
+
+    .summary-net table tbody tr td:nth-child(4) {
+      text-align: right !important;
+    }
+
+    .summary-net table thead tr th:nth-child(2) {
+      text-align: right !important;
+    }
+
+    .summary-net table thead tr th:nth-child(3) {
+      text-align: right !important;
+    }
+
+    .summary-net table thead tr th:nth-child(4) {
+      text-align: right !important;
+    }
+
+    .sign {
+      margin-bottom: 60pt;
+    }
+
+    .footer {
+      /* position: absolute; */
+      bottom: 0pt !important;
+      width: 100%;
+    }
+
+
+    input {
+      height: 10pt;
+      width: 10pt;
+    }
+
+    .top-logo {
+      text-align: end;
+      margin-bottom: 12pt;
+      margin-top: 16pt;
+    }
+
+    body {
+      font-size: 7pt;
+    }
+
+    .top-heading {
+      background-color: #566e7b;
+      color: #fff;
+      padding: 5pt;
+      margin-bottom: 10pt;
+      text-align: left;
+    }
+
+    .top-heading h1 {
+      font-size: 8.5pt;
+      margin: 0pt;
+    }
+
+    .po-content {
+      margin-left: 11pt;
+      line-height: 2;
+
+    }
+
+    .po-signature {
+      margin-bottom: 10pt;
+    }
+
+    .top-card {
+      border-radius: 6pt;
+      background: #F7F9FA;
+      padding: 12pt 20pt;
+    }
+
+    .po-details p {
+      margin-bottom: 2pt;
+    }
+
+    .po-details {
+      text-align: end;
+      padding: 0pt;
+    }
+
+    .top-content {
+      padding: 0pt;
+      list-style: none;
+    }
+
+    /* ************** TABLE ************ */
+    .po table thead tr th {
+      padding: 4pt 2pt !important;
+
+    }
+
+    .po table tbody tr td {
+      padding: 4pt 2pt !important;
+
+    }
+
+
+    .po table thead tr {
+      border-top: 1pt solid #ddd;
+    }
+
+    .top-content p {
+      margin-top: 10pt;
+    }
+
+    .top-content ul {
+      padding: 0pt;
+      list-style: none;
+      margin-bottom: 0pt;
+
+    }
+
+    .flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .flex2 {
+      display: flex;
+      align-items: center;
+    }
+
+    .flex-po {
+      display: flex;
+      justify-content: space-between !important;
+    }
+
+    .flex3 {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+
+
+    body ul {
+      list-style: none;
+      padding: 0pt;
+      margin-bottom: 0pt;
+
+    }
+
+    .main-heading {
+      margin-top: 20pt;
+      margin-bottom: 20pt;
+    }
+
+    .main-heading h1 {
+      color: #0E3346;
+      text-align: center;
+      font-size: 16pt;
+      font-weight: 600;
+      margin: 0pt;
+    }
+
+    .main-heading2 h1 {
+      color: #0E3346;
+      font-size: 10pt;
+      font-weight: 600;
+      margin-bottom: 0pt;
+    }
+
+    .main-heading2 p {
+      margin-bottom: 5pt;
+    }
+
+    .sub-heading {
+      color: var(--black-1, #1E2122);
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin-bottom: 2pt;
+
+    }
+
+    .sub-heading span {
+      font-weight: 400;
+    }
+
+    .sub-heading2 h1 {
+      color: var(--primary, #0E3346);
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      font-size: 10pt;
+
+    }
+
+    .address {
+      padding: 0pt;
+    }
+
+    .contact svg {
+      margin-bottom: -3pt;
+    }
+
+
+    /* ************** TABLE ************ */
+    .type-order tbody tr td {
+      border: none !important;
+    }
+
+    .type-order tbody tr td input {
+      margin: 0pt !important;
+    }
+
+    /* ************** TABLE ************ */
+
+    table,
+    th,
+    td {
+
+      border-top: 0pt !important;
+      border-collapse: collapse;
+    }
+
+    /* table tr{
+        border-bottom: 1pt solid black;
+      } */
+    .type-order thead tr th {
+      padding: 14pt 20pt !important;
+    }
+
+    .type-order tbody tr td svg {
+      width: 10pt;
+
+    }
+
+    .type-order tbody tr td label {
+      margin-bottom: 0pt;
+      font-weight: normal;
+      margin-left: 3pt;
+    }
+
+    .type-order tbody tr td {
+      padding: 3pt !important;
+      vertical-align: middle !important;
+
+    }
+
+    .type-order .border-bottom {
+      border-bottom: 1pt solid #000000 !important;
+    }
+
+    .type-order .table-2 thead tr th {
+      padding: 14pt 2pt !important;
+      text-align: center;
+    }
+
+    .type-order .table-2 tbody tr td {
+      padding: 14pt 5pt !important;
+      text-align: center;
+    }
+
+    .type-order td p {
+      margin-bottom: 0pt;
+    }
+
+    .type-order input[type="checkbox"] {
+      vertical-align: top;
+    }
+
+    .type-order .flex2 {
+      justify-content: start !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="page">
+      <!-- <div class="top-header">
+     <div class="logo">
+      <svg id="Group_29104" data-name="Group 29104" xmlns="http://www.w3.org/2000/svg" width="61.581" height="30.802" viewBox="0 0 61.581 30.802">
+        <path id="Path_192392" data-name="Path 192392" d="M757.9,391.69v-.517c0-.083-.025-.113-.119-.113h-6.923c-.1,0-.137.042-.125.112a1.451,1.451,0,0,1-.008.271v2.706c0,.123.03.166.168.166h2.526c.277,0,.23-.014.23.219q.005,6.695,0,13.391c0,.142.036.186.194.186h3.845a1.184,1.184,0,0,0,.126,0c.09-.01.09-.046.09-.2v-8.317h0Z" transform="translate(-736.324 -384.017)" fill="#bed70c"/>
+        <path id="Path_192393" data-name="Path 192393" d="M862.893,339.561a.48.48,0,0,0-.2-.019h-8.031c-.1,0-.168,0-.168.13,0,.993,0,1.984,0,2.98,0,.078.013.125.077.138a.184.184,0,0,0,.089.012c.119-.008.247,0,.368,0h2.252a.217.217,0,0,1,.053.006c.04.022.031.066.011.124-.162.432-.321.864-.484,1.294-.272.722-.547,1.443-.819,2.165q-.364.96-.723,1.921c-.191.508-.379,1.016-.569,1.524l-.512,1.366c-.011.031-.01.059-.06.064h-.008a.125.125,0,0,1-.04-.059c-.036-.084-.079-.165-.114-.248l-1.133-2.725c-.31-.741-.625-1.481-.936-2.221q-.57-1.362-1.133-2.727-.283-.682-.569-1.364c-.191-.455-.362-.9-.574-1.331a1.675,1.675,0,0,0-.853-.821,1.606,1.606,0,0,0-.165-.064,3.618,3.618,0,0,0-1.216-.155h-6.228c-.081,0-.158,0-.24,0a.135.135,0,0,1-.091-.018s0,0,0,0a.08.08,0,0,1-.018-.028l0-.014,0-.024v-.018a7.472,7.472,0,0,1,.031-.969,3.428,3.428,0,0,1,.866-1.869,2.631,2.631,0,0,1,2.424-.871,8.461,8.461,0,0,1,1.494.345c.17.055.207-.008.257-.136.1-.241.2-.481.293-.72.26-.633.518-1.264.781-1.9.011-.025.022-.052.031-.077.037-.09.044-.138-.079-.171a18.827,18.827,0,0,0-2.217-.476c-.119-.019-.238-.035-.358-.048-.028,0-.055,0-.083-.007-.091-.01-.184-.018-.275-.025-.071,0-.142-.007-.213-.01-.048,0-.1-.006-.146-.006a8.118,8.118,0,0,0-1.8.16,5.924,5.924,0,0,0-2.39,1.088,6.509,6.509,0,0,0-2.091,2.743,8.429,8.429,0,0,0-.615,2.9c0,.076-.018.12-.061.143a.253.253,0,0,1-.106.017c-1.1-.008-2.2,0-3.3-.008a.3.3,0,0,0-.139.023c-.052.024-.067.075-.067.165.006.968.008,1.936,0,2.9,0,.162.052.191.207.191,1.078-.006,2.156,0,3.234-.007.162,0,.2.035.2.189q-.007,3.348,0,6.7l-.013-.006q.007,3.352,0,6.7c0,.1.021.147.079.17a.286.286,0,0,0,.141.025c1.26-.006,2.522,0,3.785,0q.21,0,.21-.2V342.975c0-.126.032-.159.166-.159,1.485,0,2.972,0,4.457.008a.931.931,0,0,1,1.017.668c.249.532.467,1.074.7,1.61.327.767.658,1.527.981,2.291.422.99.838,1.978,1.26,2.974.318.743.642,1.49.959,2.237a25.785,25.785,0,0,1,1.156,3.155,4.34,4.34,0,0,1,.171,1.874,2.007,2.007,0,0,1-.9,1.376,4.573,4.573,0,0,1-1.944.687,11.176,11.176,0,0,1-1.793.084c-.1,0-.136.024-.136.124q.005,1.618,0,3.238c0,.081.019.118.077.131a.231.231,0,0,0,.092.014,20.5,20.5,0,0,0,3.447-.147,5.891,5.891,0,0,0,1.675-.524,5.441,5.441,0,0,0,2.337-2.383,13.523,13.523,0,0,0,.662-1.494c.285-.717.584-1.429.872-2.146.508-1.268,1.01-2.537,1.518-3.8q.88-2.2,1.762-4.4c.474-1.187.942-2.377,1.413-3.565.259-.651.523-1.294.781-1.948.185-.467.362-.936.547-1.4.225-.57.458-1.138.683-1.708.055-.142.071-.19,0-.208Z" transform="translate(-808.787 -332.504)" fill="#bed70c"/>
+        <path id="Path_192394" data-name="Path 192394" d="M642.659,398.019h0l0,0a6.369,6.369,0,0,0-2.021-1.532,22.536,22.536,0,0,0-2.184-.917,14.462,14.462,0,0,1-2.024-.918,1.6,1.6,0,0,1-1.014-1.582,1.381,1.381,0,0,1,.743-1.161,2.73,2.73,0,0,1,1.2-.284c.158-.008.316-.01.474-.01a8.435,8.435,0,0,1,.853.055,5.353,5.353,0,0,1,2.665.959c.065.048.1.054.134.024a.173.173,0,0,0,.054-.083c.138-.375.283-.749.429-1.121q.332-.846.671-1.693c.034-.078.034-.125-.066-.162-.229-.091-.45-.2-.678-.291a12.261,12.261,0,0,0-1.594-.505,11.06,11.06,0,0,0-1.621-.279,11.723,11.723,0,0,0-2.135-.033,9.654,9.654,0,0,0-1.748.3h0l-.011,0a6.73,6.73,0,0,0-1.626.7,3.985,3.985,0,0,0-2.092,3.087,4.175,4.175,0,0,0,.674,2.872,6.122,6.122,0,0,0,1.756,1.681,13.094,13.094,0,0,0,2.379,1.186,16.386,16.386,0,0,1,1.963.907,3.424,3.424,0,0,1,1.084.832,1.948,1.948,0,0,1,.339,1.827,1.514,1.514,0,0,1-1.247.987,5.639,5.639,0,0,1-1.675.1,7.042,7.042,0,0,1-2.442-.619,7.263,7.263,0,0,1-1.287-.771v0c-.133.281-.257.541-.383.8q-.523,1.1-1.05,2.207a.153.153,0,0,0-.02.125.172.172,0,0,0,.1.084c.474.224.949.449,1.434.648a8.29,8.29,0,0,0,2.656.642,16.166,16.166,0,0,0,2.824-.022,9.439,9.439,0,0,0,1.583-.3,6.519,6.519,0,0,0,2.184-1.063,4.258,4.258,0,0,0,1.713-2.859,5.353,5.353,0,0,0-.048-1.857,4.372,4.372,0,0,0-.936-1.966Z" transform="translate(-631.024 -381.72)" fill="#bed70c"/>
+        <path id="Path_192395" data-name="Path 192395" d="M1107.153,332.931h0q-2.154.005-4.31,0h-.323a.362.362,0,0,0-.057,0h-.007c-.055.014-.073.053-.073.129v4.348c0,.1.037.131.142.13h4.583c.116,0,.165-.02.165-.15v-2.158h0v-2.158c0-.079.01-.148-.118-.148Z" transform="translate(-1045.689 -332.879)" fill="#bed70c"/>
+      </svg>
+     </div>
+   </div> -->
+      <div class="po">
+        <div class="main-content">
+          <div class="main-heading">
+            <h1>{{companyDetails.soTitle}}</h1>
+          </div>
+          <div class="top-address-details">
+            <div class="flex-po">
+              <div class="col-md-7 address">
+                <p class="sub-heading">To</p>
+                <ul>
+                  <li>
+                    SIFY TECHNOLOGIES LIMITED, </li>
+                  <li>
+                    2nd floor Tidel Park,
+                  </li>
+                  <li>
+                    NO.4 Rajiv Gandhi Salai,
+                  </li>
+                  <li>
+                    Taramani,Chennai-600113.
+                  </li>
+                </ul>
+              </div>
+              <div class="col-md-4 po-details">
+                {{!-- <p class="sub-heading">PO Date : <span>{{#if poDate}} {{poDate}} {{else}} {{now "date"}}
+                    {{/if}}</span> </p> --}}
+                <p class="sub-heading">PO Number : <span>{{#if poRefNo}} {{poRefNo}} {{else}} MPLS-{{reqId}}
+                    {{/if}}</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="main-heading2">
+            <h1>Decicated Internet Access New Connection(s) </h1>
+          </div>
+          <!-- ******** TABLE ********* -->
+          <div class="table sify-service">
+            <table class="table table-bordered" style="width:100%">
+              {{!-- <colgroup>
+                <col width="3%" />
+                <col width="30%" />
+                <col width="25%" />
+                <col width="30%" />
+                <col width="10%" />
+                <col width="10%" />
+              </colgroup> --}}
+              <thead>
+                <tr>
+                  <th scope="col">
+                    <span>S.No</span>
+                  </th>
+                  <th scope="col">
+                    <span>Company</span>
+                  </th>
+                  <th scope="col">
+                    <span>Customer Shipping Address</span>
+                  </th>
+                  <th scope="col">
+                    <span>Product</span>
+                  </th>
+                  <th scope="col">
+                    <span>One Time Charges (OTC)</span>
+                  </th>
+                  <th scope="col">
+                    <span>Annual Recurring Charges (ARC)</span>
+                  </th>
+                </tr>
+              </thead>
+              {{#each locationDetails}}
+              <tbody>
+                <!-- ************************************************* Sify Technologies Ltd ************************************************* -->
+                {{#each basePlan}}
+                <tr>
+                  <td class="border-top-bottom">{{incSerial}}</td>
+                  <td class="border-top-bottom">Sify Technologies Ltd</td>
+                  <td class="border-none" style="vertical-align: middle;">
+                    <ul>
+                      <li>{{../shippingAddress.address1}},</li>
+                      <li>{{../shippingAddress.address2}},</li>
+                      {{#if ../shippingAddress.address3}}
+                      <li>{{../shippingAddress.address3}},</li>
+                      {{/if}}
+                      <li>{{../shippingAddress.city}}, {{../shippingAddress.state}} - {{../shippingAddress.pincode}}.
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <ul>
+                      <li>{{../connectionType}}: {{../reqBandwidth}} {{../reqBandwidthUOM}}</li>
+                      <li>Class of Service: {{planType}}</li>
+                      <li>Contract Term: {{../contractPeriod}} {{../contractUnit}}</li>
+                    </ul>
+                  </td>
+                  <td>{{#if otc}} ₹ {{otc}} {{else}} - {{/if}}</td>
+                  <td>{{#if arc}} ₹ {{arc}} {{else}} - {{/if}}</td>
+                </tr>
+                {{/each}}
+                <!-- ************************************************* TOWER CHARGES ************************************************* -->
+                {{#each additionalPrice}}
+                <tr>
+                  <td class="border-top-bottom"></td>
+                  <td class="border-right border-top-bottom"></td>
+                  <td class="border-none"></td>
+                  <td>{{mastHeight}} Meter pole (provided by Sify)</td>
+                  <td style="text-align: right;">{{#if otc}} ₹ {{otc}} {{else}} - {{/if}}</td>
+                  <td style="text-align: right;">{{#if arc}} ₹ {{arc}} {{else}} - {{/if}}</td>
+                </tr>
+                {{/each}}
+                {{#each valueAddedService}}
+                <tr>
+                  <td class="border-top-bottom"></td>
+                  <td class="border-right border-top-bottom"></td>
+                  <td class="border-none"></td>
+                  <td>{{name}}</td>
+                  <td style="text-align: right;">{{#if otc}} ₹ {{otc}} {{else}} - {{/if}}</td>
+                  <td style="text-align: right;">{{#if arc}} ₹ {{arc}} {{else}} - {{/if}}</td>
+                </tr>
+                {{/each}}
+                <!-- ********************************************* Sify Digital Services *********************************** -->
+                {{#if ../hasManaged}}
+                <tr>
+                  <td rowspan="3">{{incSerial}}</td>
+                  <td rowspan="3">Sify Digital Services</td>
+                  <td rowspan="3" class="border-none"></td>
+                  {{#each managedBundled}}
+                <tr>
+                  <td>{{name}}</td>
+                  <td> {{#if otc}}₹ {{otc}} {{else}} - {{/if}}</td>
+                  <td> {{#if arc}}₹ {{arc}} {{else}} - {{/if}}</td>
+                </tr>
+                {{/each}}
+                </tr>
+                {{/if}}
+              </tbody>
+              {{/each}}
+              <tr class="sub-heading">
+                <td style="vertical-align: middle;text-align: end;" colspan="4">Total</td>
+                <td style="vertical-align: middle;text-align: end;">{{#if totalOTC}}₹&nbsp;{{totalOTC}} {{else}} -
+                  {{/if}}
+                </td>
+                <td style="vertical-align: middle;text-align: end;">{{#if totalARC}}₹&nbsp;{{totalARC}} {{else}} -
+                  {{/if}}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- ******** TABLE ********* -->
+
+        <!-- ******** BOTTOM ADDRESS ********* -->
+        {{!-- <div class="bottom-address">
+          <div class="flex">
+            <div>
+              <div class="add">
+                <ul>
+                  <li>
+                    SIFY TECHNOLOGIES LIMITED
+                  </li>
+                  <li> 2nd Floor, Tidel Park, Rajiv Gandhi Salai, Taramani </li>
+                  <li> Chennai – 600113. </li>
+                </ul>
+
+                <ul>
+                  <li>
+                    <span class="sub-heading"> GST:</span>
+                    33AAACS9032R1ZY
+                  </li>
+                  <li>
+                    <span class="sub-heading">HSN:</span>
+                    998419
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="vl"></div>
+            <div>
+              {{#if hasManaged}}
+              <div class="add">
+                <ul>
+                  <li>
+                    SIFY DIGITAL SERVICES LIMITED
+                  </li>
+                  <li> 2nd Floor, Tidel Park, Rajiv Gandhi Salai, Taramani </li>
+                  <li> Chennai – 600113. </li>
+                </ul>
+
+                <ul>
+                  <li>
+                    <span class="sub-heading"> GST:</span>
+                    33ABDCS9734N1ZS
+                  </li>
+                  <li>
+                    <span class="sub-heading">HSN:</span>
+                    998419
+                  </li>
+                </ul>
+              </div>
+              {{else}} {{/if}}
+            </div>
+          </div>
+
+        </div> --}}
+        <!-- ******** BOTTOM ADDRESS ********* -->
+      </div>
+
+      {{#if hasManaged}}
+
+      <div class="main-heading2">
+        <h1>Summary of Net Charges</h1>
+      </div>
+      <!-- ******** TABLE ********* -->
+      <div class="table">
+        <table class="table table-bordered" style="width:100%">
+          <colgroup>
+            <col width="30%" />
+            <col width="20%" />
+            <col width="20%" />
+            <col width="20%" />
+
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">
+                <span>Charge Type</span>
+              </th>
+              <th scope="col">
+                <span>Amount (INR)</span>
+              </th>
+              <th scope="col">
+                <span>STL</span>
+              </th>
+              <th scope="col">
+                <span>SDS</span>
+              </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Annual Recurring Charges (ARC)</td>
+              <td>₹ {{totalARC}}</td>
+              <td>{{#if stlPrice.arc}} ₹ {{stlPrice.arc}} {{else}} - {{/if}}</td>
+              <td>{{#if sdsPrice.arc}} ₹ {{sdsPrice.arc}} {{else}} - {{/if}}</td>
+
+            </tr>
+            <tr>
+              <td>One Time Charges (OTC)</td>
+              <td>₹ {{totalOTC}}</td>
+              <td>{{#if stlPrice.otc}} ₹ {{stlPrice.otc}} {{else}} - {{/if}}</td>
+              <td>{{#if sdsPrice.otc}} ₹ {{sdsPrice.otc}} {{else}} - {{/if}}</td>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>{{else}} {{/if}}
+      <!-- ******** TABLE ********* -->
+      <!-- ******** TERMS AND CONDITION ********* -->
+      {{#if hasRateCard}}
+      <div>
+        <p>
+          <b>Terms and Conditions</b>
+          applicable as per the
+          {{companyDetails.soDes}}
+          signed between SIFY TECHNOLOGIES LIMITED &
+          {{companyName}}.
+        </p>
+      </div>
+      {{else}}
+      <div class="main-heading2">
+        <h1>General Terms and conditions</h1>
+      </div>
+      <div class="terms-conditions">
+        <div class="sub-heading2">
+          <h1>Commercials</h1>
+        </div>
+        <div class="content">
+          <ol>
+            <li>GST will be extra as applicable.</li>
+            <li>Annual recurring charges (ARC) will be paid quarterly in advance starting from the date of Internet
+              connection is handed over to us.</li>
+            <li>One time installation charges (OTC) 100% against PO.</li>
+            <li>Five IP will be provided for Express connect.</li>
+            <li>The Service Contract shall be a period of {{contractPeriod}} Years & the Service can be extended on
+              Mutual consent, however it can be terminated by giving a period of 1 month Paid notice.</li>
+            <li>Class of service is Value Base.</li>
+            <li>The billing period begins from the date of commissioning service</li>
+            <li>Router scope by {{#if hasManaged}} Sify {{else}} COE {{/if}}</li>
+            <li>Delivery 3-4 weeks From the date of receipt of PO.</li>
+            {{!-- <li>Contact person:{{contactFirstName}} {{contactLastName}}</li> --}}
+            {{!-- <li>Installation Address:
+              {{address1}},
+              {{address2}},
+              {{address3}},
+              {{city}},
+              {{state}}
+              -
+              {{pincode}}.</li> --}}
+            {{! <li>PAN No :-</li> }}
+            {{#if hasManaged}}<li>Router and Other accessories installed will remain in the name of Sify. The same has
+              to be returned to Sify at the time of termination of contract.</li>{{else}} {{/if}}
+          </ol>
+        </div>
+      </div>
+      {{/if}}
+
+      <div class="Date-time">
+        <div>
+          <p> <span class="sub-heading">Signature: <span style="color: white;">/sn1/</span></p>
+        </div>
+        <div>
+          <p> <span class="sub-heading">Date: </span> {{now "date"}}</p>
+        </div>
+        <div>
+          <p> <span class="sub-heading">Time: </span> {{now "time"}}</p>
+        </div>
+      </div>
+      <!-- ******** TERMS AND CONDITION ********* -->
+
+    </div>
+    <!-- ************************ CAF - MPLS/Internet/VAS PAGE 2 ******************* -->
+    {{#if companyDetails.cafRequired}}
+    <div class="page">
+      <div class="main-heading">
+        <h1>Customer Acquisition Form</h1>
+      </div>
+
+      <div class="top-heading">
+        <h1>CAF - MPLS/Internet/VAS</h1>
+      </div>
+      <div class="top-content">
+        <div class="flex">
+          <div>
+            <ul>
+              <li>
+                Customer Name - {{companyName}}
+              </li>
+              {{!-- <li>
+                {{companyName}}
+              </li> --}}
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li>
+              </li>
+              <li>
+                ID13067
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p>I hereby order for Sify Technologies Limited MPLS/Internet/VAS Service Subject to terms and conditions as
+          described in service form.We furnish the necessary details as follows</p>
+      </div>
+      <div class="type-order">
+        <div class="table">
+          <table style="width:100%">
+            <!-- <colgroup>
+          <col width="4%">
+          <col width="12%">
+          <col width="12%">
+          <col width="12%">
+          <col width="12%">
+          <col width="12%">
+          <col width="12%">
+          <col width="12%">
+        </colgroup> -->
+            <tbody>
+              <tr class="border-bottom">
+                <td>1.1</td>
+                <td>Type of order</td>
+                <td>
+                  <input type="checkbox" name="" value="" checked>
+                  <label class="label-input" for="lable">New</label>
+                </td>
+                <td>
+                  <div class="datas">
+                    <input type="checkbox" name="" value="">
+                    <label class="label-input" for="lable" {{#isEqualForShift provisionType}} checked {{else}}
+                      {{/isEqualForShift}}>Shifting</label>
+                  </div>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable" {{#isEqualOr provisionType "Upgrade" "Shift-Upgrade" }} checked
+                    {{else}} {{/isEqualOr}}>Upgrade</label>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable" {{#isEqualOr provisionType "Downgrade" "Shift-Downgrade" }}
+                    checked {{else}} {{/isEqualOr}}>Downgrade</label>
+                </td>
+              </tr>
+              <!-- ********************************* SERVICE 1 PALN ************************************** -->
+              <tr>
+                <td>1.2</td>
+                <td>Service 1</td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Site Connect</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!-- ********************************* PLAN ************************************** -->
+              <tr>
+                <td></td>
+                <td>Plan</td>
+                <td>
+                  <div>
+                    <input type="checkbox" name="" value="">
+                    <label class="label-input" for="lable">Bronze</label>
+                  </div>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Gold</label>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Diamond
+                  </label>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Silver</label>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Platinum</label>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Starter</label>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Secure Site Connect</label>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Secure Roam Connec</label>
+                </td>
+                <td colspan="2">
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Layer2 NNI</label>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Layer2 Non NNI</label>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Premium Base</label>
+                </td>
+
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Premium Plus Clean Connect</label>
+                </td>
+                <td colspan="2">
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Premium Plus</label>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Value Base</label>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Value Plus</label>
+                </td>
+              </tr>
+              <tr class="border-bottom">
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Not Applicable</label>
+                </td>
+                <td colspan="2">
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Burstable</label>
+                </td>
+                <td>
+                  <input type="checkbox" name="" value="">
+                  <label class="label-input" for="lable">Fixed B/W</label>
+                </td>
+              </tr>
+              <!-- ********************************* SERVICE 2 PALN ************************************** -->
+              <tr>
+                <td></td>
+                <td>Service 2</td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="" checked>
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Express Connect</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <p>Bandwidth:</p>
+                    </div>
+                    <div>
+                      <p>{{reqBandwidth}} {{reqBandwidthUOM}}</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!-- ********************************* PLAN ************************************** -->
+              <tr>
+                <td></td>
+                <td>Plan</td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Bronze</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Gold</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Diamond</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Silver</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Platinum</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Starter</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Secure Site Connect</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Secure Roam Connect</label>
+                    </div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Layer2 NNI</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Layer2 Non NNI</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Premium Base</label>
+                    </div>
+                  </div>
+                </td>
+
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Premium Plus Clean Connect</label>
+                    </div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Premium Plus</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Value Base</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Value Plus</label>
+                    </div>
+                  </div>
+                </td>
+
+              </tr>
+              <tr class="border-bottom">
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Not Applicable</label>
+                    </div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Burstable</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="" checked>
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Fixed B/W</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!-- ********************************* SERVICE 2 PALN ************************************** -->
+              <!-- ********************************* SERVICE 3 PALN ************************************** -->
+              <tr>
+                <td></td>
+                <td>Service 3</td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Global Site Connect</label>
+                    </div>
+                  </div>
+                </td>
+
+              </tr>
+              <!-- ********************************* PLAN ************************************** -->
+              <tr>
+                <td></td>
+                <td>Plan</td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Bronze</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Gold</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Diamond</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Silver</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Platinum</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Starter</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Secure Site Connect</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Secure Roam Connect</label>
+                    </div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Layer2 NNI</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Layer2 Non NNI</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Premium Base</label>
+                    </div>
+                  </div>
+                </td>
+
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Premium Plus Clean Connect</label>
+                    </div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Premium Plus</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Value Base</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Value Plus</label>
+                    </div>
+                  </div>
+                </td>
+
+              </tr>
+              <tr class="border-bottom">
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Not Applicable</label>
+                    </div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Burstable</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex2">
+                    <div>
+                      <div check-box>
+                        <input type="checkbox" name="" value="">
+                      </div>
+                    </div>
+                    <div>
+                      <label for="lable">Fixed B/W</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!-- ********************************* SERVICE 3 PALN ************************************** -->
+              <!-- ********************************* VAS ************************************** -->
+              <div class="vas-paln">
+                <tr>
+                  <td></td>
+                  <td>VAS</td>
+                  <td colspan="2">
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Clean Connect</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td colspan="2">
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Factor Authentication</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td colspan="2">
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Proactive Monitoring & Management</label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td></td>
+                  <td>Plan</td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Value</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td colspan="2">
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">VPN Over Broadband</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td colspan="2">
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Bundled Managed CPE</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Enhance</label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td colspan="2">
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">VPN Over Dongle</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td colspan="2">
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">VPN Over VSAT</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td colspan="2">
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">NMM Bundled CPE</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">DDOS</label>
+                      </div>
+                    </div>
+                  </td>
+
+                </tr>
+                <tr class="border-bottom">
+                  <td></td>
+                  <td></td>
+                  <td colspan="2">
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Premium</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td colspan="2">
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">NMR</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td colspan="2">
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">NMM-COE</label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </div>
+              <!-- ********************************* VAS  ************************************** -->
+              <!-- ********************************* VAS BANDWIDTH  ************************************** -->
+              <tr class="border-bottom padding">
+                <td></td>
+                <td>VAS Bandwidth</td>
+              </tr>
+              <!-- ********************************* Last Mile  ************************************** -->
+              <div class="last-mile">
+                <tr>
+                  <td></td>
+                  <td>Last Mile</td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Leased Line</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Fiber</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">VSAT</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">ADSL</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Wireless</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">3G Datacard</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Router Colocation</label>
+                      </div>
+                    </div>
+                  </td>
+
+
+                </tr>
+                <tr class="border-bottom">
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Nailed ISDN</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">None</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Ethernet</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">PSTN</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">ISDN</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Metro Ethernet</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Not Applicable</label>
+                      </div>
+                    </div>
+                  </td>
+
+
+                </tr>
+              </div>
+              <!-- ********************************* Last Mile Bandwidth  ************************************** -->
+              <tr class="border-bottom padding">
+                <td></td>
+                <td>Last Mile Bandwidth</td>
+              </tr>
+              <!-- ********************************* Last Mile Interface  ************************************** -->
+              <div class="last-mile">
+
+                <tr class="border-bottom">
+                  <td></td>
+                  <td>Last Mile Interface</td>
+
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Ethernet</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">G703</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Serial/V.35</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Optical</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">BNC</label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </div>
+              <!-- ********************************* Last Mile Provision BySIFY  ************************************** -->
+              <tr class="border-bottom padding">
+                <td></td>
+                <td colspan="2">Last Mile Provision By SIFY </td>
+              </tr>
+              <!-- ********************************* Customer Type  ************************************** -->
+              <div class="customer-type">
+
+                <tr class="border-bottom">
+                  <td>1.3</td>
+                  <td>Customer Type</td>
+
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">SAM</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">CAM</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">ISP</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Other BSO</label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </div>
+              <!-- ********************************* Customer Purchase Order Number  ************************************** -->
+              <tr class="border-bottom padding">
+                <td>1.4</td>
+                <td colspan="2">Customer Purchase Order Number</td>
+                <td colspan="2">Purchase Order Date : {{now "date"}}</td>
+              </tr>
+              <!-- ********************************* Service taken by customer for  ************************************** -->
+              <div class="Service taken by customer for">
+                <tr class="border-bottom">
+                  <td>1.5</td>
+                  <td colspan="2">Service taken by customer for</td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Own Use</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Reselling</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td colspan="3">
+                    <p>In case reselling does the link touches customer network :</p>
+                  </td>
+                </tr>
+              </div>
+              <!-- ********************************* Customer Type  ************************************** -->
+              <div class="customer-type">
+                <tr class="border-bottom">
+                  <td>1.6</td>
+                  <td>CPE</td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">On Opex</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">On Capex</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Bundled</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Customer own</label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-bottom">
+                  <td></td>
+                  <td>CPE Interface</td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Ethernet</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">G703</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">BNC</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Optical</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex2">
+                      <div>
+                        <div check-box>
+                          <input type="checkbox" name="" value="">
+                        </div>
+                      </div>
+                      <div>
+                        <label for="lable">Serial/V.35</label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </div>
+              <!-- ********************************* Contract Term  ************************************** -->
+              <tr class="border-bottom padding">
+                <td>1.7</td>
+                <td>Contract Term</td>
+                <td>{{contractPeriod}} {{contractUnit}}</td>
+              </tr>
+              <!-- ********************************* Billing Pattern  ************************************** -->
+              <tr class="border-bottom padding">
+                <td>1.8</td>
+                <td>Billing Pattern</td>
+                <td>Monthly in Advance</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- ************************ CONTACT DETAILS ******************* -->
+    <div class="page">
+      <div class="contact">
+        <div class="top-heading">
+          <h1>CAF - MPLS/Internet/VAS</h1>
+        </div>
+        <!-- ********************************* TABLE  ************************************** -->
+
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Billing</th>
+              <th scope="col">Shipping</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row">
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p>Contact Person Name : </p>
+                        </div>
+                        <div class="right">
+                          <p>{{contactFirstName}} {{contactLastName}}</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+              <td>
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p>Contact Person Name : </p>
+                        </div>
+                        <div class="right">
+                          <p>{{contactFirstName}} {{contactLastName}}</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+            {{!-- <tr>
+              <td scope="row">
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p>Designation: </p>
+                        </div>
+                        <div class="right">
+                          <p>Director</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+              <td>
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p>Designation: </p>
+                        </div>
+                        <div class="right">
+                          <p>Director</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr> --}}
+            {{!-- <tr>
+              <td scope="row">
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p>Department Name :</p>
+                        </div>
+                        <div class="right">
+                          <p>IT</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+              <td>
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p>Department Name :</p>
+                        </div>
+                        <div class="right">
+                          <p>IT</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+
+            </tr> --}}
+            <tr>
+              <td scope="row">
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p>Telephone Number :</p>
+                        </div>
+                        <div class="right">
+                          <p>{{contactPhoneNumber1}}</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+              <td>
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p>Telephone Number :</p>
+                        </div>
+                        <div class="right">
+                          <p>{{contactPhoneNumber1}}</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+
+            </tr>
+            <tr>
+              <td scope="row">
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p>Email Address :</p>
+                        </div>
+                        <div class="right">
+                          <p>{{contactEmail}}</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+              <td>
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p>Email Address :</p>
+                        </div>
+                        <div class="right">
+                          <p>{{contactEmail}}</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <!-- ************************ ADDRESS DETAILS ******************* -->
+      <div class="address-detail contact">
+        <div class="top-heading">
+          <h1>Address Details</h1>
+        </div>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Shipping Address</th>
+              <th scope="col">Billing Address</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row" width="30%">
+                {{address1}}, {{address2}}, {{address3}}, {{city}}, {{state}} - {{pincode}}.
+              <td scope="row" width="40%">
+                {{billToAddress.address1}}, {{billToAddress.address1}}, {{billToAddress.city}}, {{billToAddress.state}}
+                - {{billToAddress.pinCode}}. </td>
+              <td scope="row" width="40%">
+                Permission Clearance Date :
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- ************************ SITE NETWORK DETAILS ******************* -->
+      <div class="site-network">
+        <div class="top-heading">
+          <h1>Site Network Details</h1>
+        </div>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <td scope="row">
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p>Availability of VOIP Network :</p>
+                        </div>
+                        <div class="right">
+                          <p></p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+              <td scope="row">
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p> OSP License Number : </p>
+                        </div>
+                        <div class="right">
+                          <p></p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td scope="row">
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p> Availability of Other ISP Links :</p>
+                        </div>
+                        <div class="right">
+                          <p></p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+              <td scope="row">
+                <div class="billing">
+                  <ul>
+                    <li>
+                      <div class="flex2">
+                        <div class="left">
+                          <p> Is other ISP link to be Integrated with Sify Solution : </p>
+                        </div>
+                        <div class="right">
+                          <p></p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- ************************ CHARGES DESCRIPTION ******************* -->
+      <div class="top-heading">
+        <h1>Charges Description</h1>
+      </div>
+      <div class="charge-description">
+
+        <div class="heading">Dedicated Internet Access</div>
+        <table style="width:100%">
+          <colgroup>
+            <col width="33%">
+            <col width="33%">
+            <col width="33%">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">
+                <span>Request</span>
+              </th>
+              <th scope="col">
+                <span>One Time Charges (OTC)</span>
+              </th>
+              <th scope="col">
+                <span>Annual Recurring Charges (ARC)</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each docs}}
+            {{#each basePlan}}
+            <tr>
+              <td>
+                <p style="font-weight:600"> {{planType}} Plan</p>
+                <p style="font-weight:400">{{../connectionType}} - {{../reqBandwidth}} {{../reqBandwidthUOM}}</p>
+              </td>
+              <td>{{#if otc}} ₹ {{otc}} {{else}} - {{/if}}</td>
+              <td>{{#if arc}} ₹ {{arc}} {{else}} - {{/if}}</td>
+            </tr>
+            {{/each}}
+            {{#each additionalPrice}}
+            <tr>
+              <td style="font-weight:600">
+                <p style="font-weight:600">{{name}}</p>
+                <p style="font-weight:400">{{mastHeight}} {{unit}} {{mastType}} (provided by Sify)</p>
+              </td>
+              <td>{{#if otc}} ₹ {{otc}} {{else}} - {{/if}}</td>
+              <td>{{#if arc}} ₹ {{arc}} {{else}} - {{/if}}</td>
+            </tr>
+            {{/each}}
+            {{#each valueAddedService}}
+            <tr>
+              <td style="font-weight:600">
+                <p style="font-weight:600">{{name}}</p>
+                <p style="font-weight:400">
+                  {{#if plan}}
+                  {{!-- {{#if (eq name "DDOS")}}
+                  Mitigation capacity - {{plan}} {{unit}}
+                  {{else}} --}}
+                  {{plan}} {{unit}}
+                  {{!-- {{/if}} --}}
+                  {{/if}}</p>
+              </td>
+              <td>{{#if otc}} ₹{{otc}} {{else}} - {{/if}}</td>
+              <td>{{#if arc}} ₹{{arc}} {{else}} - {{/if}}</td>
+            </tr>
+            {{/each}}
+            {{/each}}
+            <tr>
+              <td>Grand Total</td>
+              <td>{{#if totalOTC}} ₹{{totalOTC}} {{else}} - {{/if}}</td>
+              <td>{{#if totalARC}} ₹{{totalARC}} {{else}} - {{/if}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- ************************ SPECIAL COMMENT AND NOTES ******************* -->
+      <div class="special-notes">
+        <div class="top-heading">
+          <h1>Special Comment And Notes</h1>
+        </div>
+        <div class="row special-comment">
+          <div class="col-md-4">
+            <div class="comments">
+              <p style="margin-bottom: 3px;">
+                Comments:
+              </p>
+              <p>
+                Other terms and condition as per MSA
+              </p>
+            </div>
+            <div class="applicant-name" style="margin-bottom: 41px;">
+              <p style="margin-bottom: 3px;">
+                Note Applicant name/Authorized signatories Name
+              </p>
+              <p>
+                {{contactFirstName}} {{contactLastName}} - {{companyName}}
+              </p>
+            </div>
+            <div><span style="color: white;">/sn1/</span></div>
+            <div class="applicant-name">
+              <p style="margin-bottom: 3px;">
+                Designation: AUTHORIZED SIGNATORY
+              </p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <p style="margin-bottom: 0px;">Place: {{city}}</p>
+          </div>
+          <div class="col-md-3">
+            <p style="margin-bottom: 0px;">Date : {{now "date"}}</p>
+          </div>
+          <div class="col-md-3">
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <hr>
+    <!-- ************************ TERMS AND CONDITIONS ******************* -->
+    <div class="terms-conditions">
+      <div class="heading">
+        Terms and conditions
+      </div>
+      <div class="content">
+        <p>On acceptance of duly signed Order form for the mentioned services from customer by Sify, an agreement is
+          hereby formed between the customer, named in the order form (hereinafter referred to as the "Customer") of the
+          one part and Sify Technologies Limited having its Registered office at 2nd Floor, Tidel Park, No.4 Rajiv
+          Gandhi Salai , Taramani Chennai - 600 113 (hereinafter referred to as " SIFY ") of the other part the customer
+          has been provided with the details of different services/ schemes including applicable charges . The customer
+          has understood the same & exercised his choice accordingly.
+        </p>
+        <ol>
+          <li>
+            <ol>
+
+              <li>This agreement will come into effect from the date of signing of the terms & conditions and/ or
+                Service Installation Report whichever is later & shall be valid unless terminated by either of the
+                party. </li>
+              <li>The agreement period shall be limited to the last date of validity of the license of SIFY for the
+                operation of NLD/ILD/ISP service in the concerned licensed geographical areas along with its extension
+                as received from time to time from the licensor i.e. Department of Telecommunications,
+                Ministry of communications, Government of India. It is also subject to all applicable laws, bylaws,
+                rules, regulations, notifications,
+                orders, directions of the Government (Centre & State) / Local Municipality/Court/ Tribunal.
+              </li>
+              <li>SIFY reserves the right to terminate the service of any customer who is not competent to enter into
+                any contract under the Indian Contract Act, 1872. </li>
+              <li>Except as provided elsewhere either party may end the agreement by written notice
+                giving not less than 60 days to other party but such a notice shall not absolve the customer of its
+                liability to make payments of the accounts that may be due and outstanding on the date of such notice or
+                as may become due subsequently.
+                In case of early termination within 12 months from start of service the customer remains liable to pay
+                for the entire year one service charges.
+              </li>
+            </ol>
+          </li>
+          <li>
+            <ol>
+              The equipment if any provided by Sify is licensed to use to obtain access to the network during the
+              Agreement period only and shall return the same to SIFY upon the termination/ determination hereof and/ or
+              upon disconnection of service.
+              <li>SIFY connection/ Service shall be non-transferable in nature. Any private transfer
+                effected by the customer shall not absolve the customer of his primary duty towards
+                <p>a) SIFY for charges levied pertaining to such particular connection/ Service and/ or </p>
+                <p>b) Proper usage as envisaged under Clause 5.1. </p>
+              </li>
+              <li>
+                SIFY's acceptance of payment from a person other than the customer shall not amount to SIFY having
+                transferred or modified any of rights & obligations to the customer or to such third parties.
+              </li>
+              <li>
+                For addition/ deletion/ change in any supplementary services/ plan / scheme/ features, customer shall
+                submit order in the requisite form and shall be bound by the additional terms thereof.
+                <ol>
+                  <li>
+                    Any withdrawal/ change in supplementary services/ plan / scheme/ features shall entitle the customer
+                    to adjustment/ refund of the money already paid as per applicable terms & conditions.
+                  </li>
+                </ol>
+              </li>
+            </ol>
+
+          </li>
+          <!-- ****************** 3 **************** -->
+          <li>
+            <ol>
+              <li>The Customer hereby agrees that
+                <p>a) He will not use the connection/ service provided for any unlawful/ illegal/ immoral purposes. </p>
+                <p>b) He will not use improper/ abusive/ indecent/ threatening/ harassing language on the service
+                  connection. </p>
+                <p>c) He will not send obscene, indecent, threatening, harassing, unsolicited messages or messages
+                  affecting/ infringing national interest to create any damage or risk to SIFY or its equipment/ network
+                  and/or other customers. </p>
+                <ol>
+                  <li>
+                    In case of failure to observe above conditions, SIFY reserves the right to disconnect service
+                    without liability, at its sole discretion.
+                  </li>
+                </ol>
+              </li>
+              <li>
+                The Customer will be responsible for safe keeping of any hardware (Router/Modem/Wireless access point)
+                provided to him to gain access to the network of SIFY.
+                <ol>
+                  <li> In case of loss of hardware (Router/Modem/Wireless access point ) by the customer, the same shall
+                    be reported to SIFY at the earliest.</li>
+                  <li>The liability arising from the unauthorized use/ misuse of hardware (Router/Modem/Wireless access
+                    point ) shall be borne by/ lie on the customer.</li>
+                  <li>On request from the customer, SIFY shall issue duplicate hardware(Router/Modem/Wireless access
+                    point ) against Charges as set out in the schedule from time to time.</li>
+
+                </ol>
+              </li>
+
+              <li>3.3 The Customer will provide all information and cooperation to SIFY that SIFY may reasonably require
+                from time to time. </li>
+
+              <li> 3.4 The customer hereby agrees to indemnify and hold SIFY harmless against any claim against SIFY for
+                libel or slander arising out of communications sent or received by customer on SIFY's network. The
+                customer shall also indemnify SIFY for any claim against SIFY arising out of any infringement or
+                violation of copy right by the customer or by anyone else using the service provided to the customer.
+              </li>
+            </ol>
+            <ol>
+              <li>The Customer hereby agrees that
+                <p>a) He will not use the connection/ service provided for any unlawful/ illegal/ immoral purposes. </p>
+                <p>b) He will not use improper/ abusive/ indecent/ threatening/ harassing language on the service
+                  connection. </p>
+                <p>c) He will not send obscene, indecent, threatening, harassing, unsolicited messages or messages
+                  affecting/ infringing national interest to create any damage or risk to SIFY or its equipment/ network
+                  and/or other customers. </p>
+                <ol>
+                  <li>
+                    In case of failure to observe above conditions, SIFY reserves the right to disconnect service
+                    without liability, at its sole discretion.
+                  </li>
+                </ol>
+              </li>
+              <li>
+                The Customer will be responsible for safe keeping of any hardware (Router/Modem/Wireless access point)
+                provided to him to gain access to the network of SIFY.
+                <ol>
+                  <li> In case of loss of hardware (Router/Modem/Wireless access point ) by the customer, the same shall
+                    be reported to SIFY at the earliest.</li>
+                  <li>The liability arising from the unauthorized use/ misuse of hardware (Router/Modem/Wireless access
+                    point ) shall be borne by/ lie on the customer.</li>
+                  <li>On request from the customer, SIFY shall issue duplicate hardware(Router/Modem/Wireless access
+                    point ) against Charges as set out in the schedule from time to time.</li>
+
+                </ol>
+              </li>
+
+              <li>3.3 The Customer will provide all information and cooperation to SIFY that SIFY may reasonably require
+                from time to time. </li>
+
+              <li> 3.4 The customer hereby agrees to indemnify and hold SIFY harmless against any claim against SIFY for
+                libel or slander arising out of communications sent or received by customer on SIFY's network. The
+                customer shall also indemnify SIFY for any claim against SIFY arising out of any infringement or
+                violation of copy right by the customer or by anyone else using the service provided to the customer.
+              </li>
+            </ol>
+
+          </li>
+          <!-- ****************** 4 **************** -->
+          <li>
+            <ol>
+              <li>SIFY shall be at liberty to provide the services under any brand name.
+              </li>
+              <li>
+                SIFY reserves the right to seek/ verify financial and other information that customer's Banker/ Credit
+                provides and such other sources and reserves the right to reject Service even after activation for any
+                reasons without liability.
+              </li>
+              <li>The information provided by customer in the order form and/ or subsequent forms and/ or
+                collected/gathered by SIFY shall be
+                property of SIFY even if application is rejected/ refused and/ or connection is disconnected. SIFY may
+                use the said information in any manner, if deems fit.
+              </li>
+              <li>SIFY will not be liable to the customer for any loss of business, profit, revenue or goodwill,
+                anticipated savings use of contracts or for any indirect or consequential loss howsoever it arises.
+              </li>
+              <li>SIFY shall not be liable for any delayed service activation. </li>
+              <li>SIFY will not be liable for any dealings for the customer with any party which is not authorized to
+                deal on its behalf. </li>
+              <li>SIFY is not responsible for the acts of Franchisees/Business Associates/ Direct Selling Agents/
+                Channel Partners/ Dealers/ Retailers with regard to the scheme / commercial which are not authorized by
+                SIFY or which are purported to have been offered on behalf of SIFY without the latter's sanction. </li>
+              <li>Repeat - SIFY shall not be responsible for any civil or criminal liability incurred by the customer
+                due to misuse of the service provided by SIFY i.e. any acts of commission or omission by the customer.
+              </li>
+              <li>SIFY shall not be liable for any act of commission or omission of any third
+                party/suppliers/manufacturers including any agency/company offering any privilege or benefits to
+                customer without specific permission or authority of SIFY. </li>
+              <li>SIFY will not be held liable in case services are affected outside its control viz.Atmospheric
+                conditions, Structures (Building/ Bridges) & proximity of Base Stations, acts of God or any other Force
+                Majeure conditions. </li>
+            </ol>
+          </li>
+          <!-- ****************** 5 **************** -->
+          <li>
+            <ol>
+              <li>The scope of services is governed by the statutory guidelines issued by the Telecom Regulatory
+                Authority & Govt. of India within the parameters of license agreement executed with the Ministry of
+                Communications, Govt. of India. The Telegraph Act, 1885 and the Indian Telegraph Rules, 1951 framed
+                under the same act, as amended from time to time, govern the services and the customer shall abide by
+                them.
+              </li>
+              <li>
+                SIFY is entitled to change, vary, add, withdraw any services/additional services, supplementary
+                services, etc. an d or change, vary, add, alter, delete, withdrawn /all
+                charges/prices/discounts/surcharges, etc. related thereto including equipments, accessory (ies) and/or
+                prices thereto etc. at any time in its sole discretion for one or more or all customers.
+              </li>
+              <li>
+                SIFY will test the equipment prior to activation & customer shall ensure its functionalities thereafter.
+                SIFY shall not be responsible for any of the defect/ fault etc. which is not expressly covered by the
+                manufacturer of the equipment.
+              </li>
+              <li>Any repairs/ exchange carried out by SIFY at the request of customer for defects, etc. shall be
+                charged from the customer as per SIFY policy on the subject from time to time.
+                <ol>
+                  <li>
+                    In case of suspension/ disconnection etc. reconnection may be made by SIFY in its sole discretion on
+                    such additional terms as SIFY may determine. Now, it is hereby agreed by & between the parties:
+
+                    Period of Agreement : - Minimum 12 months Agreement / Terms & Conditions
+
+                  </li>
+                </ol>
+              </li>
+
+
+            </ol>
+          </li>
+          <!-- ****************** 6 **************** -->
+          <li>
+            <ol>
+              Should we add a clause that allows auto-renewal at the same rate if there is no explicit change in rates
+              initiated by the customer
+              <li>
+                SIFY may withdraw/ add/ change/ vary any services/ supplementary services/ scheme/ plans etc. and /or to
+                vary the terms and change at any time in compliance with the directions of the Govt. agencies.
+              </li>
+
+            </ol>
+          </li>
+          <!-- ****************** 7 **************** -->
+          <li>
+            <ol>
+              <li>
+                The rates/ charges may change as per the directives of TRAI/ any statutory authority from time to time.
+              </li>
+              <li>
+                Any increase/addition/introduction of taxes and/or levy of taxes, duties or any other statutory charges,
+                etc. in future shall be to the customer's account. No separate notice will be issued to him in this
+                regard and the same shall be deemed to be part of tariff.
+              </li>
+              <li>
+                All discounts or other special benefits announced by SIFY from time to time shall have the time
+                limitation. SIFY shall have the right to withdraw/ vary/ extend any/ all such discounts, etc. at any
+                time without notice.
+              </li>
+              <li>
+                A service tax or any other tax as notified from time to time, by the Govt. of India/ Govt. of J&K (as
+                applicable) shall be levied on all charges
+              </li>
+
+
+            </ol>
+          </li>
+          <!-- ****************** 8 **************** -->
+          <li>
+            <ol>
+              <li>The billing cycle shall normally run on Quarterly basis in advance or such other frequency as may be
+                decided by SIFY from time to time and periodic bills will be issued accordingly. The customer is
+                responsible to pay his bills by the prescribed date. It is incumbent on the customer to enquire for his/
+                her balance and settle the same in case of non receipt of monthly bill for any reason whatsoever. </li>
+              <li> SIFY reserves the right to raise interim bills and the customer agrees to make such interim payment
+                as and when required by SIFY, based on internal credit rating of SIFY. </li>
+              <li> Bills will be sent to the billing address of customer as furnished by him /her. For any change of
+                address, the billing department should receive notification in writing well in advance to change the
+                address along with such proof to accept the change.
+                <p>(a) In case any charges are disputed, customer shall intimate SIFY within two days of receipt of
+                  bills. Incase of non receipt of such information the charges will be presumed to have been accepted.
+                  Customer shall have to pay full amount of even disputed charges pending settlement of disputes. </p>
+              </li>
+              <li>All charges and other sums to be paid by
+
+                customer are due for payment by prescribed due date. All charges must be paid in full without any
+                deduction, set off with holding. All payments must be made in favour of SIFY Technologies Limited.
+              </li>
+              <li> The loss of or inability to use the customer equipment does not bring the agreement or the customer
+                liability to pay the charges at the end.
+              </li>
+              <li> Where a security deposit has been paid, the SIFY is entitled to retain it and apply it as it decides,
+                in full or to the partial satisfaction of any sums due from the customer to SIFY any time. At the end of
+                the agreement period, provided all sums payable to SIFY have been duly paid, the balance (if any) of the
+                deposit or fee will be repaid to the customer on fulfillment of such conditions as may be intimated by
+                SIFY. No interest will be paid on the deposit. SIFY reserves the right to adjust security deposit of the
+              </li>
+              <li> Penal Charges for delayed Payment:The payment against bills beyond the stipulated date shall entail
+                an interest charges @ 2% per month or such other rate fixed amount as may be decided by SIFY from time
+                to time over the payment from the date it became due. This however is without prejudice to rights of
+                SIFY to suspend the services partially or fully due to non-payment.
+              </li>
+            </ol>
+          </li>
+          <!-- ****************** 9 **************** -->
+          <li>
+            <ol>
+              <li>SIFY may at any time suspend, without notice and without any liability, the service wholly or
+                partially and/or disconnect any customer equipment from the network for any reason which is found to be
+                reasonable
+                Page 3 of 4 by SIFY including any of the following circumstances.
+                <p> a) Due to any discrepancy noticed in the material particulars provided in the form overleaf
+                  including address confirmation. In case it is found that the information furnished in the order form
+                  is incorrect/ false and/ or the documents enclosed are not truthful/ genuine, the services provided
+                  are liable to be withdrawn immediately without any notice. In addition action may be taken by Police /
+                  Security agencies as deemed fit. </p>
+                <p>b) The nonpayment of bills beyond the due date The SIFY reserves the right to totally or partially
+                  disconnect the customer in case of nonpayment of the due bill by the due date or in case the cheque is
+                  dishonored. Although no notice is mandatory, all warning either as verbal or written communication
+                  shall be construed as due notice in this regard. </p>
+                <p> c) During technical failures, modification or repair or testing of the network. </p>
+                <p>d) SIFY reserves the right totally or partially disconnect the customer connection without notifying
+                  him in the case of his exceeding the prescribed credit limit. SIFY does not however guarantee to
+                  effect such suspension /disconnection immediately upon the customer reaching the credit limit. The
+                  SIFY has the right to predetermine and prefix the credit limit to usage of Services. In the event of
+                  the customer having exceeding his predetermined limit he will be responsible to pay all services
+                  obtained even beyond the stated limit. </p>
+                <p>e) When the agreement is terminated owing to any reason in consonance with the terms of this
+                  agreement. </p>
+                <p>f) Any other reason which is found to be reasonable by SIFY warranting suspension / disconnection.
+                </p>
+              </li>
+            </ol>
+          </li>
+          <!-- ****************** 10 **************** -->
+          <li>
+            <ol>
+              <li>All such dispute & differences that may arise between the parties hereto as to the meaning,
+                construction or effect of the terms & provisions of this agreement or as to the right or claim of the
+                either party under this agreement shall be referred to the sole arbitration by an executive nominated by
+                SIFY.
+                <ol>
+                  <li>The customer will not raise any objection in any such appointment that arbitrator so appointed is
+                    employee of the SIFY. </li>
+                  <li>The same will be settled by Arbitration conducted in accordance with the Provisions of Arbitration
+                    and Conciliation Act, 1996 or any statutory modification or re- enactment thereof or any rules made
+                    thereof. </li>
+                </ol>
+              </li>
+            </ol>
+          </li>
+          <!-- ****************** 11 **************** -->
+          <li>
+            <ol>
+              <li>Any notice pursuant to this agreement shall be deemed duly given or made when they have been delivered
+                by regd. Post/ FAX/ by hand addressed to the party at the address set forth at the beginning of this
+                agreement or to such other address as has been given to the other party in writing.
+              </li>
+              <li>Any notice pursuant to this agreement shall be deemed duly given or made when they have been delivered
+                by regd. Post/ FAX/ by hand addressed to the party at the address set forth at the beginning of this
+                agreement or to such other address as has been given to the other party in writing.
+              </li>
+            </ol>
+          </li>
+          <!-- ****************** 12 **************** -->
+          <li>
+            <ol>
+              <li>
+                The Courts at the headquarter of Chennai shall have exclusive jurisdiction under this agreement. I
+                confirm that I have read the terms & conditions and agree to abide by them.
+                Privacy of communication is not guaranteed which is subject to Regulation of the Government. Charges
+                :-Billing and Payment :Suspension and Disconnection Dispute Resolution/Arbitration :-
+                Notice :-Litigation :-payable by the customer.
+              </li>
+            </ol>
+          </li>
+        </ol>
+        </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- *********************** Signature ********************* -->
+    <div class="signature">
+      <div class="signature-space">
+        <span style="color: white;">/sn1/</span>
+      </div>
+      <p>Company Seal Signature of Customer</p>
+      <p>Date: {{now "date"}}</p>
+    </div>
+    {{else}}{{/if}}
+    <div class="bottom-content footer">
+      <div class="flex2">
+        <div>
+          <span>
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_74_5329)">
+                <path
+                  d="M4 0.75C3.35721 0.75 2.72886 0.940609 2.1944 1.29772C1.65994 1.65484 1.24338 2.16242 0.997393 2.75628C0.751408 3.35014 0.687047 4.00361 0.812449 4.63404C0.937851 5.26448 1.24738 5.84358 1.7019 6.2981C2.15643 6.75262 2.73552 7.06215 3.36596 7.18755C3.9964 7.31295 4.64986 7.24859 5.24372 7.00261C5.83758 6.75662 6.34516 6.34006 6.70228 5.8056C7.05939 5.27114 7.25 4.64279 7.25 4C7.24909 3.13833 6.90639 2.3122 6.29709 1.70291C5.6878 1.09361 4.86168 0.75091 4 0.75ZM4 6.75C3.4561 6.75 2.92442 6.58872 2.47218 6.28654C2.01995 5.98437 1.66747 5.55488 1.45933 5.05238C1.25119 4.54988 1.19673 3.99695 1.30284 3.4635C1.40895 2.93005 1.67086 2.44005 2.05546 2.05546C2.44005 1.67086 2.93006 1.40895 3.4635 1.30284C3.99695 1.19673 4.54988 1.25119 5.05238 1.45933C5.55488 1.66747 5.98437 2.01995 6.28654 2.47218C6.58872 2.92442 6.75 3.4561 6.75 4C6.74917 4.72909 6.45918 5.42808 5.94363 5.94363C5.42809 6.45918 4.72909 6.74917 4 6.75ZM3 4C3 4.20988 3.06604 4.41444 3.18876 4.58471C3.31148 4.75498 3.48466 4.88231 3.68377 4.94868C3.88289 5.01505 4.09783 5.01709 4.29817 4.95451C4.4985 4.89193 4.67407 4.76791 4.8 4.6C4.83983 4.54696 4.89909 4.51191 4.96476 4.50256C5.03042 4.49321 5.09711 4.51033 5.15016 4.55016C5.2032 4.58998 5.23825 4.64924 5.2476 4.71491C5.25695 4.78058 5.23983 4.84727 5.2 4.90031C5.01106 5.1521 4.7477 5.33806 4.44721 5.43186C4.14672 5.52566 3.82433 5.52255 3.52571 5.42296C3.22709 5.32338 2.96736 5.13237 2.78332 4.87699C2.59927 4.6216 2.50024 4.31479 2.50024 4C2.50024 3.68521 2.59927 3.3784 2.78332 3.12301C2.96736 2.86763 3.22709 2.67662 3.52571 2.57704C3.82433 2.47745 4.14672 2.47434 4.44721 2.56814C4.7477 2.66194 5.01106 2.8479 5.2 3.09969C5.21972 3.12595 5.23407 3.15584 5.24224 3.18765C5.25041 3.21947 5.25223 3.25257 5.2476 3.28509C5.24297 3.3176 5.23198 3.34889 5.21526 3.37716C5.19855 3.40543 5.17642 3.43012 5.15016 3.44984C5.12389 3.46956 5.094 3.48392 5.06219 3.49208C5.03038 3.50025 4.99727 3.50207 4.96476 3.49744C4.93224 3.49281 4.90096 3.48183 4.87269 3.46511C4.84442 3.44839 4.81972 3.42626 4.8 3.4C4.67407 3.23209 4.4985 3.10807 4.29817 3.04549C4.09783 2.98291 3.88289 2.98495 3.68377 3.05132C3.48466 3.11769 3.31148 3.24502 3.18876 3.41529C3.06604 3.58556 3 3.79012 3 4Z"
+                  fill="#1E2122" />
+              </g>
+              <defs>
+                <clipPath id="clip0_74_5329">
+                  <rect width="8" height="8" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            {{now "year"}} Sify Technologies Limited. All Rights Reserved.</span>
+          {{#if hasManaged}}
+          <span>
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_74_5333)">
+                <path
+                  d="M4 0.75C3.35721 0.75 2.72886 0.940609 2.1944 1.29772C1.65994 1.65484 1.24338 2.16242 0.997393 2.75628C0.751408 3.35014 0.687047 4.00361 0.812449 4.63404C0.937851 5.26448 1.24738 5.84358 1.7019 6.2981C2.15643 6.75262 2.73552 7.06215 3.36596 7.18755C3.9964 7.31295 4.64986 7.24859 5.24372 7.00261C5.83758 6.75662 6.34516 6.34006 6.70228 5.8056C7.05939 5.27114 7.25 4.64279 7.25 4C7.24909 3.13833 6.90639 2.3122 6.29709 1.70291C5.6878 1.09361 4.86168 0.75091 4 0.75ZM4 6.75C3.4561 6.75 2.92442 6.58872 2.47218 6.28654C2.01995 5.98437 1.66747 5.55488 1.45933 5.05238C1.25119 4.54988 1.19673 3.99695 1.30284 3.4635C1.40895 2.93005 1.67086 2.44005 2.05546 2.05546C2.44005 1.67086 2.93006 1.40895 3.4635 1.30284C3.99695 1.19673 4.54988 1.25119 5.05238 1.45933C5.55488 1.66747 5.98437 2.01995 6.28654 2.47218C6.58872 2.92442 6.75 3.4561 6.75 4C6.74917 4.72909 6.45918 5.42808 5.94363 5.94363C5.42809 6.45918 4.72909 6.74917 4 6.75ZM3 4C3 4.20988 3.06604 4.41444 3.18876 4.58471C3.31148 4.75498 3.48466 4.88231 3.68377 4.94868C3.88289 5.01505 4.09783 5.01709 4.29817 4.95451C4.4985 4.89193 4.67407 4.76791 4.8 4.6C4.83983 4.54696 4.89909 4.51191 4.96476 4.50256C5.03042 4.49321 5.09711 4.51033 5.15016 4.55016C5.2032 4.58998 5.23825 4.64924 5.2476 4.71491C5.25695 4.78058 5.23983 4.84727 5.2 4.90031C5.01106 5.1521 4.7477 5.33806 4.44721 5.43186C4.14672 5.52566 3.82433 5.52255 3.52571 5.42296C3.22709 5.32338 2.96736 5.13237 2.78332 4.87699C2.59927 4.6216 2.50024 4.31479 2.50024 4C2.50024 3.68521 2.59927 3.3784 2.78332 3.12301C2.96736 2.86763 3.22709 2.67662 3.52571 2.57704C3.82433 2.47745 4.14672 2.47434 4.44721 2.56814C4.7477 2.66194 5.01106 2.8479 5.2 3.09969C5.21972 3.12595 5.23407 3.15584 5.24224 3.18765C5.25041 3.21947 5.25223 3.25257 5.2476 3.28509C5.24297 3.3176 5.23198 3.34889 5.21526 3.37716C5.19855 3.40543 5.17642 3.43012 5.15016 3.44984C5.12389 3.46956 5.094 3.48392 5.06219 3.49208C5.03038 3.50025 4.99727 3.50207 4.96476 3.49744C4.93224 3.49281 4.90096 3.48183 4.87269 3.46511C4.84442 3.44839 4.81972 3.42626 4.8 3.4C4.67407 3.23209 4.4985 3.10807 4.29817 3.04549C4.09783 2.98291 3.88289 2.98495 3.68377 3.05132C3.48466 3.11769 3.31148 3.24502 3.18876 3.41529C3.06604 3.58556 3 3.79012 3 4Z"
+                  fill="#1E2122" />
+              </g>
+              <defs>
+                <clipPath id="clip0_74_5333">
+                  <rect width="8" height="8" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            {{now "year"}} Sify Digital Services Limited. All Rights Reserved.</span>
+          {{else}} {{/if}}
+        </div>
+        <div>
+          <span></span>
+          <div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Master Template</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style>
+    .container {
+      width: 595pt !important;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .link {
+      color: #3b80ff;
+      cursor: pointer;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    hr {
+      background-color: #d1e06d;
+      height: 1.2px;
+    }
+
+    .button-details {
+      margin-bottom: 26px;
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    .table-heading {
+      color: #0E3346;
+      font-size: 11pt;
+      font-weight: 600;
+    }
+
+    .greeting {
+      margin-bottom: 26px;
+    }
+
+    .primary {
+      color: #0E3346;
+    }
+
+    .button {
+      background-color: #0E3346;
+      border: none;
+      border-radius: 5px;
+      font-family: arial;
+      color: #fff;
+      padding: 10px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 10pt;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      color: #fff !important;
+      text-decoration: none;
+    }
+
+    body {
+      font-size: 10pt;
+    }
+
+    .flex-po {
+      display: flex;
+      justify-content: space-between !important;
+    }
+
+    body ul {
+      list-style: none;
+      padding: 0pt;
+      margin-bottom: 0pt;
+      line-height: 1.8;
+
+    }
+
+    .list-style {
+      margin-left: 22px;
+
+    }
+
+    body ol {
+      padding: 0pt;
+      margin-bottom: 0pt;
+      margin-left: 9pt;
+      line-height: 15pt;
+    }
+
+    body ol span {
+      color: #0045AC;
+      cursor: poi;
+    }
+
+    .flex {
+      display: flex;
+
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .flex2 {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .logo {
+      text-align: right;
+      margin-bottom: 26px;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .logo svg {
+      width: 55pt;
+    }
+
+    .vl {
+      border-left: 1pt solid #CBD0D2;
+      height: auto;
+    }
+
+    .main-heading {
+      margin-bottom: 30pt;
+    }
+
+    .main-heading h1 {
+      color: #0E3346;
+      text-align: center;
+      font-size: 18pt;
+      font-weight: 600;
+      margin: 0pt;
+    }
+
+    .main-heading2 h1 {
+      color: #0E3346;
+      font-size: 10pt;
+      font-weight: 600;
+      margin-bottom: 0pt;
+    }
+
+    .main-heading2 {
+      margin-bottom: 8pt;
+    }
+
+    .sub-heading {
+      color: #0E3346;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin-bottom: 6px;
+    }
+
+    .sub-heading2 h1 {
+      color: #0E3346;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      font-size: 10pt;
+
+    }
+
+    .address {
+      padding: 0pt;
+      margin-bottom: 26px;
+    }
+
+    .contact {
+      border-radius: 6pt;
+      background: #F7F9FA;
+      padding: 12pt 20pt;
+    }
+
+    .contact svg {
+      margin-bottom: -3pt;
+    }
+
+    .main-content {
+      padding: 33pt;
+    }
+
+    /* ************** TABLE ************ */
+    .table-bordered {
+      margin-bottom: 10px !important;
+    }
+
+    .table {
+      margin-bottom: 10px !important;
+    }
+
+    table,
+    th,
+    td {
+      border: 1pt solid black;
+      border-collapse: collapse;
+    }
+
+    table tr th {
+      background: rgba(14, 51, 70, 0.70) !important;
+      color: #fff;
+    }
+
+    thead tr th {
+      padding: 14pt 6pt !important;
+    }
+
+    tbody tr td {
+      padding: 14pt 6pt !important;
+    }
+
+    .table-2 thead tr th {
+      padding: 14pt 7pt !important;
+    }
+
+    .table-2 tbody tr td {
+      padding: 14pt 5pt !important;
+    }
+
+    /* ************** TABLE ************ */
+
+    .bottom-address {
+      background: #F7F9FA;
+      padding: 20pt;
+      margin-bottom: 50px;
+    }
+
+    .bottom-content {
+      background: #F7F9FA;
+      padding: 16pt;
+    }
+
+    .sub-text h1 {
+      color: var(--black-1, #1E2122);
+      font-size: 8pt;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin: 0pt;
+      margin-top: 6pt;
+    }
+
+    .Date-time {
+      margin-top: 30pt;
+    }
+
+    .Date-time .name {
+      margin-bottom: 10px;
+    }
+
+    .Date-time p {
+      margin-bottom: 4pt;
+    }
+
+
+    .sify-service table tbody tr td:nth-child(9) {
+      text-align: right !important;
+    }
+
+    .sify-service table tbody tr td:nth-child(10) {
+      text-align: right !important;
+    }
+
+
+    .sify-service table thead tr th:nth-child(9) {
+      text-align: right !important;
+    }
+
+    .sify-service table thead tr th:nth-child(10) {
+      text-align: right !important;
+    }
+
+
+    .sign {
+      margin-bottom: 60pt;
+    }
+
+    .footer {
+      bottom: 0pt !important;
+      width: 100%;
+    }
+
+    .container {
+      position: relative;
+    }
+
+    .company-name h1 {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .company-name {
+      margin-top: 55px;
+    }
+
+    .company-name p {
+      font-weight: 600;
+
+    }
+
+    .date-text {
+      font-weight: 400;
+    }
+
+    .top-address2 {
+      margin-top: 40px;
+    }
+
+    .mb-10 {
+      margin-bottom: 10px !important;
+    }
+
+    .mb-0 {
+      margin-bottom: 0px !important;
+    }
+  </style>
+</head>
+
+<body style="display:block; clear:both; page-break-after:always;">
+  <div class="container">
+
+    <div class="main-content">
+
+      <div class="top-header">
+        <div class="logo">
+          <svg width="55" height="29" viewBox="0 0 55 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_205_25)">
+              <path
+                d="M41.3269 25.2736C39.9736 28.7547 37.6642 28.9598 35.5633 28.9961C35.1009 29.0069 34.6277 28.9879 34.1314 28.9879V25.6756C34.8385 25.71 35.5472 25.6617 36.2431 25.5318C38.2129 25.0746 38.7154 23.9243 38.3095 22.1622C38.254 21.9249 38.1857 21.6743 38.1076 21.4037C37.9056 20.7336 37.6272 19.9618 37.2773 19.0984L33.7918 10.481C33.736 10.2347 33.5872 10.0192 33.3762 9.87908C33.1653 9.73894 32.9083 9.68488 32.6584 9.72808H28.709V22.6936H24.9502V9.72962H21.7031V6.64078H24.9636C24.9549 4.87641 25.5759 3.16631 26.7161 1.81546C27.243 1.2227 27.8946 0.752784 28.6246 0.439134C29.3547 0.125484 30.1451 -0.0242038 30.9398 0.000718683C32.0502 0.0383417 33.1494 0.235067 34.2034 0.58483L33.0946 3.43327C32.4843 3.20664 31.8438 3.07066 31.1936 3.02971C30.8403 3.03128 30.4923 3.1149 30.1772 3.27393C29.8621 3.43297 29.5886 3.66301 29.3785 3.94578C28.8718 4.5835 28.6077 5.37897 28.633 6.1917C28.633 6.34003 28.6381 6.49245 28.6499 6.64078H34.7295C35.1226 6.59691 35.5192 6.68566 35.8557 6.89284C36.1922 7.10002 36.4491 7.41363 36.5852 7.78343L40.5321 17.7323L43.3918 9.7153H40.8229V6.64078H48.3919C46.0347 12.8507 42.6802 21.7955 41.3269 25.2736Z"
+                fill="#B9D300" />
+              <path d="M15.4663 22.6955V9.71617H12.8594V6.64062H19.2749V22.695L15.4663 22.6955Z" fill="#B9D300" />
+              <path
+                d="M0.0609346 21.6619L1.40241 18.68C2.47718 19.5528 3.82408 20.0251 5.21105 20.0155C6.67583 20.0155 7.41156 19.4922 7.41156 18.4544C7.41923 18.1712 7.36371 17.8899 7.24902 17.6307C7.13432 17.3715 6.9633 17.1408 6.74828 16.9553C5.96 16.3758 5.09298 15.9108 4.17322 15.5743C1.39059 14.4289 -0.000718851 12.8206 -0.000718851 10.7495C-0.0266491 10.119 0.105961 9.49199 0.385079 8.92544C0.664198 8.35889 1.08099 7.87069 1.59765 7.50512C2.79625 6.68938 4.228 6.28204 5.67859 6.34405C7.3213 6.3368 8.94195 6.72068 10.4054 7.46369L9.32128 10.374C8.34062 9.62472 7.1211 9.25327 5.88718 9.32804C4.57088 9.32804 3.91307 9.84549 3.91376 10.8804C3.92478 11.1038 3.98946 11.3213 4.10237 11.5147C4.21528 11.7081 4.37312 11.8717 4.56266 11.9918C5.43011 12.54 6.35944 12.9845 7.33142 13.3161C8.51073 13.7121 9.56489 14.4095 10.3884 15.3385C11.0216 16.1558 11.3519 17.1658 11.3235 18.1976C11.3512 18.8736 11.2143 19.5462 10.9245 20.158C10.6346 20.7699 10.2004 21.3029 9.65883 21.7115C8.54856 22.5667 7.04473 22.9959 5.1309 22.9959C4.26327 23.0194 3.39625 22.9303 2.55173 22.7309C1.68578 22.4634 0.850826 22.1051 0.0609346 21.6619Z"
+                fill="#B9D300" />
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M50.624 4.41488H54.9994V0.0585938H50.624V4.41488Z"
+                fill="#B9D300" />
+            </g>
+            <defs>
+              <clipPath id="clip0_205_25">
+                <rect width="55" height="29" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+      </div>
+      <style>
+        .list-style {
+          list-style-type: disc;
+          padding-left: 20px;
+          margin: 0;
+        }
+      </style>
+
+      <div class="top-address-details">
+        <div>
+          <p>Dear {{customerName}},</p>
+          <div class="greeting">
+            <p class="sub-heading">Greetings from Sify!</p>
+            <p>
+              Subject: Sify - {{customerName}} - Feasibility update for MPLS Services - Request ID: {{reqId}}
+            </p>
+            <div class="greeting">
+              <p class="sub-heading">Dear [Channel Partner Associate Name],</p>
+              <p>
+                The feasibility status for the request raised has been updated. Please find the summary below:
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-address-details">
+        <div class="flex-po">
+          <div class="address">
+            <p class="sub-heading">Customer Details:</p>
+            <ul class="list-style">
+              <li>Customer ID: {{ebsAcccountNo}}</li>
+              <li>Customer Name: {{customerName}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-address-details">
+        <div class="flex-po">
+          <div class="address">
+            <p class="sub-heading">Request Overview:</p>
+            <ul class="list-style">
+              <li>Request ID: {{reqId}}</li>
+              <li>Request Date: {{now "date"}}</li>
+              <li>Request Type: {{quoteType}}</li>
+              <li>Number of connections: {{No. of line items}}</li>
+              <li>Feasibility Summary:</li>
+              <ul class="list-style">
+                <li>Feasible: [Count of feasible links]</li>
+                <li>Not Feasible: [Count of feasible links]</li>
+              </ul>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-details">
+        <p class="mb-10">
+          To view more details of each connection, use the Request ID -
+          <a href="{{url}}">{{reqId}}</a> or use the link:
+          <a href="{{url}}">{{url}}</a>
+        </p>
+        <div>
+          <p>Best Regards,</p>
+          <p>Team Sify</p>
+          <p>
+            <a href="[Sify Website Link]">[Sify Website Link]</a>
+          </p>
+        </div>
+      </div>
+
+      <hr>
+      <div class="bottom-add">
+        <div class="flex justify-between">
+          <div>
+            <div class="address mb-0">
+              <p class="sub-heading primary">Sify Technologies</p>
+              <ul>
+                <li>Il Floor, TIDEL Park, No.4,
+                <li>Rajiv Gandhi Salai, Taramani,</li>
+                <li>Chennai - 600113</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <ul class="text-right">
+              <li> <a class="link" href="">Terms & Conditions</a> </li>
+              <li> <a class="link" href="">Privacy Policy</a> </li>
+              <li> <a class="link" href="">Legal</a> </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="bottom-content footer">
+      <div class="flex2">
+        <div>
+          <span>
+            &#169; {{now "year"}} Sify Technologies Limited. All Rights Reserved.</span>
+        </div>
+        <div>
+          <span></span>
+          <div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+</body>
+</html>

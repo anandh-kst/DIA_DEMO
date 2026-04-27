@@ -1,0 +1,826 @@
+<html>
+
+<head>
+  <title>ILL_Fiber Proposal</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style>
+    html {
+      -webkit-print-color-adjust: exact;
+    }
+
+    .border-none {
+      border: none !important;
+    }
+
+    .border-right {
+      border-left: 0pt !important;
+      border-right: 1pt solid #ddd !important;
+    }
+
+    .border-top {
+      border-top: 1px solid #dee2e6;
+    }
+
+    .border-top-bottom {
+      border-top: 0pt !important;
+      border-bottom: 0pt !important;
+    }
+
+    .container {
+      /* height: 842pt !important; */
+      width: 595pt !important;
+      /* to centre page on screen*/
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    body {
+      font-size: 8pt;
+    }
+
+    body ul {
+      list-style: none;
+      padding: 0pt;
+      margin-bottom: 0pt;
+    }
+
+    body ol {
+      padding: 0pt;
+      margin-bottom: 0pt;
+      margin-left: 9pt;
+      line-height: 15pt;
+    }
+
+    body ol span {
+      color: #0045AC;
+      cursor: poi;
+    }
+
+    .flex {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .flex2 {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .logo {
+      text-align: right;
+    }
+
+    .logo svg {
+      width: 55pt;
+    }
+
+    .vl {
+      border-left: 1pt solid #CBD0D2;
+      height: auto;
+    }
+
+    .main-heading {
+      margin-bottom: 30pt;
+    }
+
+    .main-heading h1 {
+      color: #0E3346;
+      text-align: center;
+      font-size: 18pt;
+      font-weight: 600;
+      margin: 0pt;
+    }
+
+    .main-heading2 h1 {
+      color: #0E3346;
+      font-size: 10pt;
+      font-weight: 600;
+      margin-bottom: 0pt;
+    }
+
+    .main-heading2 {
+      margin-bottom: 13pt;
+    }
+
+    .sub-heading {
+      color: var(--black-1, #1E2122);
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin-bottom: 2px;
+    }
+
+    .sub-heading2 h1 {
+      color: var(--primary, #0E3346);
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      font-size: 10pt;
+    }
+
+    .address {
+      padding: 0pt;
+    }
+
+    .contact {
+      border-radius: 6pt;
+      background: #F7F9FA;
+      padding: 12pt 20pt;
+    }
+
+    .contact svg {
+      margin-bottom: -3pt;
+    }
+
+    .main-content {
+      padding: 33pt;
+    }
+
+    /* ************** TABLE ************ */
+    table {
+      margin-bottom: 35pt;
+    }
+
+    table,
+    th,
+    td {
+      border: 1pt solid black;
+      border-collapse: collapse;
+    }
+
+    table tr th {
+      background: rgba(14, 51, 70, 0.70) !important;
+      color: #fff;
+    }
+
+    thead tr th {
+      padding: 10pt 8pt !important;
+      font-size: 10pt !important;
+    }
+
+    tbody tr td {
+      padding: 10pt 8pt !important;
+      font-size: 10pt !important;
+    }
+
+    .table-2 thead tr th {
+      padding: 14pt 7pt !important;
+    }
+
+    .table-2 tbody tr td {
+      padding: 14pt 5pt !important;
+    }
+
+    /* ************** TABLE
+      ************ */
+    .bottom-address {
+      background: #F7F9FA;
+      padding: 20pt;
+    }
+
+    .bottom-content {
+      background: #F7F9FA;
+      padding: 16pt;
+    }
+
+    .sub-text h1 {
+      color: var(--black-1, #1E2122);
+      font-size: 8pt;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin: 0pt;
+      margin-top: 6pt;
+    }
+
+    .Date-time {
+      margin-top: 90pt;
+    }
+
+    .Date-time p {
+      margin-bottom: 4pt;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .sify-service table tbody tr td:nth-child(5) {
+      text-align: right !important;
+    }
+
+    .sify-service table tbody tr td:nth-child(6) {
+      text-align: right !important;
+    }
+
+    .sify-service table tbody tr td:nth-child(18) {
+      text-align: right !important;
+    }
+
+    .sify-service table thead tr th:nth-child(5) {
+      text-align: right !important;
+    }
+
+    .sify-service table thead tr th:nth-child(6) {
+      text-align: right !important;
+    }
+
+    .sify-service table thead tr th:nth-child(4) {
+      text-align: right !important;
+    }
+
+    .summary-net table tbody tr td:nth-child(2) {
+      text-align: right !important;
+    }
+
+    .summary-net table tbody tr td:nth-child(3) {
+      text-align: right !important;
+    }
+
+    .summary-net table tbody tr td:nth-child(4) {
+      text-align: right !important;
+    }
+
+    .summary-net table thead tr th:nth-child(2) {
+      text-align: right !important;
+    }
+
+    .summary-net table thead tr th:nth-child(3) {
+      text-align: right !important;
+    }
+
+    .summary-net table thead tr th:nth-child(4) {
+      text-align: right !important;
+    }
+
+    .customer-name {
+      font-weight: 600;
+
+    }
+
+    .sign {
+      margin-bottom: 60pt;
+    }
+
+    .footer {
+      /* position: absolute; */
+      bottom: 0pt !important;
+      width: 100%;
+    }
+
+    .top-address2 {
+      margin-top: 40px;
+    }
+
+    /* .container { position: relative; } */
+  </style>
+</head>
+
+<body style="display:block; clear:both; page-break-after:always;">
+  <!-- ***************** PAGE 1 ************************************************** -->
+  <div class="container page 1">
+    <!-- <div class="top-header">
+     <div class="logo">
+      <svg id="Group_29104" data-name="Group 29104" xmlns="http://www.w3.org/2000/svg" width="61.581" height="30.802" viewBox="0 0 61.581 30.802">
+        <path id="Path_192392" data-name="Path 192392" d="M757.9,391.69v-.517c0-.083-.025-.113-.119-.113h-6.923c-.1,0-.137.042-.125.112a1.451,1.451,0,0,1-.008.271v2.706c0,.123.03.166.168.166h2.526c.277,0,.23-.014.23.219q.005,6.695,0,13.391c0,.142.036.186.194.186h3.845a1.184,1.184,0,0,0,.126,0c.09-.01.09-.046.09-.2v-8.317h0Z" transform="translate(-736.324 -384.017)" fill="#bed70c"/>
+        <path id="Path_192393" data-name="Path 192393" d="M862.893,339.561a.48.48,0,0,0-.2-.019h-8.031c-.1,0-.168,0-.168.13,0,.993,0,1.984,0,2.98,0,.078.013.125.077.138a.184.184,0,0,0,.089.012c.119-.008.247,0,.368,0h2.252a.217.217,0,0,1,.053.006c.04.022.031.066.011.124-.162.432-.321.864-.484,1.294-.272.722-.547,1.443-.819,2.165q-.364.96-.723,1.921c-.191.508-.379,1.016-.569,1.524l-.512,1.366c-.011.031-.01.059-.06.064h-.008a.125.125,0,0,1-.04-.059c-.036-.084-.079-.165-.114-.248l-1.133-2.725c-.31-.741-.625-1.481-.936-2.221q-.57-1.362-1.133-2.727-.283-.682-.569-1.364c-.191-.455-.362-.9-.574-1.331a1.675,1.675,0,0,0-.853-.821,1.606,1.606,0,0,0-.165-.064,3.618,3.618,0,0,0-1.216-.155h-6.228c-.081,0-.158,0-.24,0a.135.135,0,0,1-.091-.018s0,0,0,0a.08.08,0,0,1-.018-.028l0-.014,0-.024v-.018a7.472,7.472,0,0,1,.031-.969,3.428,3.428,0,0,1,.866-1.869,2.631,2.631,0,0,1,2.424-.871,8.461,8.461,0,0,1,1.494.345c.17.055.207-.008.257-.136.1-.241.2-.481.293-.72.26-.633.518-1.264.781-1.9.011-.025.022-.052.031-.077.037-.09.044-.138-.079-.171a18.827,18.827,0,0,0-2.217-.476c-.119-.019-.238-.035-.358-.048-.028,0-.055,0-.083-.007-.091-.01-.184-.018-.275-.025-.071,0-.142-.007-.213-.01-.048,0-.1-.006-.146-.006a8.118,8.118,0,0,0-1.8.16,5.924,5.924,0,0,0-2.39,1.088,6.509,6.509,0,0,0-2.091,2.743,8.429,8.429,0,0,0-.615,2.9c0,.076-.018.12-.061.143a.253.253,0,0,1-.106.017c-1.1-.008-2.2,0-3.3-.008a.3.3,0,0,0-.139.023c-.052.024-.067.075-.067.165.006.968.008,1.936,0,2.9,0,.162.052.191.207.191,1.078-.006,2.156,0,3.234-.007.162,0,.2.035.2.189q-.007,3.348,0,6.7l-.013-.006q.007,3.352,0,6.7c0,.1.021.147.079.17a.286.286,0,0,0,.141.025c1.26-.006,2.522,0,3.785,0q.21,0,.21-.2V342.975c0-.126.032-.159.166-.159,1.485,0,2.972,0,4.457.008a.931.931,0,0,1,1.017.668c.249.532.467,1.074.7,1.61.327.767.658,1.527.981,2.291.422.99.838,1.978,1.26,2.974.318.743.642,1.49.959,2.237a25.785,25.785,0,0,1,1.156,3.155,4.34,4.34,0,0,1,.171,1.874,2.007,2.007,0,0,1-.9,1.376,4.573,4.573,0,0,1-1.944.687,11.176,11.176,0,0,1-1.793.084c-.1,0-.136.024-.136.124q.005,1.618,0,3.238c0,.081.019.118.077.131a.231.231,0,0,0,.092.014,20.5,20.5,0,0,0,3.447-.147,5.891,5.891,0,0,0,1.675-.524,5.441,5.441,0,0,0,2.337-2.383,13.523,13.523,0,0,0,.662-1.494c.285-.717.584-1.429.872-2.146.508-1.268,1.01-2.537,1.518-3.8q.88-2.2,1.762-4.4c.474-1.187.942-2.377,1.413-3.565.259-.651.523-1.294.781-1.948.185-.467.362-.936.547-1.4.225-.57.458-1.138.683-1.708.055-.142.071-.19,0-.208Z" transform="translate(-808.787 -332.504)" fill="#bed70c"/>
+        <path id="Path_192394" data-name="Path 192394" d="M642.659,398.019h0l0,0a6.369,6.369,0,0,0-2.021-1.532,22.536,22.536,0,0,0-2.184-.917,14.462,14.462,0,0,1-2.024-.918,1.6,1.6,0,0,1-1.014-1.582,1.381,1.381,0,0,1,.743-1.161,2.73,2.73,0,0,1,1.2-.284c.158-.008.316-.01.474-.01a8.435,8.435,0,0,1,.853.055,5.353,5.353,0,0,1,2.665.959c.065.048.1.054.134.024a.173.173,0,0,0,.054-.083c.138-.375.283-.749.429-1.121q.332-.846.671-1.693c.034-.078.034-.125-.066-.162-.229-.091-.45-.2-.678-.291a12.261,12.261,0,0,0-1.594-.505,11.06,11.06,0,0,0-1.621-.279,11.723,11.723,0,0,0-2.135-.033,9.654,9.654,0,0,0-1.748.3h0l-.011,0a6.73,6.73,0,0,0-1.626.7,3.985,3.985,0,0,0-2.092,3.087,4.175,4.175,0,0,0,.674,2.872,6.122,6.122,0,0,0,1.756,1.681,13.094,13.094,0,0,0,2.379,1.186,16.386,16.386,0,0,1,1.963.907,3.424,3.424,0,0,1,1.084.832,1.948,1.948,0,0,1,.339,1.827,1.514,1.514,0,0,1-1.247.987,5.639,5.639,0,0,1-1.675.1,7.042,7.042,0,0,1-2.442-.619,7.263,7.263,0,0,1-1.287-.771v0c-.133.281-.257.541-.383.8q-.523,1.1-1.05,2.207a.153.153,0,0,0-.02.125.172.172,0,0,0,.1.084c.474.224.949.449,1.434.648a8.29,8.29,0,0,0,2.656.642,16.166,16.166,0,0,0,2.824-.022,9.439,9.439,0,0,0,1.583-.3,6.519,6.519,0,0,0,2.184-1.063,4.258,4.258,0,0,0,1.713-2.859,5.353,5.353,0,0,0-.048-1.857,4.372,4.372,0,0,0-.936-1.966Z" transform="translate(-631.024 -381.72)" fill="#bed70c"/>
+        <path id="Path_192395" data-name="Path 192395" d="M1107.153,332.931h0q-2.154.005-4.31,0h-.323a.362.362,0,0,0-.057,0h-.007c-.055.014-.073.053-.073.129v4.348c0,.1.037.131.142.13h4.583c.116,0,.165-.02.165-.15v-2.158h0v-2.158c0-.079.01-.148-.118-.148Z" transform="translate(-1045.689 -332.879)" fill="#bed70c"/>
+      </svg>
+     </div>
+   </div> -->
+    <div class="main-content">
+      <div class="top-header">
+        <div class="logo">
+          <svg width="55" height="29" viewBox="0 0 55 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_205_25)">
+              <path
+                d="M41.3269 25.2736C39.9736 28.7547 37.6642 28.9598 35.5633 28.9961C35.1009 29.0069 34.6277 28.9879 34.1314 28.9879V25.6756C34.8385 25.71 35.5472 25.6617 36.2431 25.5318C38.2129 25.0746 38.7154 23.9243 38.3095 22.1622C38.254 21.9249 38.1857 21.6743 38.1076 21.4037C37.9056 20.7336 37.6272 19.9618 37.2773 19.0984L33.7918 10.481C33.736 10.2347 33.5872 10.0192 33.3762 9.87908C33.1653 9.73894 32.9083 9.68488 32.6584 9.72808H28.709V22.6936H24.9502V9.72962H21.7031V6.64078H24.9636C24.9549 4.87641 25.5759 3.16631 26.7161 1.81546C27.243 1.2227 27.8946 0.752784 28.6246 0.439134C29.3547 0.125484 30.1451 -0.0242038 30.9398 0.000718683C32.0502 0.0383417 33.1494 0.235067 34.2034 0.58483L33.0946 3.43327C32.4843 3.20664 31.8438 3.07066 31.1936 3.02971C30.8403 3.03128 30.4923 3.1149 30.1772 3.27393C29.8621 3.43297 29.5886 3.66301 29.3785 3.94578C28.8718 4.5835 28.6077 5.37897 28.633 6.1917C28.633 6.34003 28.6381 6.49245 28.6499 6.64078H34.7295C35.1226 6.59691 35.5192 6.68566 35.8557 6.89284C36.1922 7.10002 36.4491 7.41363 36.5852 7.78343L40.5321 17.7323L43.3918 9.7153H40.8229V6.64078H48.3919C46.0347 12.8507 42.6802 21.7955 41.3269 25.2736Z"
+                fill="#B9D300" />
+              <path d="M15.4663 22.6955V9.71617H12.8594V6.64062H19.2749V22.695L15.4663 22.6955Z" fill="#B9D300" />
+              <path
+                d="M0.0609346 21.6619L1.40241 18.68C2.47718 19.5528 3.82408 20.0251 5.21105 20.0155C6.67583 20.0155 7.41156 19.4922 7.41156 18.4544C7.41923 18.1712 7.36371 17.8899 7.24902 17.6307C7.13432 17.3715 6.9633 17.1408 6.74828 16.9553C5.96 16.3758 5.09298 15.9108 4.17322 15.5743C1.39059 14.4289 -0.000718851 12.8206 -0.000718851 10.7495C-0.0266491 10.119 0.105961 9.49199 0.385079 8.92544C0.664198 8.35889 1.08099 7.87069 1.59765 7.50512C2.79625 6.68938 4.228 6.28204 5.67859 6.34405C7.3213 6.3368 8.94195 6.72068 10.4054 7.46369L9.32128 10.374C8.34062 9.62472 7.1211 9.25327 5.88718 9.32804C4.57088 9.32804 3.91307 9.84549 3.91376 10.8804C3.92478 11.1038 3.98946 11.3213 4.10237 11.5147C4.21528 11.7081 4.37312 11.8717 4.56266 11.9918C5.43011 12.54 6.35944 12.9845 7.33142 13.3161C8.51073 13.7121 9.56489 14.4095 10.3884 15.3385C11.0216 16.1558 11.3519 17.1658 11.3235 18.1976C11.3512 18.8736 11.2143 19.5462 10.9245 20.158C10.6346 20.7699 10.2004 21.3029 9.65883 21.7115C8.54856 22.5667 7.04473 22.9959 5.1309 22.9959C4.26327 23.0194 3.39625 22.9303 2.55173 22.7309C1.68578 22.4634 0.850826 22.1051 0.0609346 21.6619Z"
+                fill="#B9D300" />
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M50.624 4.41488H54.9994V0.0585938H50.624V4.41488Z"
+                fill="#B9D300" />
+            </g>
+            <defs>
+              <clipPath id="clip0_205_25">
+                <rect width="55" height="29" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+      </div>
+      <div class="main-heading">
+        <h1>{{companyDetails.poTitle}}</h1>
+      </div>
+      <div class="top-address-details">
+        <div class="flex-po">
+          <div class="col-md-4 po-details text-right">
+            <p class="sub-heading">Date: <span class="date-text">{{now "date"}}</span> </p>
+          </div>
+          <div class="col-md-8 address">
+            <p class="sub-heading">From,</p>
+            <ul>
+              <li class="sub-heading">
+                SIFY TECHNOLOGIES LIMITED,</li>
+              <li>
+                2nd Floor Tidel Park,
+              </li>
+              <li>
+                No.4 Rajiv Gandhi Salai,
+              </li>
+              <li>
+                Taramani,Chennai-600113.
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+      <div class="top-address-details top-address2">
+        <div class="flex-po">
+          <div class="col-md-8 address">
+            <p class="sub-heading">To,</p>
+            <ul>
+              <li class="sub-heading">
+                {{companyName}}</li>
+              <li>{{companyDetails.address}}</li>
+              <li>{{companyDetails.address1}}</li>
+              <li>{{companyDetails.city}}, {{companyDetails.state}}, {{companyDetails.pinCode}}</li>
+              {{!-- <li>{{Contact Number}}</li> --}}
+            </ul>
+          </div>
+          <div class="col-md-4 po-details text-right">
+            <!-- <p class="sub-heading">ProposalDate : <span class="date-text ">{{data}}</span> </p> -->
+          </div>
+        </div>
+      </div>
+
+
+      <div class="main-heading2 top-address2">
+        <p class="customer-name">This Document is Shared by {{cpCompany}} ({{customerName}}) and Accound Manager :
+          {{accountManagerName}}</p>
+        <p>We are pleased to share the following proposal details for your review.</p>
+
+      </div>
+      <!-- ******** TABLE ********* -->
+      <div class="table sify-service">
+        <table class="table table-bordered" style="width:100%">
+          <colgroup>
+            <col width="3%" />
+            {{!--
+            <col width="30%" /> --}}
+            <col width="25%" />
+            <col width="30%" />
+            <col width="10%" />
+            <col width="10%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">
+                <span>S.No</span>
+              </th>
+              {{!-- <th scope="col">
+                <span>Company</span>
+              </th> --}}
+              <th scope="col">
+                <span>Customer Shipping Address</span>
+              </th>
+              <th scope="col">
+                <span>Product</span>
+              </th>
+              <th scope="col">
+                <span>One Time Charges (OTC)</span>
+              </th>
+              <th scope="col">
+                <span>Annual Recurring Charges (ARC)</span>
+              </th>
+            </tr>
+          </thead>
+          {{#each locationDetails}}
+          <tbody>
+            <!-- ************************************************* Sify Technologies Ltd ************************************************* -->
+            {{#each basePlan}}
+            <tr>
+              <td class="border-top-bottom">{{incSerial1}}</td>
+              {{!-- <td class="border-top-bottom">Sify Technologies Limited</td> --}}
+              <td class="border-none" style="vertical-align: middle;">
+                <ul>
+                  <li>{{../shippingAddress.address1}},</li>
+                  <li>{{../shippingAddress.address2}},</li>
+                  {{#if ../shippingAddress.address3}}
+                  <li>{{../shippingAddress.address3}},</li>
+                  {{/if}}
+                  <li>{{../shippingAddress.city}}, {{../shippingAddress.state}} - {{../shippingAddress.pincode}}.</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>{{../connectionType}}: {{../reqBandwidth}} {{../reqBandwidthUOM}}</li>
+                  <li>Class of Service: {{planType}}</li>
+                  <li>Contract Term: {{../contractPeriod}} {{../contractUnit}}</li>
+                </ul>
+              </td>
+              <td style="text-align: right;">{{#if otc}} ₹ {{otc}} {{else}} - {{/if}}</td>
+              <td style="text-align: right;">{{#if arc}} ₹ {{arc}} {{else}} - {{/if}}</td>
+            </tr>
+            {{/each}}
+            <!-- ************************************************* TOWER CHARGES ************************************************* -->
+            {{#each additionalPrice}}
+            <tr>
+              <td class="border-top-bottom"></td>
+              {{!-- <td class="border-right border-top-bottom"></td> --}}
+              <td class="border-none"></td>
+              <td>{{mastHeight}} Meter {{mastType}} (provided by Sify)</td>
+              <td style="text-align: right;">{{#if otc}} ₹ {{otc}} {{else}} - {{/if}}</td>
+              <td style="text-align: right;">{{#if arc}} ₹ {{arc}} {{else}} - {{/if}}</td>
+            </tr>
+            {{/each}}
+            {{#each valueAddedService}}
+            <tr>
+              <td class="border-top-bottom"></td>
+              {{!-- <td class="border-right border-top-bottom"></td> --}}
+              <td class="border-none"></td>
+              <td>{{name}}</td>
+              <td style="text-align: right;">{{#if otc}} ₹ {{otc}} {{else}} - {{/if}}</td>
+              <td style="text-align: right;">{{#if arc}} ₹ {{arc}} {{else}} - {{/if}}</td>
+            </tr>
+            {{/each}}
+            {{!-- {{#if hasManaged}}
+            {{#each managedBundled}}
+            <tr>
+              {{#if @first}}
+              <td rowspan="{{../managedBundled.length}}">{{incSerial}}</td>
+              <td rowspan="{{../managedBundled.length}}">Sify Digital Services Limited</td>
+              <td rowspan="{{../managedBundled.length}}" class="border-none"></td>
+              {{/if}}
+              <td>{{name}}</td>
+              <td style="text-align: right;">{{#if otc}} ₹ {{otc}} {{else}} - {{/if}}</td>
+              <td style="text-align: right;">{{#if arc}} ₹ {{arc}} {{else}} - {{/if}}</td>
+            </tr>
+            {{/each}}
+            {{/if}} --}}
+          </tbody>
+          {{/each}}
+          <tr class="sub-heading">
+            <td style="vertical-align: middle;text-align: end;" colspan="3">Total</td>
+            <td style="vertical-align: middle;text-align: end;">{{#if stlPrice.otc}}₹&nbsp;{{stlPrice.otc}} {{else}} -
+              {{/if}}
+            </td>
+            <td style="vertical-align: middle;text-align: end;">{{#if stlPrice.arc}}₹&nbsp;{{stlPrice.arc}} {{else}} -
+              {{/if}}
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      {{#if hasRateCard}}
+      <div>
+        <p>
+          <b>Terms and Conditions</b>
+          applicable as per the
+          {{companyDetails.soDes}}
+          signed between SIFY TECHNOLOGIES LIMITED &
+          {{companyName}}.
+        </p>
+      </div>
+      {{/if}}
+
+      <div>
+
+        {{#if hasManaged}}
+        <div class="top-address-details" style="page-break-before: always; margin-top:50px">
+          <div class="col-md-8 address">
+            <p class="sub-heading">From,</p>
+            <ul>
+              <li class="sub-heading">
+                SIFY DIGITAL SERVICES LIMITED,</li>
+              <li>
+                2nd Floor Tidel Park,
+              </li>
+              <li>
+                No.4 Rajiv Gandhi Salai,
+              </li>
+              <li>
+                Taramani,Chennai-600113.
+              </li>
+            </ul>
+          </div>
+
+          <div class="top-address-details top-address2">
+            <div class="flex-po">
+              <div class="col-md-8 address">
+                <p class="sub-heading">To,</p>
+                <ul>
+                  <li class="sub-heading">
+                    {{companyName}}</li>
+                  <li>{{companyDetails.address}}</li>
+                  <li>{{companyDetails.address1}}</li>
+                  <li>{{companyDetails.city}}, {{companyDetails.state}}, {{companyDetails.pinCode}}</li>
+                  {{!-- <li>{{Contact Number}}</li> --}}
+                </ul>
+              </div>
+              <div class="col-md-4 po-details text-right">
+                <!-- <p class="sub-heading">ProposalDate : <span class="date-text ">{{data}}</span> </p> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="table sify-service" style="margin-top:35px">
+            <table class="table table-bordered" style="width:100%">
+              <colgroup>
+                <col width="3%" />
+                {{!--
+                <col width="30%" /> --}}
+                <col width="25%" />
+                <col width="30%" />
+                <col width="10%" />
+                <col width="10%" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th scope="col">
+                    <span>S.No</span>
+                  </th>
+                  {{!-- <th scope="col">
+                    <span>Company</span>
+                  </th> --}}
+                  <th scope="col">
+                    <span>Customer Shipping Address</span>
+                  </th>
+                  <th scope="col">
+                    <span>Product</span>
+                  </th>
+                  <th scope="col">
+                    <span>One Time Charges (OTC)</span>
+                  </th>
+                  <th scope="col">
+                    <span>Annual Recurring Charges (ARC)</span>
+                  </th>
+                </tr>
+              </thead>
+              {{#each locationDetails}}
+              <tbody>
+
+                {{#if hasManaged}}
+                {{#each managedBundled}}
+                <tr>
+                  {{#if @first}}
+                  <td rowspan="{{../managedBundled.length}}">{{incSerial2}}</td>
+                  {{!-- <td rowspan="{{../managedBundled.length}}">Sify Digital Services Limited</td> --}}
+                  <td rowspan="{{../managedBundled.length}}" class="border-none" style="vertical-align: middle;">
+                    <ul>
+                      <li>{{../shippingAddress.address1}},</li>
+                      <li>{{../shippingAddress.address2}},</li>
+                      {{#if ../shippingAddress.address3}}
+                      <li>{{../shippingAddress.address3}},</li>
+                      {{/if}}
+                      <li>{{../shippingAddress.city}}, {{../shippingAddress.state}} - {{../shippingAddress.pincode}}.
+                      </li>
+                    </ul>
+                  </td>
+                  {{/if}}
+                  <td>{{name}}</td>
+                  <td style="text-align: right;">{{#if otc}} ₹ {{otc}} {{else}} - {{/if}}</td>
+                  <td style="text-align: right;">{{#if arc}} ₹ {{arc}} {{else}} - {{/if}}</td>
+                </tr>
+                {{/each}}
+                {{/if}}
+              </tbody>
+              {{/each}}
+              <tr class="sub-heading">
+                <td style="vertical-align: middle;text-align: end;" colspan="3">Total</td>
+                <td style="vertical-align: middle;text-align: end;">{{#if sdsPrice.otc}}₹&nbsp;{{sdsPrice.otc}} {{else}}
+                  -
+                  {{/if}}
+                </td>
+                <td style="vertical-align: middle;text-align: end;">{{#if sdsPrice.arc}}₹&nbsp;{{sdsPrice.arc}} {{else}}
+                  -
+                  {{/if}}
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          {{#if hasRateCard}}
+          <div>
+            <p>
+              <b>Terms and Conditions</b>
+              applicable as per the
+              {{companyDetails.soDes}}
+              signed between SIFY DIGITAL SERVICES LIMITED &
+              {{companyName}}.
+            </p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="main-heading2" style="page-break-before: always">
+          <h1>Summary of Net Charges</h1>
+        </div>
+        <!-- ******** TABLE ********* -->
+        <div class="table summary-net">
+          <table class="table table-bordered" style="width:100%">
+            <colgroup>
+              <col width="30%" />
+              <col width="20%" />
+              <col width="20%" />
+              <col width="20%" />
+
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">
+                  <span>Charge Type</span>
+                </th>
+                <th scope="col">
+                  <span>Amount (INR)</span>
+                </th>
+                <th scope="col">
+                  <span>STL</span>
+                </th>
+                <th scope="col">
+                  <span>SDS</span>
+                </th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Annual Recurring Charges (ARC)</td>
+                <td>₹ {{totalARC}}</td>
+                <td>{{#if stlPrice.arc}} ₹ {{stlPrice.arc}} {{else}} - {{/if}}</td>
+                <td>{{#if sdsPrice.arc}} ₹ {{sdsPrice.arc}} {{else}} - {{/if}}</td>
+
+              </tr>
+              <tr>
+                <td>One Time Charges (OTC)</td>
+                <td>₹ {{totalOTC}}</td>
+                <td>{{#if stlPrice.otc}} ₹ {{stlPrice.otc}} {{else}} - {{/if}}</td>
+                <td>{{#if sdsPrice.otc}} ₹ {{sdsPrice.otc}} {{else}} - {{/if}}</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+        {{else}}
+
+        {{/if}}
+        {{#if hasRateCard}}
+
+        {{else}}
+        <div class="main-heading2">
+          <h1>General Terms and Conditions:</h1>
+        </div>
+        <div class="terms-conditions">
+          <div class="sub-heading2">
+            <h1>{{{terms.title1}}}:</h1>
+          </div>
+          <div class="content">
+            <ol>
+              <li>This proposal is valid till {{{validTillDate}}} </li>
+              {{{terms.commercials}}}
+            </ol>
+          </div>
+        </div>
+        <div class="terms-conditions">
+          <div class="sub-heading2">
+            <h1>{{{terms.title2}}}:</h1>
+          </div>
+          <div class="content">
+            {{{terms.contractTermination}}}
+          </div>
+        </div>
+        <div class="sub-heading2">
+          <h1>Billing & Notice Period T&C :</h1>
+        </div>
+        <div class="table sify-service">
+          <table class="table table-bordered" style="width:100%">
+            <colgroup>
+              <col width="3%" />
+              <col width="15%" />
+              <col width="20%" />
+              <col width="20%" />
+              <col width="5%" />
+              <col width="40%" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">
+                  <span>Product</span>
+                </th>
+                <th scope="col">
+                  <span>Billing Pattern - RC</span>
+                </th>
+                <th scope="col">
+                  <span>Billing Pattern - OT </span>
+                </th>
+                <th scope="col">
+                  <span>Notice Period</span>
+                </th>
+                <th scope="col">
+                  <span>Warranty</span>
+                </th>
+                <th scope="col">
+                  <span>Billing Dispute</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="text-align: left;">Express Connect</td>
+                <td style="text-align: left;">Quarterly in Advance</td>
+                <td style="text-align: left;">100% advance along with Order</td>
+                <td style="text-align: left;">90 Days in advance</td>
+                <td style="text-align: left;"></td>
+                <td style="text-align: left;">Billing Disputes to be raised within 15 days of invoice submission. No
+                  claims raised later would not
+                  be accepted</td>
+              </tr>
+              {{#if hasManaged}}
+              <tr>
+                <td style="text-align: left;">MCPE</td>
+                <td style="text-align: left;">Quarterly in Advance</td>
+                <td style="text-align: left;">100% advance along with Order</td>
+                <td style="text-align: left;">90 Days in advance</td>
+                <td style="text-align: left;"></td>
+                <td style="text-align: left;">Billing Disputes to be raised within 15 days of invoice submission. No
+                  claims raised later would not
+                  be accepted</td>
+              </tr>
+              <tr>
+                <td style="text-align: left;">Managed NOC</td>
+                <td style="text-align: left;">Quarterly in Advance</td>
+                <td style="text-align: left;">100% advance along with Order</td>
+                <td style="text-align: left;">90 Days in advance</td>
+                <td style="text-align: left;"></td>
+                <td style="text-align: left;">Billing Disputes to be raised within 15 days of invoice submission. No
+                  claims raised later would not
+                  be accepted</td>
+              </tr>
+              {{/if}}
+            </tbody>
+          </table>
+        </div>
+        {{/if}}
+        {{!-- <div class="Date-time">
+          <div>
+            <p> <span class="sub-heading">Date: </span> {{now "date"}}</p>
+          </div>
+          <div>
+            <p> <span class="sub-heading">Time: </span> {{now "time"}}</p>
+          </div>
+        </div> --}}
+        <!-- ******** TERMS AND CONDITION ********* -->
+      </div>
+    </div>
+
+
+    <div class="bottom-content footer">
+      <div class="flex2">
+        <div>
+          <span>
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_74_5329)">
+                <path
+                  d="M4 0.75C3.35721 0.75 2.72886 0.940609 2.1944 1.29772C1.65994 1.65484 1.24338 2.16242 0.997393 2.75628C0.751408 3.35014 0.687047 4.00361 0.812449 4.63404C0.937851 5.26448 1.24738 5.84358 1.7019 6.2981C2.15643 6.75262 2.73552 7.06215 3.36596 7.18755C3.9964 7.31295 4.64986 7.24859 5.24372 7.00261C5.83758 6.75662 6.34516 6.34006 6.70228 5.8056C7.05939 5.27114 7.25 4.64279 7.25 4C7.24909 3.13833 6.90639 2.3122 6.29709 1.70291C5.6878 1.09361 4.86168 0.75091 4 0.75ZM4 6.75C3.4561 6.75 2.92442 6.58872 2.47218 6.28654C2.01995 5.98437 1.66747 5.55488 1.45933 5.05238C1.25119 4.54988 1.19673 3.99695 1.30284 3.4635C1.40895 2.93005 1.67086 2.44005 2.05546 2.05546C2.44005 1.67086 2.93006 1.40895 3.4635 1.30284C3.99695 1.19673 4.54988 1.25119 5.05238 1.45933C5.55488 1.66747 5.98437 2.01995 6.28654 2.47218C6.58872 2.92442 6.75 3.4561 6.75 4C6.74917 4.72909 6.45918 5.42808 5.94363 5.94363C5.42809 6.45918 4.72909 6.74917 4 6.75ZM3 4C3 4.20988 3.06604 4.41444 3.18876 4.58471C3.31148 4.75498 3.48466 4.88231 3.68377 4.94868C3.88289 5.01505 4.09783 5.01709 4.29817 4.95451C4.4985 4.89193 4.67407 4.76791 4.8 4.6C4.83983 4.54696 4.89909 4.51191 4.96476 4.50256C5.03042 4.49321 5.09711 4.51033 5.15016 4.55016C5.2032 4.58998 5.23825 4.64924 5.2476 4.71491C5.25695 4.78058 5.23983 4.84727 5.2 4.90031C5.01106 5.1521 4.7477 5.33806 4.44721 5.43186C4.14672 5.52566 3.82433 5.52255 3.52571 5.42296C3.22709 5.32338 2.96736 5.13237 2.78332 4.87699C2.59927 4.6216 2.50024 4.31479 2.50024 4C2.50024 3.68521 2.59927 3.3784 2.78332 3.12301C2.96736 2.86763 3.22709 2.67662 3.52571 2.57704C3.82433 2.47745 4.14672 2.47434 4.44721 2.56814C4.7477 2.66194 5.01106 2.8479 5.2 3.09969C5.21972 3.12595 5.23407 3.15584 5.24224 3.18765C5.25041 3.21947 5.25223 3.25257 5.2476 3.28509C5.24297 3.3176 5.23198 3.34889 5.21526 3.37716C5.19855 3.40543 5.17642 3.43012 5.15016 3.44984C5.12389 3.46956 5.094 3.48392 5.06219 3.49208C5.03038 3.50025 4.99727 3.50207 4.96476 3.49744C4.93224 3.49281 4.90096 3.48183 4.87269 3.46511C4.84442 3.44839 4.81972 3.42626 4.8 3.4C4.67407 3.23209 4.4985 3.10807 4.29817 3.04549C4.09783 2.98291 3.88289 2.98495 3.68377 3.05132C3.48466 3.11769 3.31148 3.24502 3.18876 3.41529C3.06604 3.58556 3 3.79012 3 4Z"
+                  fill="#1E2122" />
+              </g>
+              <defs>
+                <clipPath id="clip0_74_5329">
+                  <rect width="8" height="8" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            {{now "year"}} Sify Technologies Limited. All Rights Reserved.</span>
+          {{#if hasManaged}}
+          <span>
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_74_5333)">
+                <path
+                  d="M4 0.75C3.35721 0.75 2.72886 0.940609 2.1944 1.29772C1.65994 1.65484 1.24338 2.16242 0.997393 2.75628C0.751408 3.35014 0.687047 4.00361 0.812449 4.63404C0.937851 5.26448 1.24738 5.84358 1.7019 6.2981C2.15643 6.75262 2.73552 7.06215 3.36596 7.18755C3.9964 7.31295 4.64986 7.24859 5.24372 7.00261C5.83758 6.75662 6.34516 6.34006 6.70228 5.8056C7.05939 5.27114 7.25 4.64279 7.25 4C7.24909 3.13833 6.90639 2.3122 6.29709 1.70291C5.6878 1.09361 4.86168 0.75091 4 0.75ZM4 6.75C3.4561 6.75 2.92442 6.58872 2.47218 6.28654C2.01995 5.98437 1.66747 5.55488 1.45933 5.05238C1.25119 4.54988 1.19673 3.99695 1.30284 3.4635C1.40895 2.93005 1.67086 2.44005 2.05546 2.05546C2.44005 1.67086 2.93006 1.40895 3.4635 1.30284C3.99695 1.19673 4.54988 1.25119 5.05238 1.45933C5.55488 1.66747 5.98437 2.01995 6.28654 2.47218C6.58872 2.92442 6.75 3.4561 6.75 4C6.74917 4.72909 6.45918 5.42808 5.94363 5.94363C5.42809 6.45918 4.72909 6.74917 4 6.75ZM3 4C3 4.20988 3.06604 4.41444 3.18876 4.58471C3.31148 4.75498 3.48466 4.88231 3.68377 4.94868C3.88289 5.01505 4.09783 5.01709 4.29817 4.95451C4.4985 4.89193 4.67407 4.76791 4.8 4.6C4.83983 4.54696 4.89909 4.51191 4.96476 4.50256C5.03042 4.49321 5.09711 4.51033 5.15016 4.55016C5.2032 4.58998 5.23825 4.64924 5.2476 4.71491C5.25695 4.78058 5.23983 4.84727 5.2 4.90031C5.01106 5.1521 4.7477 5.33806 4.44721 5.43186C4.14672 5.52566 3.82433 5.52255 3.52571 5.42296C3.22709 5.32338 2.96736 5.13237 2.78332 4.87699C2.59927 4.6216 2.50024 4.31479 2.50024 4C2.50024 3.68521 2.59927 3.3784 2.78332 3.12301C2.96736 2.86763 3.22709 2.67662 3.52571 2.57704C3.82433 2.47745 4.14672 2.47434 4.44721 2.56814C4.7477 2.66194 5.01106 2.8479 5.2 3.09969C5.21972 3.12595 5.23407 3.15584 5.24224 3.18765C5.25041 3.21947 5.25223 3.25257 5.2476 3.28509C5.24297 3.3176 5.23198 3.34889 5.21526 3.37716C5.19855 3.40543 5.17642 3.43012 5.15016 3.44984C5.12389 3.46956 5.094 3.48392 5.06219 3.49208C5.03038 3.50025 4.99727 3.50207 4.96476 3.49744C4.93224 3.49281 4.90096 3.48183 4.87269 3.46511C4.84442 3.44839 4.81972 3.42626 4.8 3.4C4.67407 3.23209 4.4985 3.10807 4.29817 3.04549C4.09783 2.98291 3.88289 2.98495 3.68377 3.05132C3.48466 3.11769 3.31148 3.24502 3.18876 3.41529C3.06604 3.58556 3 3.79012 3 4Z"
+                  fill="#1E2122" />
+              </g>
+              <defs>
+                <clipPath id="clip0_74_5333">
+                  <rect width="8" height="8" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            {{now "year"}}
+            Sify Digital Services Limited. All Rights Reserved.</span>{{else}} {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

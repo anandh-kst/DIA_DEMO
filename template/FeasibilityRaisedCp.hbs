@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Master Template</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500pt;
+      margin: 0 auto;
+    }
+
+    .main-content {
+      padding: 20px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      color: rgb(29, 31, 33);
+      line-height: 1.5;
+    }
+
+    .sub-heading {
+      color: #0E3346;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .header-logo {
+      text-align: right;
+      margin-top: 15px;
+      margin-bottom: 10px;
+    }
+
+    .header-title {
+      text-align: center;
+      font-size: 16pt;
+      font-weight: bold;
+      color: #090909;
+      margin-bottom: 15px;
+    }
+
+    .bullet-table {
+      margin-left: 15px;
+    }
+
+    .bullet-table td {
+      vertical-align: top;
+      font-size: 10pt;
+      color: rgb(29, 31, 33);
+      padding: 2px 0;
+    }
+
+    .bullet-icon {
+      width: 10px;
+      text-align: left;
+      padding-right: 5px;
+    }
+
+    .button-details {
+      margin-top: 20px;
+    }
+
+    .button-details p {
+      margin-bottom: 30px;
+      line-height: 1.4;
+    }
+
+    .link {
+      color: #3b80ff;
+      text-decoration: none;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 9pt;
+      color: #555;
+      margin-top: 30px;
+    }
+
+    .footer span {
+      display: block;
+      margin-top: -30px;
+    }
+
+    /* Table styles */
+    .sify-service {
+      margin: 15px 0;
+    }
+
+    @media only screen and (max-width: 600px) {
+      .main-content {
+        padding: 15px;
+      }
+
+      .header-logo {
+        text-align: center;
+      }
+
+      .footer {
+        padding: 10px 15px;
+        margin-top: 20px;
+      }
+
+      .footer span {
+        margin-bottom: 8px;
+      }
+
+      .bullet-table {
+        margin-left: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="main-content">
+
+      <div class="header-logo">
+        <a href="https://www.sifytechnologies.com" style="border: 0; text-decoration:none;">
+          <img src="https://www.sifytechnologies.com/wp-content/uploads/2022/04/logo_007800781_2166.png" alt="One Sify"
+            style="max-width:160px; height:auto;">
+        </a>
+      </div>
+      <hr />
+
+      <div class="detail-section greeting-section">
+        <div class="greeting">
+          <p class="sub-heading">Hi {{customerName}},</p>
+          <p>
+            A new feasibility check has been raised for DIA Services. Please find the request summary below:
+          </p>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <p class="sub-heading">Customer Details:</p>
+        <table class="bullet-table" role="presentation">
+          <tr>
+            <td class="bullet-icon">&bull;</td>
+            <td>Customer ID: {{ebsAccountNo}}</td>
+          </tr>
+          <tr>
+            <td class="bullet-icon">&bull;</td>
+            <td>Customer Name: {{companyName}}</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="detail-section">
+        <p class="sub-heading">Request Overview:</p>
+        <table class="bullet-table" role="presentation">
+          <tr>
+            <td class="bullet-icon">&bull;</td>
+            <td>Request ID: {{reqId}}</td>
+          </tr>
+          <tr>
+            <td class="bullet-icon">&bull;</td>
+            <td>Request Date: {{now "date"}}</td>
+          </tr>
+          <tr>
+            <td class="bullet-icon">&bull;</td>
+            <td>Request Type: {{quoteType}}</td>
+          </tr>
+          <tr>
+            <td class="bullet-icon">&bull;</td>
+            <td>Number of connections: {{numberOfLineItems}}</td>
+          </tr>
+        </table>
+      </div>
+      
+      <div class="sify-service">
+        <!-- Outlook compatible table with borders and colors -->
+        <table width="100%" border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; border: 1px solid #0E3346; font-family: Arial, sans-serif; font-size: 9pt;">
+          <thead>
+            <tr>
+              <th width="10%" bgcolor="#0E3346" style="background-color: #0E3346; color: #ffffff; padding: 10px 8px; border: 1px solid #0E3346; font-weight: bold;">
+                Sl.No
+              </th>
+              <th width="15%" bgcolor="#0E3346" style="background-color: #0E3346; color: #ffffff; padding: 10px 8px; border: 1px solid #0E3346; font-weight: bold;">
+                Feasibility ID
+              </th>
+              {{#unless isNew}}
+              <th width="15%" bgcolor="#0E3346" style="background-color: #0E3346; color: #ffffff; padding: 10px 8px; border: 1px solid #0E3346; font-weight: bold;">
+                Link ID
+              </th>
+              {{/unless}}
+              <th width="20%" bgcolor="#0E3346" style="background-color: #0E3346; color: #ffffff; padding: 10px 8px; border: 1px solid #0E3346; font-weight: bold;">
+                Location
+              </th>
+              <th width="15%" bgcolor="#0E3346" style="background-color: #0E3346; color: #ffffff; padding: 10px 8px; border: 1px solid #0E3346; font-weight: bold;">
+                Connection Type
+              </th>
+              <th width="15%" bgcolor="#0E3346" style="background-color: #0E3346; color: #ffffff; padding: 10px 8px; border: 1px solid #0E3346; font-weight: bold;">
+                Bandwidth
+              </th>
+              <th width="20%" bgcolor="#0E3346" style="background-color: #0E3346; color: #ffffff; padding: 10px 8px; border: 1px solid #0E3346; font-weight: bold;">
+                Feasibility Status
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each locationDetails}}
+            <tr>
+              <td style="padding: 8px; border: 1px solid #0E3346; text-align: center;">{{add @index 1}}</td>
+              <td style="padding: 8px; border: 1px solid #0E3346;">{{this.feasibilityId}}</td>
+              {{#unless ../isNew}}
+              <td style="padding: 8px; border: 1px solid #0E3346;">{{this.existingPlanDetails.linkId}}</td>
+              {{/unless}}
+              <td style="padding: 8px; border: 1px solid #0E3346;">{{this.shippingAddress.city}}</td>
+              <td style="padding: 8px; border: 1px solid #0E3346;">{{this.connectionType}}</td>
+              <td style="padding: 8px; border: 1px solid #0E3346;">{{this.reqBandwidth}} {{this.reqBandwidthUOM}}</td>
+              <td style="padding: 8px; border: 1px solid #0E3346;">{{this.feasibilityStatus}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="button-details">
+        <p>
+          To view and track the request, use the Request ID - {{reqId}} or use the link:
+          <br />
+          <a class="link" href="{{url}}/network/dia/feasibility">{{url}}/network/dia/feasibility</a>
+        </p>
+        <div style="margin-top: 20px;">
+          <p style="margin-bottom: 4px;">Best Regards,</p>
+          <p style="margin-bottom: 4px;">Team Sify</p>
+          <p>
+            <a class="link" href="https://onesify.sifytechnologies.com">Sify Website Link</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>&#169; {{now "year"}} Sify Technologies Limited. All Rights Reserved.</span>
+    </div>
+  </div>
+</body>
+
+</html>

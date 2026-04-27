@@ -1,0 +1,189 @@
+<html>
+
+<head>
+  <title>DIA</title>
+  <style>
+    body {
+      background-color: #ffffff;
+      font-size: 16px;
+      color: #474747;
+      font-family: 'Myriad Pro', sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 800px;
+      background: #ffffff;
+      padding: 20px;
+      position: relative;
+      margin: 0 0 0 180px;
+    }
+
+    .header-logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-align: right !important;
+    }
+
+    .header-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #090909;
+      margin-bottom: 40px;
+    }
+
+    .list-style {
+      list-style: disc;
+      text-align: left;
+      margin-left: 40px;
+      padding-left: 20px;
+      line-height: 2;
+    }
+
+    .main-table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: #ffffff;
+      box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-table th,
+    .main-table td {
+      border: 2px solid #302f2f;
+      padding: 10px;
+      color: black;
+      font-size: 15px;
+    }
+
+    .main-table td {
+      text-align: right;
+    }
+
+    .main-table th:nth-child(1),
+    .main-table th:nth-child(2),
+    .main-table th:nth-child(3),
+    .main-table td:nth-child(1),
+    .main-table td:nth-child(2),
+    .main-table td:nth-child(3) {
+      text-align: left !important;
+    }
+
+    .main-table th {
+      font-weight: bold;
+    }
+
+    .footer {
+      font-size: 14px;
+      line-height: 18px;
+      color: #0A2134;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        width: 95%;
+        padding: 10px;
+      }
+
+      .main-table {
+        width: 100%;
+        font-size: 13px;
+      }
+
+      .header-logo {
+        position: static;
+        text-align: right !important;
+        margin-bottom: 10px;
+      }
+
+      .header-title {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="header-logo">
+      <a href="https://www.sifytechnologies.com" style="border: 0; text-decoration:none;">
+        <img src="https://www.sifytechnologies.com/wp-content/uploads/2022/04/logo_007800781_2166.png" alt="One Sify"
+          style="max-width:160px; height:auto;">
+      </a>
+    </div>
+
+    <div class="header-title">DIA {{quoteType}}</div>
+    <hr />
+
+    <div class="top-address-details">
+      <ul class="list-style">
+        <li>SCQH_ID: {{reqId}}</li>
+        <li>Customer Code: {{ebsAccountNo}}</li>
+        <li>Customer Name: {{companyName}}</li>
+        <li>Order signed date: {{now "date"}}</li>
+        <li>Order Type: {{quoteType}}</li>
+      </ul>
+    </div>
+
+    <div class="table po-table">
+      <table class="table table-bordered main-table">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Connection Details</th>
+            <th>Bandwidth</th>
+            <th style="text-align: right !important;">Bandwidth OTC</th>
+            <th style="text-align: right !important;">Bandwidth ARC</th>
+            {{#if isWireless}}
+            <th>MAST OTC</th>
+            {{/if}}
+            {{#if hasManaged}}
+            <th>Managed Service OTC</th>
+            <th>Managed Service ARC</th>
+            {{/if}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each locationDetails}}
+          <tr>
+            <td style="text-align: left !important;">{{add @index 1}}</td>
+            <td style="text-align: left !important;">{{city}} {{linkType}} - {{connectionType}} {{#if mastHeight}} {{mastHeight}} Meter {{mastType}}{{/if}}</td>
+            <td style="text-align: left !important;">{{reqBandwidth}} {{reqBandwidthUOM}}</td>
+            <td style="text-align: right !important;">{{#if basePrices.otc}} â‚¹ {{basePrices.otc}} {{else}} - {{/if}}</td>
+            <td style="text-align: right !important;">{{#if basePrices.arc}} â‚¹ {{basePrices.arc}} {{else}} - {{/if}}</td>
+            {{#if ../isWireless}}
+            <td>{{#if basePrices.mastOTC}} â‚¹ {{basePrices.mastOTC}} {{else}} - {{/if}}</td>
+            {{/if}}
+            {{#if ../hasManaged}}
+            <td>{{#if managedBundledOTC}} â‚¹ {{managedBundledOTC}} {{else}} - {{/if}}</td>
+            <td>{{#if managedBundledARC}} â‚¹ {{managedBundledARC}} {{else}} - {{/if}}</td>
+            {{/if}}
+          </tr>
+          {{/each}}
+          <tr>
+            <td colspan="3" style="text-align: right !important; font-weight:bold;">Total</td>
+            <td style="text-align: right !important;">{{totalPrice "basePriceTotalOTC"}}</td>
+            <td style="text-align: right !important;">{{totalPrice "basePriceTotalARC"}}</td>
+            {{#if isWireless}}
+            <td style="text-align: right !important;">{{totalPrice "mastTotalOTC"}}</td>
+            {{/if}}
+            {{#if hasManaged}}
+            <td style="text-align: right !important;">{{totalPrice "valueAddedServiceTotalOTC"}}</td>
+            <td style="text-align: right !important;">{{totalPrice "valueAddedServiceTotalARC"}}</td>
+            {{/if}}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="footer">&#169; {{now "year"}} Sify Technologies Limited. All Rights Reserved.</p>
+  </div>
+</body>
+
+</html>

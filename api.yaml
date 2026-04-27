@@ -1,0 +1,2540 @@
+swagger: "2.0"
+info:
+  title: One Sify Network ILL API
+  description: One Sify Network ILL API
+  version: 1.0.1
+  basePath: "/onesify/network/docs"
+  contact:
+    email: technical@kstinfotech.com, gomathi.sitaram@sifycorp.com
+    name: Abinesh A , Anusuya P, Gokul Kannan R, Gomathi S
+  servers:
+    -url: "http://localhost:4009"
+    description: This is Development Server
+
+schemes: [http, https]
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+#New Connection
+paths:
+  /onesify/network/new_connection/get_service_provider:
+    post:
+      tags:
+        - New Connection
+      summary: get_service_provider
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/post_new_connection:
+    post:
+      tags:
+        - New Connection
+      summary: post_new_connection
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          description: quoteType ["New","modifyBandwidth","modifyAddress","modifyBandwidthAddress"]
+          schema:
+            type: object
+            properties:
+              existingPlanDetails:
+                type: object
+                properties:
+                  shippingAddress:
+                    type: object
+                    properties:
+                      address1:
+                        type: string
+                        example: "SEMC DELHI HR DRM Office, State Entry"
+                      address2:
+                        type: string
+                        example: "RoadConnaught Place,"
+                      address3:
+                        type: string
+                        example: null,
+                      address4:
+                        type: string
+                        example: "04"
+                      city:
+                        type: string
+                        example: "NEW DELHI"
+                      state:
+                        type: string
+                        example: "Delhi"
+                      pincode:
+                        type: string
+                        example: "110055"
+                  billingAddress:
+                    type: object
+                    properties:
+                      address1:
+                        type: string
+                        example: "SEMC DELHI HR DRM Office, State Entry"
+                      address2:
+                        type: string
+                        example: "RoadConnaught Place,"
+                      address3:
+                        type: string
+                        example: null,
+                      address4:
+                        type: string
+                        example: "04"
+                      city:
+                        type: string
+                        example: "NEW DELHI"
+                      state:
+                        type: string
+                        example: "Delhi"
+                      pincode:
+                        type: string
+                        example: "110055"
+                  reqBandwidth:
+                    type: integer
+                    example: "1"
+                  reqBandwidthUOM:
+                    type: string
+                    example: "GBPS"
+                  connectionType:
+                    type: string
+                    example: "FIBER"
+                  startDate:
+                    type: string
+                    example: "2022-11-19T18:30:00.000Z"
+                  endDate:
+                    type: string
+                    example: "2023-11-18T18:30:00.000Z"
+                  contractPeriod:
+                    type: integer
+                    example: 1
+                  classofService:
+                    type: string
+                    example: "Premium"
+                  totalArc:
+                    type: integer
+                    example: 1300000
+                  linkId:
+                    type: string
+                    example: "2022150359"
+                  billTo:
+                    type: string
+                    example: "2907984"
+                  billToLocation:
+                    type: string
+                    example: "TIME SQUARE-MUMBAI"
+                  billToAddress:
+                    type: string
+                    example: "No. 302,B-Wing,3rd Floor,,Time square,A.K Road,,,4,Mumbai,Maharashtra-400049"
+                  shipTo:
+                    type: string
+                    example: "2901747"
+                  shipToLocation:
+                    type: string
+                    example: "BHIWANDI-10111"
+                  shipToAddress:
+                    type: string
+                    example: "Iron Mountain LTD, R.K. Logistics Compound, Gala No. A-1, Survey No. 66,,Mumbai-Nashik Highway,Khadavali, Bhiwandi,Nr. Khadavali Phata-421605,,4,Bhiwandi,Maharashtra-421605"
+                  shipSiteCode:
+                    type: string
+                    example: "BHIWANDI-10111"
+              reqId:
+                type: integer
+                example: 0
+              locationId:
+                type: integer
+                example: 0
+              quoteType:
+                type: string
+                example: "modifyBandwidth"
+              sameContactForAll:
+                type: boolean
+                example: false
+              shippingAddress:
+                type: object
+                properties:
+                  address1:
+                    type: string
+                    example: "No.5, 12th Main Road"
+                  address2:
+                    type: string
+                    example: "Vijaya Nagar"
+                  address3:
+                    type: string
+                    example: "Velacheri"
+                  city:
+                    type: string
+                    example: "Chennai "
+                  state:
+                    type: string
+                    example: "Tamil Nadu"
+                  pincode:
+                    type: integer
+                    example: 600042
+                  latitude:
+                    type: string
+                    example: "0.00 N"
+                  longitude:
+                    type: string
+                    example: "0.00 E"
+                  officeFloor:
+                    type: string
+                    example: "G + 1"
+                  totalFloor:
+                    type: string
+                    example: "G + 2"
+              contactDetails:
+                type: object
+                properties:
+                  contactFirstName:
+                    type: string
+                    example: "Hello"
+                  contactLastName:
+                    type: string
+                    example: "World"
+                  contactPhoneNumber1:
+                    type: integer
+                    example: 9876543210
+                  contactPhoneNumber2:
+                    type: integer
+                    example: 9876543210
+                  contactEmail:
+                    type: string
+                    example: "string@gmail.com"
+              reqBandwidth:
+                type: integer
+                example: 7
+              reqBandwidthUOM:
+                type: string
+                example: "Mbps"
+              connectionType:
+                type: string
+                example: "Wireless"
+              serviceProvider:
+                type: string
+                example: "BSNL"
+              hasRateCard:
+                type: boolean
+                example: false
+              rateCode:
+                type: string
+                example: "HDFC_LTD_Apr23-Mar24"
+              parentRole:
+                type: string
+                example: ""
+              companyId:
+                type: string
+                example: ""
+              partyId:
+                type: string
+                example: ""
+              partyNo:
+                type: string
+                example: ""
+              ebsAccountNo:
+                type: string
+                example: ""
+              companyName:
+                type: string
+                example: ""
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/post_feasibile_to_new_reqId:
+    post:
+      tags:
+        - New Connection
+      summary: post_feasibile_to_new_reqId
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          description:
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 0
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/get_connectiontype:
+    post:
+      tags:
+        - New Connection
+      summary: get_connectiontype
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              rateCode:
+                type: string
+                example: "HDFC_LTD_Apr23-Mar24"
+              reqBandwidth:
+                type: integer
+                example: 394
+              reqBandwidthUOM:
+                type: string
+                example: Mbps
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/get_bandwidth_list:
+    post:
+      tags:
+        - New Connection
+      summary: get_bandwidth_list
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              connectionType:
+                type: string
+                example: "Fiber"
+              rateCode:
+                type: string
+                example: "HDFC_LTD_Apr23-Mar24"
+              currentBandwidth:
+                type: integer
+                example: 2
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/get_floor_list:
+    post:
+      tags:
+        - New Connection
+      summary: get_floor_list
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/get_new_connection_list:
+    post:
+      tags:
+        - New Connection
+      summary: get_new_connection_list
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              isSelect:
+                type: boolean
+                example: true
+              parentRole:
+                type: string
+                example: CXM + Customer
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/delete_new_connection:
+    post:
+      tags:
+        - New Connection
+      summary: delete_new_connection
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              locationId:
+                type: integer
+                example: 1
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/post_feasibility:
+    post:
+      tags:
+        - New Connection
+      summary: post_feasibility
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/check_linkid_exist:
+    post:
+      tags:
+        - New Connection
+      summary: check_linkid_exist
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: mpls
+          schema:
+            type: object
+            properties:
+              linkId:
+                type: integer
+                example: 100000
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+
+  /onesify/network/new_connection/get_excel_template:
+    post:
+      tags:
+        - Bulk Upload
+      summary: get_excel_template
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: ill
+          schema:
+            type: object
+            properties:
+              quoteType:
+                type: string
+                example: modifyBandwidth
+              sameContactInfo:
+                type: boolean
+                example: true
+              hasRateCard:
+                type: boolean
+                example: true
+              rateCode:
+                type: string
+                example: "HDFC BANK_ILL_Apr2023-Mar2024"
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/post_excel_template:
+    post:
+      tags:
+        - Bulk Upload
+      summary: post_excel_template
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: ill
+          schema:
+            type: object
+            properties:
+              excelFile:
+                type: string
+                example: file
+              quoteType:
+                type: string
+                example: modifyBandwidth
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/get_excel_data:
+    post:
+      tags:
+        - Bulk Upload
+      summary: get_excel_data
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: ill
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 200000
+              limit:
+                type: integer
+                example: 10
+              page:
+                type: integer
+                example: 1
+              filters:
+                type: object
+                properties:
+                  isActive:
+                    type: boolean
+                    example: true
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/get_all_data_as_excel:
+    post:
+      tags:
+        - Bulk Upload
+      summary: get_all_data_as_excel
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: ill
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 8
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/new_connection/post_excel_data:
+    post:
+      tags:
+        - Bulk Upload
+      summary: post_excel_data
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: ill
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 8
+              hasRateCard:
+                type: boolean
+                example: false
+              rateCode:
+                type: string
+                example: "HDFC_LTD_Apr23-Mar24"
+              parentRole:
+                type: string
+                example: ""
+              companyId:
+                type: string
+                example: ""
+              partyId:
+                type: string
+                example: ""
+              partyNo:
+                type: string
+                example: ""
+              ebsAccountNo:
+                type: string
+                example: ""
+              companyName:
+                type: string
+                example: ""
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/list/get_feasibility_excel_by_reqid:
+    post:
+      tags:
+        - Bulk Upload
+      summary: get_feasibility_excel_by_reqid
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: ill
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 8
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/plan/post_excel_plan:
+    post:
+      tags:
+        - Bulk Upload
+      summary: post_excel_plan
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: ill
+          schema:
+            type: object
+            properties:
+              excelPlanFile:
+                type: integer
+                example: file
+              reqId:
+                type: integer
+                example: 8
+              submitAll:
+                type: boolean
+                example: false
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+
+  /onesify/network/plan/get_quote_feasability_status:
+    post:
+      tags:
+        - Modify
+      summary: get_quote_feasability_status
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/list/feasibility:
+    post:
+      tags:
+        - List
+      summary: feasibility
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              limit:
+                type: integer
+                example: 10
+              page:
+                type: integer
+                example: 1
+              searchKeyword:
+                type: string
+                example: 20
+              companyId:
+                type: string
+                example: 20
+              filters:
+                type: object
+                properties:
+                  status:
+                    type: array
+                    items:
+                      type: string
+                      example: "Feasible"
+                  fromDate:
+                    type: string
+                    example: ""
+                  toDate:
+                    type: string
+                    example: ""
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/list/cxm_tower_feasibility:
+    post:
+      tags:
+        - List
+      summary: cxm_tower_feasibility
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              limit:
+                type: integer
+                example: 10
+              page:
+                type: integer
+                example: 1
+              parentRole:
+                type: string
+                example: CXM + Customer
+              searchKeyword:
+                type: string
+                example: 
+              companyId:
+                type: string
+                example: 20
+              filters:
+                type: object
+                properties:
+                  fromDate:
+                    type: string
+                    example: ""
+                  toDate:
+                    type: string
+                    example: ""
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/list/get_links_excel:
+    post:
+      tags:
+        - List
+      summary: get_links_excel
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              fromDate:
+                type: string
+                example: 2023-07-22T11:30:33.000+00:00
+              toDate:
+                type: string
+                example: 2023-07-22T11:30:33.000+00:00
+              companyId:
+                type: string
+                example: ""
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/list/all_links:
+    post:
+      tags:
+        - List
+      summary: feasibility
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: mpls
+          schema:
+            type: object
+            properties:
+              ebsAccountNo:
+                type: string
+                example: 7278
+              limit:
+                type: integer
+                example: 10
+              page:
+                type: integer
+                example: 1
+              filters:
+                type: object
+                properties:
+                  connectionType:
+                    type: string
+                    example: ""
+                  productType:
+                    type: string
+                    example: ""
+                  fromDate:
+                    type: string
+                    example: ""
+                  toDate:
+                    type: string
+                    example: ""
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/list/get_all_links_excel:
+    post:
+      tags:
+        - List
+      summary: get_all_links_excel
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: mpls
+          schema:
+            type: object
+            properties:
+              ebsAccountNo:
+                type: string
+                example: 7278
+              filters:
+                type: object
+                properties:
+                  connectionType:
+                    type: string
+                    example: ""
+                  productType:
+                    type: string
+                    example: ""
+                  fromDate:
+                    type: string
+                    example: ""
+                  toDate:
+                    type: string
+                    example: ""
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/list/my_links:
+    post:
+      tags:
+        - List
+      summary: feasibility
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: mpls
+          description: status ["ACTIVE","EXPIRED"]
+          schema:
+            type: object
+            properties:
+              ebsAccountNo:
+                type: string
+                example: 7278
+              limit:
+                type: integer
+                example: 10
+              page:
+                type: integer
+                example: 1
+              searchKeyword:
+                type: string
+                example: 
+              status:
+                type: string
+                example: ACTIVE
+              filters:
+                type: object
+                properties:
+                  connectionType:
+                    type: array
+                    items:
+                      type: string
+                      example: "fiber"
+                  fromDate:
+                    type: string
+                    example: ""
+                  toDate:
+                    type: string
+                    example: ""
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/list/get_my_links_excel:
+    post:
+      tags:
+        - List
+      summary: get_my_links_excel
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: mpls
+          schema:
+            type: object
+            properties:
+              ebsAccountNo:
+                type: string
+                example: 7278
+              filters:
+                type: object
+                properties:
+                  connectionType:
+                    type: string
+                    example: ""
+                  fromDate:
+                    type: string
+                    example: ""
+                  toDate:
+                    type: string
+                    example: ""
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/common/get_quote:
+    post:
+      tags:
+        - Common
+      summary: get_quote
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/common/change_quote_status:
+    post:
+      tags:
+        - Common
+      summary: change_quote_status
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: common
+          description: status types are ['Draft', 'Awaiting Signature', 'Order Signed', 'Order Placed', 'PO Signed & Awaiting Payment', 'Payment Completed']
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 1000006
+              status:
+                type: string
+                example: PO Signed
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/common/post_updated_feasibility:
+    post:
+      tags:
+        - Common
+      summary: post_updated_feasibility
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      # parameters:
+      # - in: body
+      #   name: common
+      #   description: status types are ['Draft', 'Awaiting Signature', 'Order Signed', 'Order Placed', 'PO Signed & Awaiting Payment', 'Payment Completed']
+      #   schema:
+      #     type: object
+      #     properties:
+      #       reqId:
+      #         type: integer
+      #         example: 1000006
+      #       status:
+      #         type: string
+      #         example: PO Signed
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/common/get_booking_no:
+    post:
+      tags:
+        - Common
+      summary: get_booking_no
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              connectionID:
+                type: integer
+                example: 1
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/common/orm_view_validation:
+    post:
+      tags:
+        - Common
+      summary: orm_view_validation
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000              
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/common/updatae_page_tracker:
+    post:
+      tags:
+        - Common
+      summary: updatae_page_tracker
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000              
+              pageTracker:
+                type: string
+                example: proposal              
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/plan/get_contract_period:
+    post:
+      tags:
+        - plan
+      summary: get_contract_period
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/plan/get_base_plan_details:
+    post:
+      tags:
+        - plan
+      summary: get_base_plan_details
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              locationId:
+                type: integer
+                example: 1
+              contractPeriod:
+                type: integer
+                example: 1
+              contractUnit:
+                type: string
+                example: "year"
+              updatePrice:
+                type: boolean
+                example: false
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/plan/get_modify_base_plan:
+    post:
+      tags:
+        - Modify
+      summary: get_modify_base_plan
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/plan/post_selected_locationId:
+    post:
+      tags:
+        - Modify
+      summary: post_selected_locationId
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 1
+              locationIdList:
+                type: array
+                items:
+                  type: integer
+                  example: 100013
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/plan/get_addons_details:
+    post:
+      tags:
+        - plan
+      summary: get_addons_details
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              locationId:
+                type: integer
+                example: 1
+              serviceType:
+                type: string
+                example: "bundled"
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/plan/post_plan_details:
+    post:
+      tags:
+        - plan
+      summary: post_plan_details
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              locationId:
+                type: integer
+                example: 1
+              basePlan:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    planType:
+                      type: string
+                      example: "Value"
+                    arc:
+                      type: integer
+                      example: 100
+                    otc:
+                      type: integer
+                      example: 7
+                    originalARC:
+                      type: integer
+                      example: 7
+                    originalOTC:
+                      type: integer
+                      example: 8
+                    connectionTypePriceARC:
+                      type: integer
+                      example: 8
+                    connectionTypePriceOTC:
+                      type: integer
+                      example: 8
+              valueAddedService:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    serviceType:
+                      type: string
+                      example: "Value"
+                    desc:
+                      type: integer
+                      example: "Content Required"
+                    arc:
+                      type: integer
+                      example: 100
+                    otc:
+                      type: integer
+                      example: 7
+                    totalcost:
+                      type: integer
+                      example: 7
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/plan/delete_addons:
+    post:
+      tags:
+        - plan
+      summary: delete_addons
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              locationId:
+                type: integer
+                example: 1
+              serviceType:
+                type: String
+                example: "ip"
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/plan/post_tower_price:
+    post:
+      tags:
+        - plan
+      summary: post_tower_price
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              locationId:
+                type: integer
+                example: 1
+              additionalPrice:
+               type: array
+                items:
+                  type: object
+                  properties:
+                    priceType:
+                      type: string
+                      example: ""
+              opex:
+                type: integer
+                example: 10000
+              capex:
+                type: integer
+                example: 10000
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/bill_and_ship/get_address_info:
+    post:
+      tags:
+        - Billing and Shipping
+      summary: get_address_info
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              locationId:
+                type: integer
+                example: 1
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/bill_and_ship/get_address_list:
+    post:
+      tags:
+        - Billing and Shipping
+      summary: get_address_list
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              locationId:
+                type: integer
+                example: 1
+              stateName:
+                type: string
+                example: Kerala
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/bill_and_ship/post_new_address:
+    post:
+      tags:
+        - Billing and Shipping
+      summary: post_new_address
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              locationId:
+                type: integer
+                example: 1
+              sameBillToForAll:
+                type: boolean
+                example: false
+              shipToGst:
+                type: string
+                example: ""
+              hasShipToGst:
+                type: boolean
+                example: false
+              billingAddress:
+                type: object
+                properties:
+                  billToAddressType:
+                    type: string
+                    example: new
+                  siteCode:
+                    type: string
+                    example: ""
+                  email:
+                    type: string
+                    example: yuvaraj.subramanian@sifycorp.com,
+                  address1:
+                    type: string
+                    example: 2nd Floor, Railway Station Road,
+                  address2:
+                    type: string
+                    example: Alandhur,,
+                  city:
+                    type: string
+                    example: Chennai,
+                  state:
+                    type: string
+                    example: Tamil Nadu,
+                  pinCode:
+                    type: string
+                    example: 600016,
+                  gstNo:
+                    type: string
+                    example: 33AFKPY1234A1AB,
+                  hasGstNo:
+                    type: boolean
+                    example: true
+                  remarks:
+                    type: string
+                    example: ""
+                  isComplete:
+                    type: boolean
+                    example: false
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/bill_and_ship/post_po_no:
+    post:
+      tags:
+        - Billing and Shipping
+      summary: post_po_no
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              locationId:
+                type: integer
+                example: 1
+              isPoNo:
+                type: boolean
+                example: true
+              poRefNo:
+                type: string
+                example: PO1234
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/purchase_summary/get_purchase_summary_by_linkid:
+    post:
+      tags:
+        - Purchase Summary
+      summary: get_purchase_summary_by_linkid
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              linkId:
+                type: integer
+                example: 100002
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/common/post_po_doc:
+    post:
+      tags:
+        - Modify
+      summary: post_po_doc
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              file:
+                type: string
+                example: po.pdf
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/common/view_upload_po/{reqId}:
+    get:
+      tags:
+        - Modify
+      summary: view_upload_po
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: reqId
+          schema:
+            type: string
+            example: 100001
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/common/remove_poDoc/{reqId}:
+    post:
+      tags:
+        - Modify
+      summary: remove_poDoc
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: reqId
+          schema:
+            type: string
+            example: 100001
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        200:
+          description: Success
+  /onesify/network/docu_sign/get_pd_doc/{reqId}/{version}:
+    get:
+      tags:
+        - Docu Sign
+      summary: get_pd_doc
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: reqId
+          schema:
+            type: string
+            example: ILL-PD-100001
+        - in: path
+          name: version
+          schema:
+            type: string
+            example: "V1"
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/docu_sign/get_modify_pd_doc/{withPrice}/{reqId}:
+    get:
+      tags:
+        - Modify
+      summary: get_modify_pd_docs
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: reqId
+          schema:
+            type: string
+            example: ILL-PD-100001
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+
+  /onesify/network/docu_sign/get_sign_order/{reqId}:
+    get:
+      tags:
+        - Docu Sign
+      summary: get_sign_order
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: reqId
+          schema:
+            type: string
+            example: ILL-SO-100001
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/docu_sign/get_modify_sign_order/{withPrice}/{reqId}:
+    get:
+      tags:
+        - Modify
+      summary: get_modify_sign_order
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: reqId
+          schema:
+            type: string
+            example: ILL-SO-100001
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+
+  /onesify/docusign/api/v1/get-jwt-token/{reqId}:
+    post:
+      tags:
+        - Docu Sign
+      summary: post_new_address
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: reqId
+          schema:
+            type: integer
+            example: 100001
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "name"
+              email:
+                type: string
+                example: "abc@gamil.com"
+              filePath:
+                type: string
+                example: "https://onesifydemo.sifytechnologies.com/onesify/network/docu_sign/view_quote_doc/100001.pdf"
+              service:
+                type: string
+                example: ILL
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/docusign/api/v1/view/signed-file/{reqId}:
+    get:
+      tags:
+        - Docu Sign
+      summary: post_new_address
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: reqId
+          schema:
+            type: integer
+            example: 100001
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/mail/send_mail_to_all:
+    post:
+      tags:
+        - Mail
+      summary: send_mail_to_all
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              locationId:
+                type: integer
+                example: 1
+              mailIdList:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: "abi"
+                    mail:
+                      type: string
+                      example: "abcd@gmail.com"
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  /onesify/network/mail/send_mail_to_sign:
+    post:
+      tags:
+        - Mail
+      summary: send_mail_to_sign
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 100000
+              to:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: "abi"
+                    mail:
+                      type: string
+                      example: "abcd@gmail.com"
+              cc:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: "abi"
+                    mail:
+                      type: string
+                      example: "abcd@gmail.com"
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  
+  /onesify/network/plan/save_quote_version:
+    post:
+      tags:
+        - plan
+      summary: save quote version
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 10481
+              links:
+                type: array
+                items:
+                  type: object
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success
+  
+  /onesify/network/plan/get_pricing_list:
+    post:
+      tags:
+        - plan
+      summary: get pricing list
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            required:
+              - reqId
+            properties:
+              reqId:
+                type: integer
+                example: 10481
+              version:
+                type: string
+                example: "V1"
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        200:
+          description: Pricing list fetched successfully
+          
+  /onesify/network/plan/get_total_quote_price:
+    post:
+      tags:
+        - plan
+      summary: get total quote price
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            required:
+              - links
+            properties:
+              links:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    lineItems:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          newOtc:
+                            type: number
+                            example: 100
+                          newArc:
+                            type: number
+                            example: 200
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        200:
+          description: Total Price calculated successfully
+         
+  /onesify/network/plan/check_min_price:
+    post:
+      tags:
+        - plan
+      summary: check minimum and maximum price validation
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 10481
+              totalArc:
+                type: number
+                example: 1000
+              totalOtc:
+                type: number
+                example: 500
+              lineItem:
+                type: object
+                properties:
+                  serviceType:
+                    type: string
+                    example: managed
+                  newArc:
+                    type: number
+                    example: 300
+                  newOtc:
+                    type: number
+                    example: 100
+                  product:
+                    type: string
+                    example: internet
+                  itemType:
+                    type: string
+                    example: bw
+                  bandwidth:
+                    type: number
+                    example: 100
+                  connectionType:
+                    type: string
+                    example: dedicated
+                  planType:
+                    type: string
+                    example: premium
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        200:
+          description: Sucess
+
+  /onesify/network/docu_sign/get_all_proposal_versions:
+    post:
+      tags:
+        - Docu Sign
+      summary: get all proposal versions
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            required:
+              - reqId
+            properties:
+              reqId:
+                type: integer
+                example: 10481
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        200:
+          description: Versions retrieved successfully
+          
+  /onesify/network/plan/get_updation_method:
+    post:
+      tags:
+        - plan
+      summary: Get quote updation methods
+      description: |
+        Provides the available methods to update the quote pricing (by line item or total price),
+        along with the existing quote versions and summary (ARC/OTC).
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: quote
+          required: true
+          schema:
+            type: object
+            required:
+              - reqId
+            properties:
+              reqId:
+                type: integer
+                example: 10481
+              version:
+                type: string
+                example: "V1"
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        200:
+          description: Updation methods and quote versions fetched
+         
+  /onesify/network/plan/split_by_total_price:
+    post:
+      tags:
+        - plan
+      summary: split the total price to all the line items in the quote
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: network
+          schema:
+            type: object
+            properties:
+              reqId:
+                type: integer
+                example: 10481
+              version:
+                type: string
+                example: "V1"
+              totalOtc:
+                type: integer
+                example: 130000
+              totalArc:
+                type: integer
+                example: 1400000
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+          description: Success     
+     
+  /onesify/network/plan/save_final_quote:
+    post:
+        tags:
+          - plan
+        summary: Save final Quote Price
+        produces:
+          - application/json
+        consumes:
+          - application/json
+        parameters:
+          - in: body
+            name: network
+            schema:
+              type: object
+              properties:
+                reqId:
+                  type: integer
+                  example: 10481
+                version:
+                  type: string
+                  example: "V1"
+        securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+        security: [{ "Bearer": [] }]
+        responses:
+          201:
+            description: Success
+
+  /onesify/network/mail/send_proposal_mail:
+    post:
+      tags:
+        - Mail
+      summary: send proposal through mail
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - reqId
+              - version
+              - channelPartnerName
+              - channelPartnerEmail
+              - to
+            properties:
+              reqId:
+                type: integer
+                example: 10481
+              version:
+                type: string
+                example: "V1"
+              channelPartnerName:
+                type: string
+                example: "Kiran"
+              channelPartnerEmail:
+                type: string
+                format: email
+                example: "navin.dayanithi@sifycorp.com"
+              to:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - name
+                    - email
+                  properties:
+                    name:
+                      type: string
+                      example: "Navin"
+                    email:
+                      type: string
+                      format: email
+                      example: "navin.dayanithi@sifycorp.com"
+              cc:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - name
+                    - email
+                  properties:
+                    name:
+                      type: string
+                      example: "Vaishnavi"
+                    email:
+                      type: string
+                      format: email
+                      example: "vaishnavi.srinivasan@sifycorp.com"
+            example:
+              reqId: 10481
+              version: "V1"
+              channelPartnerName: "Kiran"
+              channelPartnerEmail: "navin.dayanithi@sifycorp.com"
+              to:
+                - name: "Navin"
+                  email: "navin.dayanithi@sifycorp.com"
+              cc:
+                - name: "Vaishnavi"
+                  email: "vaishnavi.srinivasan@sifycorp.com"
+      securityDefinitions:
+        Bearer:
+          type: apiKey
+          name: Authorization
+          in: header
+      security:
+        - Bearer: []
+      responses:
+        201:
+          description: Success
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "Success"
+  /onesify/network/mail/get_shared_mails:
+    post:
+      tags:
+        - Mail
+      summary: Retrieve all shared email addresses and summary info for a quote version
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - reqId
+            properties:
+              reqId:
+                type: integer
+                example: 10481
+              version:
+                type: string
+                description: (optional) quote version to filter by
+                example: "V1"
+            example:
+              reqId: 10481
+              version: "V1"
+      securityDefinitions:
+      Bearer:
+        type: apiKey
+        name: Authorization
+        in: header
+      security: [{ "Bearer": [] }]
+      responses:
+        201:
+            description: Success

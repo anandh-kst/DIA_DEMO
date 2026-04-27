@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Purchase Order</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        html {
+            -webkit-print-color-adjust: exact;
+        }
+
+        .container {
+            page-break-after: always !important;
+
+            width: 595pt !important;
+            /* to centre page on screen*/
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        body {
+            font-size: 8pt;
+        }
+
+        body ul {
+            list-style: none;
+            padding: 0pt;
+            margin-bottom: 0pt;
+
+        }
+
+        body ol {
+            padding: 0pt;
+            margin-bottom: 0pt;
+            margin-left: 9pt;
+            line-height: 15pt;
+        }
+
+        body ol span {
+            color: #0045AC;
+            cursor: poi;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        .flex {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .flex2 {
+            display: flex;
+        }
+
+        .flex3 {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .logo {
+            text-align: right;
+        }
+
+        .logo svg {
+            width: 55pt;
+        }
+
+        .vl {
+            border-left: 1pt solid #CBD0D2;
+            height: auto;
+        }
+
+        .main-heading {
+            margin-bottom: 30pt;
+        }
+
+        .main-heading h1 {
+            color: #0E3346;
+            text-align: center;
+            font-size: 18pt;
+            font-weight: 600;
+            margin: 0pt;
+        }
+
+        .main-heading2 h1 {
+            color: #0E3346;
+            font-size: 10pt;
+            font-weight: 600;
+            margin-bottom: 0pt;
+        }
+
+        .main-heading2 {
+            margin-bottom: 13pt;
+        }
+
+        .sub-heading {
+            color: var(--black-1, #1E2122);
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+        }
+
+        .sub-heading2 h1 {
+            color: var(--primary, #0E3346);
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            font-size: 10pt;
+
+        }
+
+        .address {
+            padding: 0pt;
+        }
+
+        .contact {
+            border-radius: 6pt;
+
+        }
+
+        .contact svg {
+            margin-bottom: -3pt;
+        }
+
+        .main-content {
+            padding: 33pt;
+        }
+
+        .sub-content p {
+            margin-bottom: 10px;
+        }
+
+        .top-address-details {
+            margin-bottom: 50px;
+        }
+
+        /* ************** TABLE ************ */
+        table {
+            margin-bottom: 35pt;
+        }
+
+        table,
+        th,
+        td {
+            border: none;
+            border-collapse: collapse;
+        }
+
+        table tr th {
+            background: rgba(14, 51, 70, 0.70) !important;
+            color: #fff;
+        }
+
+        thead tr th {
+            padding: 14pt 5pt !important;
+        }
+
+        tbody tr td {
+            padding: 14pt 5pt !important;
+        }
+
+        .table-2 thead tr th {
+            padding: 14pt 7pt !important;
+        }
+
+        .table-2 tbody tr td {
+            padding: 14pt 5pt !important;
+        }
+
+        /* ************** TABLE ************ */
+
+        .bottom-address {
+            background: #F7F9FA;
+            padding: 20pt;
+        }
+
+        .bottom-content {
+            padding: 16pt;
+        }
+
+        .sub-text h1 {
+            color: var(--black-1, #1E2122);
+            font-size: 8pt;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            margin: 0pt;
+            margin-top: 6pt;
+        }
+
+
+
+        .Date-time p {
+            margin-bottom: 4pt;
+        }
+
+        .text-right {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .text-right1 {
+            text-align: right;
+            white-space: nowrap;
+            font-weight: bold !important;
+        }
+
+
+        .sign {
+            margin-bottom: 60pt;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0pt !important;
+            width: 100%;
+        }
+
+        .footer1 {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f8f8f8;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .container {
+            position: relative;
+        }
+
+        .customer {
+            margin-bottom: 10px;
+        }
+
+        .company-name {
+            margin-bottom: 10px !important;
+        }
+
+        .terms-conditions {
+            margin-bottom: 60px;
+        }
+
+        .signature {
+            margin-bottom: 42px;
+        }
+
+        .signature_doc {
+            display: none;
+        }
+
+
+
+        /* *********************************************** CAF *************************************/
+        .page-1 {
+            width: 700px !important;
+            /* to centre page on screen*/
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-2 {
+            width: 595px !important;
+            /* to centre page on screen*/
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+
+        input {
+            height: 10px;
+            width: 10px;
+        }
+
+        .top-logo {
+            text-align: end;
+            margin-bottom: 12px;
+            margin-top: 16px;
+        }
+
+        body {
+            font-size: 7px;
+        }
+
+        .top-heading {
+            background-color: #566e7b;
+            color: #fff;
+            padding: 5px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .top-heading h1 {
+            font-size: 8.5px;
+            margin: 0px;
+        }
+
+        .po-content {
+            margin-left: 11px;
+            line-height: 2;
+
+        }
+
+        .po-signature {
+            margin-bottom: 10px;
+        }
+
+        .top-card {
+            border-radius: 6px;
+            background: #F7F9FA;
+            padding: 12px 20px;
+        }
+
+        .po-details p {
+            margin-bottom: 2px;
+        }
+
+        .po-details {
+            text-align: end;
+            padding: 0px;
+        }
+
+        .top-content {
+            padding: 0px;
+            list-style: none;
+        }
+
+        .top-content p {
+            margin-top: 10px;
+        }
+
+        .top-content ul {
+            padding: 0px;
+            list-style: none;
+            margin-bottom: 0px;
+
+        }
+
+        .flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .flex2 {
+            display: flex;
+            align-items: center;
+        }
+
+        .flex3 {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        /* **************** PO *************** */
+        .po-table tbody tr td:nth-child(4) {
+            text-align: right;
+        }
+
+        .po-table tbody {
+            background: #F7F9FA;
+        }
+
+        .po-table tbody tr td:nth-child(5) {
+            text-align: right;
+        }
+
+        .po-table tbody tr td:nth-child(6) {
+            text-align: right;
+        }
+
+        .po-table thead tr th:nth-child(4) {
+            text-align: right;
+        }
+
+        .po-table thead tr th:nth-child(5) {
+            text-align: right;
+        }
+
+        .po-table thead tr th:nth-child(6) {
+            text-align: right;
+        }
+
+        .po table thead tr {
+            background: rgba(14, 51, 70, 0.70) !important;
+            color: #fff;
+        }
+
+        body ul {
+            list-style: none;
+            padding: 0px;
+            margin-bottom: 0px;
+
+        }
+
+
+        .main-heading h1 {
+            color: #0E3346;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0px;
+        }
+
+        .main-heading2 h1 {
+            color: #0E3346;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 0px;
+        }
+
+        .main-heading2 p {
+            margin-bottom: 5px;
+        }
+
+        .sub-heading {
+            color: var(--black-1, #1E2122);
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            margin-bottom: 2px;
+
+        }
+
+        .sub-heading span {
+            font-weight: 400;
+        }
+
+        .sub-heading2 h1 {
+            color: var(--primary, #0E3346);
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            font-size: 10px;
+
+        }
+
+        .address {
+            padding: 0px;
+        }
+
+        .contact svg {
+            margin-bottom: -3px;
+        }
+
+        /* ************** TABLE ************ */
+        .po table thead tr th {
+            padding: 14px 20px !important;
+
+        }
+
+        .po table tbody tr td {
+            padding: 10px 20px !important;
+
+        }
+
+        .po table thead tr {
+            border-top: 1px solid #ddd;
+        }
+
+        /* ************** TABLE ************ */
+        /* ************** TABLE ************ */
+        .charge-description thead tr th {
+            color: #fff !important;
+        }
+
+        .charge-description table tr th {
+            background: #57717e !important;
+            /* Background color */
+            color: #fff !important;
+            /* Force text color to white */
+            border: 1px solid #fff !important;
+            /* White border */
+        }
+
+        .charge-description thead tr th {
+            padding: 8px 20px !important;
+        }
+
+        .charge-description thead tr th:first-child {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .charge-description thead tr th:last-child {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .charge-description tbody tr td {
+            padding: 9px 20px !important;
+            border: none;
+        }
+
+        .charge-description tbody tr:last-child {
+            border-top: 1.5px solid #dddddd;
+        }
+
+        .charge-description tbody tr:last-child td {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .charge-description .table-2 thead tr th {
+            padding: 14px 7px !important;
+        }
+
+        .charge-description .table-2 tbody tr td {
+            padding: 14px 5px !important;
+        }
+
+        .charge-description {
+            border-radius: 6px;
+            background: #F7F9FA;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .charge-description .heading {
+            font-size: 8px;
+            font-weight: 500;
+            margin-bottom: 7px;
+        }
+
+        /* ************** TABLE ************ */
+        .type-order table tbody tr td {
+            border: none !important;
+        }
+
+        .type-order tbody tr td input {
+            margin: 0px !important;
+        }
+
+        /* ************** TABLE ************ */
+
+        table,
+        th,
+        td {
+
+            border-top: 0px !important;
+            border-collapse: collapse;
+        }
+
+        /* table tr{
+        border-bottom: 1px solid black;
+      } */
+        thead tr th {
+            padding: 14px 20px !important;
+        }
+
+        tbody tr td svg {
+            width: 10px;
+
+        }
+
+        tbody tr td label {
+            margin-bottom: 0px;
+            font-weight: normal;
+            margin-left: 3px;
+        }
+
+        tbody tr td {
+            padding: 4px 3px 4px 3px !important;
+            vertical-align: middle !important;
+
+        }
+
+        .border-bottom {
+            border-bottom: 1px solid #000000 !important;
+        }
+
+        .table-2 thead tr th {
+            padding: 14px 2px !important;
+            text-align: center;
+        }
+
+        .table-2 tbody tr td {
+            padding: 14px 5px !important;
+            text-align: center;
+        }
+
+        td p {
+            margin-bottom: 0px;
+        }
+
+        input[type="checkbox"] {
+            vertical-align: top;
+        }
+
+        /* ************** TABLE ************ */
+        /* ************** TABLE 2 ************ */
+        .contact table thead {
+            border-top: 1px solid #000000;
+        }
+
+        .contact table thead tr th {
+            border-bottom-width: 1px;
+        }
+
+        .contact table tbody td {
+            border-left: 1px solid #000000;
+            border-right: 1px solid #000000;
+        }
+
+        .contact table tbody td {
+            border-bottom: none;
+            padding: 4px 10px !important;
+        }
+
+        .contact table tbody tr:last-child {
+            border-bottom: 1px solid #000000 !important;
+        }
+
+        .contact table tbody th {
+            border: 1px solid #000000 !important;
+        }
+
+        .contact table thead tr th {
+            border: 1px solid #000000 !important;
+        }
+
+        .contact thead tr th {
+            padding: 7px !important;
+        }
+
+        /* ************** TABLE 2 ************ */
+        .billing ul {
+            list-style: none;
+            margin-bottom: 0px;
+        }
+
+        .billing .right {
+            margin-left: 5px;
+        }
+
+        .site-network table tbody {
+            border: 1px solid #000000 !important;
+        }
+
+        .site-network table tbody tr td {
+            border: 1px solid #000000 !important;
+            padding: 4px 10px !important;
+            width: 50%;
+
+        }
+
+        .specify-currency {
+            margin-bottom: 16px;
+        }
+
+        .special-comment {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .special-comment hr {
+            margin: 0px;
+            border-width: 1px;
+            border: 0.5px solid #000000;
+        }
+
+        /* ********************** TERMS AND CONDITION   ***************** */
+        .content ol {
+            list-style-type: none;
+            counter-reset: item;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content li {
+            display: table;
+            counter-increment: item;
+            margin-bottom: 0.6em;
+        }
+
+        .content li:before {
+            content: counters(item, ".") ". ";
+            display: table-cell;
+            padding-right: 0.6em;
+        }
+
+        .content li li {
+            margin: 0;
+        }
+
+        .content li li:before {
+            content: counters(item, ".") " ";
+        }
+
+        .signature {
+            margin-top: 35px;
+        }
+
+        .signature p {
+            margin-bottom: 6px;
+        }
+
+        .terms-conditions .heading {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .special-notes {
+            margin-bottom: 40px;
+        }
+
+        .padding td {
+            padding: 4px 0px !important;
+        }
+
+        .terms-conditions p {
+            margin-bottom: 4px !important;
+        }
+
+        .terms-conditions .content {
+            line-height: 1.7;
+        }
+
+        /* new changes  */
+        .main-heading {
+            margin-bottom: 20px;
+            margin-top: 30px;
+        }
+
+        .flex-po {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* *********************************************** CAF *************************************/
+        .address-detail table tbody tr {
+            border-bottom: 0.5px solid grey;
+        }
+
+        .thead_colour table tr th {
+            background: #57717e !important;
+            /* Background color */
+            color: #fff !important;
+            /* Force text color to white */
+            border: 1px solid #fff !important;
+            /* White border */
+        }
+    </style>
+</head>
+
+<body style="display:block; clear:both; page-break-after:always;">
+    <!-- ***************** PAGE 1 ************************************************** -->
+    <div class="container page-1">
+
+        <div class="main-content">
+            <div class="top-header">
+
+            </div>
+            <div class="main-heading">
+                <h1>Purchase Order</h1>
+
+            </div>
+            <div class="top-address-details">
+                <div class="flex3">
+                    <div class="address">
+                        <p class="sub-heading">To</p>
+                        <ul>
+                            <li>SIFY TECHNOLOGIES LIMITED,</li>
+                            <li>2nd floor Tidel Park, </li>
+                            <li>NO.4 Rajiv Gandhi Salai, </li>
+                            <li>Tharamani,Chennai-600113</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>
+                                <span class="sub-heading">Date:</span> 22-OCT-25
+                            </li>
+                            <li>
+                                <span class="sub-heading">PO Number: </span>P2P-13839
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-content">
+                <p>We are pleased to place the order for P2P for the below link details.</p>
+            </div>
+            <!-- ******** TABLE ********* -->
+            <div class="thead_colour">
+                <table class="table table-bordered" style="width:100%">
+
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <span style="color: #fff !important;">S.No</span>
+                            </th>
+                            <th scope="col">
+                                <span style="color: #fff !important;">Company</span>
+                            </th>
+                            <th scope="col">
+                                <span style="color: #fff !important;">Items</span>
+                            </th>
+                            <th scope="col">
+                                <span style="color: #fff !important;">Description</span>
+                            </th>
+                            <th scope="col" class="text-right">
+                                <span style="color: #fff !important;">OTC</span>
+                            </th>
+                            <th scope="col" class="text-right">
+                                <span style="color: #fff !important;">ARC</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <!--************************************ S.no 1 ************************************************************************************************  -->
+
+                        <tr>
+                            <td rowspan="2" class="text-center">
+                                1
+                            </td>
+                            <td rowspan="2">
+                                SIFY TECHNOLOGIES
+                                LIMITED
+                            </td>
+                            <td>
+                                Point A
+                            </td>
+                            <td>
+                                Link ID - 2019037291; Location - Chennai;
+                                Existing B/W - 100 Gbps;
+                                Proposed B/W - 50 Mbps;
+                                GST NO - 33AAOCA5897L1ZX
+                            </td>
+                            <td class="text-right">
+                                ₹ 5000
+                            </td>
+                            <td class="text-right">
+                                ₹ 77077
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Point B
+                            </td>
+                            <td>
+                                Link ID - 2019037292; Location - Chennai;
+                                Existing B/W - 100 Gbps;
+                                Proposed B/W - 50 Mbps;
+                                GST NO - 33AAOCA5897L1ZX
+                            </td>
+                            <td class="text-right">
+                                ₹ 5000
+                            </td>
+                            <td class="text-right">
+                                ₹ 77077
+                            </td>
+                        </tr>
+
+                        <!--************************************ S.no 2 ************************************************************************************************  -->
+                        <tr>
+                            <td class="text-right1" colspan="4">Grand Total</td>
+                            <td class="text-right1">₹ 10000</td>
+                            <td class="text-right1">₹ 154154</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <!-- ***************** PAGE 2 ************************************************** -->
+
+</body>
+
+
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sify – Document for E-Signature</title>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: 'Myriad Pro', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      padding: 20px;
+      text-align: right;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .logo {
+      max-width: 207px;
+      height: auto;
+    }
+
+    .recipient-name {
+      font-size: 18px;
+      color: #0E3346;
+      font-weight: bold;
+    }
+
+    .order-details {
+      background-color: #f8f9fa;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 5px;
+      border-left: 4px solid #0E3346;
+    }
+
+    .order-details ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .order-details li {
+      margin-bottom: 8px;
+    }
+
+    .sign-button {
+      display: inline-block;
+      background-color: #ffffff;
+      color: #0E3346 !important;
+      padding: 15px 32px;
+      text-decoration: none;
+      border-radius: 10px;
+      border: 2px solid #000000;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+
+    .sign-button:hover {
+      background-color: #f0f0f0;
+      border-color: #333333;
+    }
+
+    .footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .button-container {
+      text-align: left;
+      margin: 30px 0;
+      background-color: #ffffff !important;
+      color: #0E3346;
+    }
+
+    p {
+      line-height: 1.6;
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="https://www.sifytechnologies.com" target="_blank">
+        <img src="https://www.sifytechnologies.com/wp-content/uploads/2022/04/logo_007800781_2166.png"
+          alt="Sify Technologies" class="logo">
+      </a>
+    </div>
+
+    <div class="content">
+      <p>Dear <span class="recipient-name">{{recipientName}}</span>,</p>
+
+      <p>Greetings from Sify!</p>
+      <p>The user {{req.firstName}} {{req.lastName}} from the company {{companyName}} has shared the document for your
+        signature.</p>
+
+      <div class="order-details">
+        <p><strong>Order Details</strong></p>
+        <ul>
+          <li><strong>Name of document:</strong> ILL-SO-{{proposalId}}</li>
+          <li><strong>Proposal ID:</strong> {{proposalId}}</li>
+          <li><strong>Version:</strong> {{version}}</li>
+          <li><strong>Product name:</strong> {{product}}</li>
+        </ul>
+      </div>
+
+      {{#if isPrimaryRecipient}}
+      <p>To proceed, kindly review and sign the document using the button below:</p>
+      {{else}}
+      <p>To proceed, kindly review the document using the button below:</p>
+      {{/if}}
+
+      <div class="button-container">
+        <a href="{{signingUrl}}" target="_blank" class="sign-button">
+          {{#if isPrimaryRecipient}}Sign Order Document{{else}}Click Here to View{{/if}}
+        </a>
+      </div>
+
+      {{#if isPrimaryRecipient}}
+      <p><strong>Please complete the signing process at your earliest convenience.</strong></p>
+      {{/if}}
+
+      <p>For any queries, feel free to reach out to the above mail address or contact details.
+      </p>
+      <div class="footer">
+        <div style="margin-top: 20px;">
+          <p style="margin-bottom: 4px;">Best Regards,</p>
+          <p style="margin-bottom: 4px;">Team Sify</p>
+          <p>
+            <a class="link" href="https://onesify.sifytechnologies.com">Sify Website Link</a>
+          </p>
+        </div>
+        <span>&#169; {{now "year"}} Sify Technologies Limited. All Rights Reserved.</span>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Master Template</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style>
+    html {
+      -webkit-print-color-adjust: exact;
+    }
+
+    .container {
+      /* height: 842pt !important; */
+      width: 595pt !important;
+      /* to centre page on screen*/
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .link {
+      color: #3b80ff;
+      cursor: pointer;
+    }
+   .header-logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-align: right !important;
+    }
+    .text-right {
+      text-align: right;
+    }
+
+    hr {
+      background-color: #d1e06d;
+      height: 1.2px;
+      margin-top:60px;
+    }
+
+    .button-details {
+      margin-bottom: 26px;
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    .table-heading {
+      color: #0E3346;
+      font-size: 11pt;
+      font-weight: 600;
+    }
+
+    .greeting {
+      margin-bottom: 26px;
+    }
+
+    .primary {
+      color: #0E3346;
+    }
+
+    .button {
+      background-color: #0E3346;
+      border: none;
+      border-radius: 5px;
+      font-family: arial;
+      color: #fff;
+      padding: 10px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 10pt;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      color: #fff !important;
+      text-decoration: none;
+    }
+
+    body {
+      font-size: 10pt;
+    }
+
+    .flex-po {
+      display: flex;
+      justify-content: space-between !important;
+    }
+
+    body ul {
+      list-style: none;
+      padding: 0pt;
+      margin-bottom: 0pt;
+      line-height: 1.8;
+
+    }
+
+    .list-style {
+      margin-left: 22px;
+
+    }
+
+    body ol {
+      padding: 0pt;
+      margin-bottom: 0pt;
+      margin-left: 9pt;
+      line-height: 15pt;
+    }
+
+    body ol span {
+      color: #0045AC;
+      cursor: poi;
+    }
+
+    .flex {
+      display: flex;
+
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .flex2 {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .logo {
+      text-align: right;
+      margin-bottom: 26px;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .logo svg {
+      width: 55pt;
+    }
+
+    .vl {
+      border-left: 1pt solid #CBD0D2;
+      height: auto;
+    }
+
+    .main-heading {
+      margin-bottom: 30pt;
+    }
+
+    .main-heading h1 {
+      color: #0E3346;
+      text-align: center;
+      font-size: 18pt;
+      font-weight: 600;
+      margin: 0pt;
+    }
+
+    .main-heading2 h1 {
+      color: #0E3346;
+      font-size: 10pt;
+      font-weight: 600;
+      margin-bottom: 0pt;
+    }
+
+    .main-heading2 {
+      margin-bottom: 8pt;
+    }
+
+    .sub-heading {
+      color: #0E3346;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin-bottom: 6px;
+    }
+
+    .sub-heading2 h1 {
+      color: #0E3346;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      font-size: 10pt;
+
+    }
+
+    .address {
+      padding: 0pt;
+      margin-bottom: 26px;
+    }
+
+    .contact {
+      border-radius: 6pt;
+      background: #F7F9FA;
+      padding: 12pt 20pt;
+    }
+
+    .contact svg {
+      margin-bottom: -3pt;
+    }
+
+    .main-content {
+      padding: 33pt;
+    }
+
+    /* ************** TABLE ************ */
+    .table-bordered {
+      margin-bottom: 10px !important;
+    }
+
+    .table {
+      margin-bottom: 10px !important;
+    }
+
+    table,
+    th,
+    td {
+      border: 1pt solid black;
+      border-collapse: collapse;
+    }
+
+    table tr th {
+      background: rgba(14, 51, 70, 0.70) !important;
+      color: #fff;
+    }
+
+    thead tr th {
+      padding: 14pt 6pt !important;
+    }
+
+    tbody tr td {
+      padding: 14pt 6pt !important;
+    }
+
+    .table-2 thead tr th {
+      padding: 14pt 7pt !important;
+    }
+
+    .table-2 tbody tr td {
+      padding: 14pt 5pt !important;
+    }
+
+    /* ************** TABLE ************ */
+
+    .bottom-address {
+      background: #F7F9FA;
+      padding: 20pt;
+      margin-bottom: 50px;
+    }
+
+    .bottom-content {
+      background: #F7F9FA;
+      padding: 16pt;
+    }
+
+    .sub-text h1 {
+      color: var(--black-1, #1E2122);
+      font-size: 8pt;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin: 0pt;
+      margin-top: 6pt;
+    }
+
+    .Date-time {
+      margin-top: 30pt;
+    }
+
+    .Date-time .name {
+      margin-bottom: 10px;
+    }
+
+    .Date-time p {
+      margin-bottom: 4pt;
+    }
+
+
+    .sify-service table tbody tr td:nth-child(9) {
+      text-align: right !important;
+    }
+
+    .sify-service table tbody tr td:nth-child(10) {
+      text-align: right !important;
+    }
+
+
+    .sify-service table thead tr th:nth-child(9) {
+      text-align: right !important;
+    }
+
+    .sify-service table thead tr th:nth-child(10) {
+      text-align: right !important;
+    }
+
+
+    .sign {
+      margin-bottom: 60pt;
+    }
+
+    .footer {
+      bottom: 0pt !important;
+      width: 100%;
+    }
+
+    .container {
+      position: relative;
+    }
+
+    .company-name h1 {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .company-name {
+      margin-top: 55px;
+    }
+
+    .company-name p {
+      font-weight: 600;
+
+    }
+
+    .date-text {
+      font-weight: 400;
+    }
+
+    .top-address2 {
+      margin-top: 40px;
+    }
+
+    .mb-10 {
+      margin-bottom: 10px !important;
+    }
+
+    .mb-0 {
+      margin-bottom: 0px !important;
+    }
+  </style>
+</head>
+
+<body style="display:block; clear:both; page-break-after:always;">
+  <!-- ***************** PAGE 1 ************************************************** -->
+  <div class="container">
+
+    <div class="main-content">
+
+      <div class="header-logo">
+        <a href="https://www.sifytechnologies.com" style="border: 0; text-decoration:none;">
+          <img src="https://www.sifytechnologies.com/wp-content/uploads/2022/04/logo_007800781_2166.png" alt="One Sify"
+            style="max-width:160px; height:auto;">
+        </a>
+      </div>
+      <hr />
+      <div class="top-address-details">
+        <div>
+
+          <p>
+            Dear {{customerName}},
+          </p>
+          <div class="greeting">
+            <p class="sub-heading">Greetings from Sify!</p>
+            <p>
+              Thank you very much for placing your order. The order details are shared below and the
+              order document is attached for your reference.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="top-address-details">
+        <div class="flex-po">
+          <div class="address">
+            {{!-- <p class="sub-heading">Your company profile details are shared below.</p> --}}
+            <ul class="list-style">
+              <li>Request ID: {{reqId}}</li>
+              <li>Order ID: {{orderId}}</li>
+              <li>Order Date: {{orderDate}}</li>
+              <li>Order Status: {{status}}</li>
+              <li>Order Type: {{quoteType}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      {{!-- <div class="button-details">
+        <p class="mb-10">Please click the'{{Button Name}}' button or this link <span class="link">{{Link}}</span> to
+          complete your account
+          activation</p>
+        <div>
+          <a href="link" class="button">Button Name</a>
+        </div>
+      </div> --}}
+
+
+      {{!-- <p class="mb-10">If the email content has a table in it, the following table format to be followed.</p> --}}
+      {{!-- <p class="table-heading">Title of table if available</p> --}}
+      <!-- ******** TABLE ********* -->
+      <div class="table sify-service">
+        {{!-- <table class="table table-bordered" style="width:100%">
+
+          <colgroup>
+            <col width="10%">
+            <col width="20%">
+            <col width="20%">
+            <col width="20%">
+            <col width="20%">
+
+
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">
+                <span>{{Sl.No}}</span>
+              </th>
+              <th scope="col">
+                <span>{{Column Title}}</span>
+              </th>
+              <th scope="col">
+                <span>{{Column Title}}</span>
+              </th>
+              <th scope="col">
+                <span>{{Column Title}}</span>
+              </th>
+              <th scope="col">
+                <span>{{Column Title}}</span>
+              </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+              <td>{{Column Content}}</td>
+            </tr>
+          </tbody>
+
+        </table> --}}
+        <div>
+          <p>We value your business, and we will do our best to meet your service expectation. The order
+            processing has been initiated and we will shortly share the service engineer details with you.</p>
+          <p>Thanks again! We look forward to serving you for many years to come.</p>
+          <p>For any queries, please feel free to contact your Customer Experience Manager {{customerName}}, @
+            {{customerNumber}} or write to us @ onesify@sifycorp.com</p>
+        </div>
+        <div class="Date-time">
+          <div class="name">
+            <p>Best Regards</p>
+            <p>Team One Sify</p>
+          </div>
+        </div>
+        <hr>
+        <div class="bottom-add">
+          <div class="flex justify-between">
+            <div>
+              <div class="address mb-0">
+                <p class="sub-heading primary">Sify Technologies</p>
+                <ul>
+                  <li>Il Floor, TIDEL Park, No.4,
+                  <li>Rajiv Gandhi Salai, Taramani,</li>
+                  <li>Chennai - 600113</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <ul class="text-right">
+                <li> <a class="link" href="">Terms & Conditions</a> </li>
+                <li> <a class="link" href="">Privacy Policy</a> </li>
+                <li> <a class="link" href="">Legal</a> </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- ******** TABLE ********* -->
+
+    </div>
+    <div class="bottom-content footer">
+      <div class="flex2">
+        <div>
+          <span>
+            {{!-- <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_74_5329)">
+                <path
+                  d="M4 0.75C3.35721 0.75 2.72886 0.940609 2.1944 1.29772C1.65994 1.65484 1.24338 2.16242 0.997393 2.75628C0.751408 3.35014 0.687047 4.00361 0.812449 4.63404C0.937851 5.26448 1.24738 5.84358 1.7019 6.2981C2.15643 6.75262 2.73552 7.06215 3.36596 7.18755C3.9964 7.31295 4.64986 7.24859 5.24372 7.00261C5.83758 6.75662 6.34516 6.34006 6.70228 5.8056C7.05939 5.27114 7.25 4.64279 7.25 4C7.24909 3.13833 6.90639 2.3122 6.29709 1.70291C5.6878 1.09361 4.86168 0.75091 4 0.75ZM4 6.75C3.4561 6.75 2.92442 6.58872 2.47218 6.28654C2.01995 5.98437 1.66747 5.55488 1.45933 5.05238C1.25119 4.54988 1.19673 3.99695 1.30284 3.4635C1.40895 2.93005 1.67086 2.44005 2.05546 2.05546C2.44005 1.67086 2.93006 1.40895 3.4635 1.30284C3.99695 1.19673 4.54988 1.25119 5.05238 1.45933C5.55488 1.66747 5.98437 2.01995 6.28654 2.47218C6.58872 2.92442 6.75 3.4561 6.75 4C6.74917 4.72909 6.45918 5.42808 5.94363 5.94363C5.42809 6.45918 4.72909 6.74917 4 6.75ZM3 4C3 4.20988 3.06604 4.41444 3.18876 4.58471C3.31148 4.75498 3.48466 4.88231 3.68377 4.94868C3.88289 5.01505 4.09783 5.01709 4.29817 4.95451C4.4985 4.89193 4.67407 4.76791 4.8 4.6C4.83983 4.54696 4.89909 4.51191 4.96476 4.50256C5.03042 4.49321 5.09711 4.51033 5.15016 4.55016C5.2032 4.58998 5.23825 4.64924 5.2476 4.71491C5.25695 4.78058 5.23983 4.84727 5.2 4.90031C5.01106 5.1521 4.7477 5.33806 4.44721 5.43186C4.14672 5.52566 3.82433 5.52255 3.52571 5.42296C3.22709 5.32338 2.96736 5.13237 2.78332 4.87699C2.59927 4.6216 2.50024 4.31479 2.50024 4C2.50024 3.68521 2.59927 3.3784 2.78332 3.12301C2.96736 2.86763 3.22709 2.67662 3.52571 2.57704C3.82433 2.47745 4.14672 2.47434 4.44721 2.56814C4.7477 2.66194 5.01106 2.8479 5.2 3.09969C5.21972 3.12595 5.23407 3.15584 5.24224 3.18765C5.25041 3.21947 5.25223 3.25257 5.2476 3.28509C5.24297 3.3176 5.23198 3.34889 5.21526 3.37716C5.19855 3.40543 5.17642 3.43012 5.15016 3.44984C5.12389 3.46956 5.094 3.48392 5.06219 3.49208C5.03038 3.50025 4.99727 3.50207 4.96476 3.49744C4.93224 3.49281 4.90096 3.48183 4.87269 3.46511C4.84442 3.44839 4.81972 3.42626 4.8 3.4C4.67407 3.23209 4.4985 3.10807 4.29817 3.04549C4.09783 2.98291 3.88289 2.98495 3.68377 3.05132C3.48466 3.11769 3.31148 3.24502 3.18876 3.41529C3.06604 3.58556 3 3.79012 3 4Z"
+                  fill="#1E2122" />
+              </g>
+              <defs>
+                <clipPath id="clip0_74_5329">
+                  <rect width="8" height="8" fill="white" />
+                </clipPath>
+              </defs>
+            </svg> --}}
+            &#169; {{now "year"}} Sify Technologies Limited. All Rights Reserved.</span>
+          {{!-- <span> <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_74_5333)">
+                <path
+                  d="M4 0.75C3.35721 0.75 2.72886 0.940609 2.1944 1.29772C1.65994 1.65484 1.24338 2.16242 0.997393 2.75628C0.751408 3.35014 0.687047 4.00361 0.812449 4.63404C0.937851 5.26448 1.24738 5.84358 1.7019 6.2981C2.15643 6.75262 2.73552 7.06215 3.36596 7.18755C3.9964 7.31295 4.64986 7.24859 5.24372 7.00261C5.83758 6.75662 6.34516 6.34006 6.70228 5.8056C7.05939 5.27114 7.25 4.64279 7.25 4C7.24909 3.13833 6.90639 2.3122 6.29709 1.70291C5.6878 1.09361 4.86168 0.75091 4 0.75ZM4 6.75C3.4561 6.75 2.92442 6.58872 2.47218 6.28654C2.01995 5.98437 1.66747 5.55488 1.45933 5.05238C1.25119 4.54988 1.19673 3.99695 1.30284 3.4635C1.40895 2.93005 1.67086 2.44005 2.05546 2.05546C2.44005 1.67086 2.93006 1.40895 3.4635 1.30284C3.99695 1.19673 4.54988 1.25119 5.05238 1.45933C5.55488 1.66747 5.98437 2.01995 6.28654 2.47218C6.58872 2.92442 6.75 3.4561 6.75 4C6.74917 4.72909 6.45918 5.42808 5.94363 5.94363C5.42809 6.45918 4.72909 6.74917 4 6.75ZM3 4C3 4.20988 3.06604 4.41444 3.18876 4.58471C3.31148 4.75498 3.48466 4.88231 3.68377 4.94868C3.88289 5.01505 4.09783 5.01709 4.29817 4.95451C4.4985 4.89193 4.67407 4.76791 4.8 4.6C4.83983 4.54696 4.89909 4.51191 4.96476 4.50256C5.03042 4.49321 5.09711 4.51033 5.15016 4.55016C5.2032 4.58998 5.23825 4.64924 5.2476 4.71491C5.25695 4.78058 5.23983 4.84727 5.2 4.90031C5.01106 5.1521 4.7477 5.33806 4.44721 5.43186C4.14672 5.52566 3.82433 5.52255 3.52571 5.42296C3.22709 5.32338 2.96736 5.13237 2.78332 4.87699C2.59927 4.6216 2.50024 4.31479 2.50024 4C2.50024 3.68521 2.59927 3.3784 2.78332 3.12301C2.96736 2.86763 3.22709 2.67662 3.52571 2.57704C3.82433 2.47745 4.14672 2.47434 4.44721 2.56814C4.7477 2.66194 5.01106 2.8479 5.2 3.09969C5.21972 3.12595 5.23407 3.15584 5.24224 3.18765C5.25041 3.21947 5.25223 3.25257 5.2476 3.28509C5.24297 3.3176 5.23198 3.34889 5.21526 3.37716C5.19855 3.40543 5.17642 3.43012 5.15016 3.44984C5.12389 3.46956 5.094 3.48392 5.06219 3.49208C5.03038 3.50025 4.99727 3.50207 4.96476 3.49744C4.93224 3.49281 4.90096 3.48183 4.87269 3.46511C4.84442 3.44839 4.81972 3.42626 4.8 3.4C4.67407 3.23209 4.4985 3.10807 4.29817 3.04549C4.09783 2.98291 3.88289 2.98495 3.68377 3.05132C3.48466 3.11769 3.31148 3.24502 3.18876 3.41529C3.06604 3.58556 3 3.79012 3 4Z"
+                  fill="#1E2122" />
+              </g>
+              <defs>
+                <clipPath id="clip0_74_5333">
+                  <rect width="8" height="8" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            2023 Sify Digital Services Limited. All Rights Reserved.</span> --}}
+        </div>
+        <div>
+          <span></span>
+          <div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+</body>
+
+
+</html> 
