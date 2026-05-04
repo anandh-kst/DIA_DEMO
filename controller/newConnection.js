@@ -407,11 +407,35 @@ exports.get_bandwidth_by_connectiontype = async (req, res, next) => {
 };
 exports.get_connectiontype = async (req, res, next) => {
   try {
-    const { rateCode, reqBandwidth, reqBandwidthUOM } = req.body;
-    console.log("req.body", req.body);
+    const { rateCode, reqBandwidth, reqBandwidthUOM, existingConnectionType } = req.body;
     const { parentRole } = req;
-    console.log("parentRole", parentRole);
+
     const restrictedRoles = ["CP + Customer", "CXM + Customer"];
+
+    const filterByExistingConnectionType = (connectionTypes) => {
+      if (
+        !existingConnectionType ||
+        (Array.isArray(existingConnectionType) && existingConnectionType.length === 0)
+      ) {
+        return connectionTypes;
+      }
+
+      const existing = Array.isArray(existingConnectionType)
+        ? existingConnectionType
+        : [existingConnectionType];
+
+      if (existing.includes("Ethernet Drop - Sify PoP")) {
+        return connectionTypes.includes("Fiber") ? ["Fiber"] : [];
+      }
+
+      if (existing.includes("Fiber") || existing.includes("Wireless")) {
+        return connectionTypes.filter((type) =>
+          ["Fiber", "Wireless"].includes(type)
+        );
+      }
+
+      return connectionTypes;
+    };
 
     if (rateCode) {
       const connectionTypes = await db
@@ -419,7 +443,6 @@ exports.get_connectiontype = async (req, res, next) => {
         .find({
           plan: /bw/,
           Price_Sheet: rateCode,
-          // Price_Sheet: "HDFC BANK_ILL_Apr24-Mar25",
           ...(reqBandwidth && { bandwidth: reqBandwidth }),
         })
         .toArray();
@@ -437,70 +460,70 @@ exports.get_connectiontype = async (req, res, next) => {
         }
       });
 
-      const connectionTypesArray = Array.from(uniqueConnectionTypes);
+      let connectionType = Array.from(uniqueConnectionTypes);
+      connectionType = filterByExistingConnectionType(connectionType);
 
       logger.info(`${req.path} -- ${req.method} -- Success`);
-      res.send({
-        status: "Success",
-        connectionType: connectionTypesArray,
-      });
-    } else if (!reqBandwidth) {
+      return res.send({ status: "Success", connectionType });
+    }
+
+    if (!reqBandwidth) {
       let connectionType = await db.collection("conditionills").distinct("connectionType");
 
       if (!restrictedRoles.includes(parentRole)) {
         connectionType = connectionType.filter((item) => item !== "Other ISP");
       }
 
+      connectionType = filterByExistingConnectionType(connectionType);
+
       logger.info(`${req.path} -- ${req.method} -- Success`);
-      res.send({
-        status: "Success",
-        connectionType,
-      });
-    } else {
-      const matchConditions = {
-        bw: reqBandwidth,
-        unit: reqBandwidthUOM,
-      };
+      return res.send({ status: "Success", connectionType });
+    }
 
-      // if (restrictedRoles.includes(parentRole)) {
-      //   matchConditions.connectionType = { $ne: "Other ISP" };
-      // }
+    const matchConditions = {
+      bw: reqBandwidth,
+      unit: reqBandwidthUOM,
+    };
 
-      const bwCondition = await db.collection("conditionills").find(matchConditions).toArray();
-      console.log("bwCondition", bwCondition);
+    const bwCondition = await db.collection("conditionills").find(matchConditions).toArray();
 
-      const connectionType = [...new Set(bwCondition.map((doc) => doc.connectionType))];
-      console.log("matchConditions", matchConditions);
-      if (connectionType.length !== 0) {
-        logger.info(`${req.path} -- ${req.method} -- Success`);
-        res.send({
-          status: "Success",
-          connectionType,
-        });
-      } else {
-        let connectionType = [];
-        const availableBandwith = await db
-          .collection("conditionills")
-          .find({ bw: { $gte: reqBandwidth } })
-          .limit(1)
-          .toArray();
+    let connectionType = [...new Set(bwCondition.map((doc) => doc.connectionType))];
 
-        const bw = await db.collection("conditionills").find({ bw: availableBandwith[0].bw });
+    if (connectionType.length !== 0) {
+      connectionType = filterByExistingConnectionType(connectionType);
 
-        for await (const data of bw) {
-          connectionType.push(data.connectionType);
-        }
+      logger.info(`${req.path} -- ${req.method} -- Success`);
+      return res.send({ status: "Success", connectionType });
+    }
 
-        if (!restrictedRoles.includes(parentRole)) {
-          connectionType = connectionType.filter((item) => item !== "Other ISP");
-        }
-        logger.info(`${req.path} -- ${req.method} -- Success`);
-        res.send({
-          status: "Success",
-          connectionType,
-        });
+    let fallbackTypes = [];
+
+    const availableBandwith = await db
+      .collection("conditionills")
+      .find({ bw: { $gte: reqBandwidth } })
+      .limit(1)
+      .toArray();
+
+    if (availableBandwith.length > 0) {
+      const bw = await db
+        .collection("conditionills")
+        .find({ bw: availableBandwith[0].bw });
+
+      for await (const data of bw) {
+        fallbackTypes.push(data.connectionType);
       }
     }
+
+    if (!restrictedRoles.includes(parentRole)) {
+      fallbackTypes = fallbackTypes.filter((item) => item !== "Other ISP");
+    }
+
+    let connectionTypeFinal = [...new Set(fallbackTypes)];
+    connectionTypeFinal = filterByExistingConnectionType(connectionTypeFinal);
+
+    logger.info(`${req.path} -- ${req.method} -- Success`);
+    return res.send({ status: "Success", connectionType: connectionTypeFinal });
+
   } catch (error) {
     next(error);
   }
