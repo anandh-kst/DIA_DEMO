@@ -663,9 +663,9 @@ exports.get_modify_base_plan = async (req, res, next, sendResponse = true) => {
           additionalPrice.push({
             priceType: "tower",
             arc: 0,
-            otc: tower[0]?.Price || 0,
+            otc: hasOtc ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             actualARC: 0,
-            actualOTC: tower[0]?.Price || 0,
+            actualOTC: hasOtc ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             mastHeight: data.mastHeight,
             unit: tower[0]?.unit || "Meter",
             mastType: data.mastType,
@@ -709,6 +709,7 @@ exports.get_modify_base_plan = async (req, res, next, sendResponse = true) => {
           capex = data.otherIspArc;
         }
         const calculatePrice = async (markupPrice, planType, property, noDiscount) => {
+          if (property === "otc" && !hasOtc) return 0;
           const isFiberConnection = data.connectionType === "Fiber" || data.connectionType === "Other ISP";
           const baseValue = planType[property] - (noDiscount ? (planType[property] * discount[property]) / 100 : 0) + connectionTypePrice[property];
 
@@ -803,7 +804,7 @@ exports.get_modify_base_plan = async (req, res, next, sendResponse = true) => {
             connectionType: selectedConnectionType,
           })
           .toArray();
-        console.log("query",{
+        console.log("query", {
           porduct: "DIA",
           type: /bw/,
           plan: classofService,
@@ -826,9 +827,9 @@ exports.get_modify_base_plan = async (req, res, next, sendResponse = true) => {
           additionalPrice.push({
             priceType: "tower",
             arc: 0,
-            otc: tower[0]?.otc || 0,
+            otc: hasOtc ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             actualARC: 0,
-            actualOTC: tower[0]?.otc || 0,
+            actualOTC: hasOtc ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             mastHeight: data.mastHeight,
             unit: tower[0]?.unit || "Meter",
             mastType: data.mastType,
@@ -855,6 +856,7 @@ exports.get_modify_base_plan = async (req, res, next, sendResponse = true) => {
           capex = data.otherIspArc;
         }
         const calculatePrice = async (markupPrice, planType, property, noDiscount) => {
+          if (property === "otc" && !hasOtc) return 0;
           const isFiberConnection = data.connectionType === "Fiber" || data.connectionType === "Other ISP";
           const baseValue = planType[property] + connectionTypePrice[property];
 
@@ -1601,7 +1603,7 @@ exports.save_quote_version = async (req, res, next) => {
               if (item.serviceType == "bundled" && vas.serviceType == "bundled") {
                 vas.otc = item.newOtc || 0;
                 vas.arc = item.newArc || 0;
-                vas.totalcost = item.newOtc|| 0 + item.newArc || 0;
+                vas.totalcost = item.newOtc || 0 + item.newArc || 0;
               }
             });
           }

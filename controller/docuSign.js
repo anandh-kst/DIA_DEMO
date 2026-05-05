@@ -330,7 +330,7 @@ exports.get_modify_pd_doc = async (req, res, next) => {
 
     let reqId = fileName.match(/\d+/g).join("");
     reqId = parseInt(reqId);
-
+    await new Promise(resolve => setTimeout(resolve, 1000));
     let quote = await Quote.findOne({ reqId }).lean();
     if (!quote) throw new Error(`Quote with reqId: ${reqId} not found or is inactive.`);
 
