@@ -290,6 +290,40 @@ const getPdfBuffer = async (quote, templateFile, pdfPath) => {
   const pdfBuffer = fs.readFileSync(`${pdfPath}`);
   return pdfBuffer;
 };
+const verifyOpportunity = async (reqId) => {
+  try {
+    const opportunityData = await db
+      .collection("opportunityDetails")
+      .findOne({ reqId });
+
+    if (!opportunityData) {
+      return {
+        success: false,
+        message: "Opportunity record not found"
+      };
+    }
+
+    if (opportunityData.opportunityStatus === "Cancelled") {
+      return {
+        success: false,
+        message: `Opportunity is already cancelled with status code "${opportunityData.statusCode || "N/A"}" due to reason "${opportunityData.cancelReason || "N/A"}".`
+      };
+    }
+
+    return {
+      success: true,
+      message: "Opportunity is valid"
+    };
+
+  } catch (error) {
+    console.error("verifyOpportunity Error:", error);
+
+    return {
+      success: false,
+      message: "Something went wrong while verifying opportunity"
+    };
+  }
+};
 exports.get_pd_doc = async (req, res, next) => {
   try {
     const fileName = req.params.reqId;
@@ -456,7 +490,13 @@ exports.get_modify_pd_doc = async (req, res, next) => {
       }
     );
 
-    // updateOpportunityDate(reqId);
+    const { success, message } = await verifyOpportunity(reqId);
+    if (success) {
+      await updateOpportunityPrice(reqId);
+    }
+    else {
+      console.log(`Opportunity cancelled for reqId ${reqId}: ${message}`);
+    }
 
     res.contentType("application/pdf");
     logger.info(`${req.path} -- ${req.method} -- Success`);

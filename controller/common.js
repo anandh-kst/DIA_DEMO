@@ -99,6 +99,42 @@ const updateOscPoDoc = async (reqId, base64Doc, fileName) => {
   }
 };
 
+const verifyOpportunity = async (reqId) => {
+  try {
+    const opportunityData = await db
+      .collection("opportunityDetails")
+      .findOne({ reqId });
+
+    if (!opportunityData) {
+      return {
+        success: false,
+        message: "Opportunity record not found"
+      };
+    }
+
+    if (opportunityData.opportunityStatus === "Cancelled") {
+      return {
+        success: false,
+        message: `Opportunity is already cancelled with status code "${opportunityData.statusCode || "N/A"}" due to reason "${opportunityData.cancelReason || "N/A"}".`
+      };
+    }
+
+    return {
+      success: true,
+      message: "Opportunity is valid"
+    };
+
+  } catch (error) {
+    console.error("verifyOpportunity Error:", error);
+
+    return {
+      success: false,
+      message: "Something went wrong while verifying opportunity"
+    };
+  }
+};
+
+
 const sendOpportunityUpdate = async (reqId) => {
   let apiUrl, payload;
   try {
@@ -1962,6 +1998,11 @@ exports.orm_view_validation = async (req, res, next) => {
     // Enable this code as per the mail subject: "Clarification on ORM Validation Flow for DIA." 14/03/2025
     oracleDb = await common.getOracleDb();
     const { reqId, linkIds = [] } = req.body;
+
+    const { success, message } = await verifyOpportunity(parseInt(reqId));
+    if (!success) {
+      return res.status(200).send({ status: "Error", message: message });
+    }
 
     let linkIdArray = linkIds;
     if (linkIds.length === 0) {
