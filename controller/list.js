@@ -227,10 +227,24 @@ exports.feasibility = async (req, res, next) => {
 exports.my_links = async (req, res, next, sendResponse = true) => {
   let oracalDb;
   try {
-    let { ebsAccountNo, page, limit, searchKeyword, status } = req.body;
+    let { ebsAccountNo, page, limit, searchKeyword, status, reqId } = req.body;
     const { connectionType, fromDate, toDate } = req.body.filters;
 
     oracalDb = await common.getOracleDb();
+
+    let ignoreLinkIds = [];
+
+    if (reqId) {
+      const quote = await Quote.findOne({ reqId });
+
+      if (quote) {
+        const linkIds = quote.locationDetails
+          .map(loc => loc?.existingPlanDetails?.linkId)
+          .filter(Boolean);
+
+        ignoreLinkIds = linkIds;
+      }
+    }
 
     const lastMileTypeFilter = () => {
       const commonTypes = ["SIFY FIBER", "Sify Fiber", "FIBER", "Sify fiber", "sify fiber", "FIber", "Fiber", "Sify FIBER", "SifyFiber", "wireless", "Sify RF", "Wireless"];
@@ -291,6 +305,16 @@ exports.my_links = async (req, res, next, sendResponse = true) => {
       return "";
     };
 
+    const ignoreLinkIdsFilter = () => {
+      if (ignoreLinkIds && ignoreLinkIds.length > 0) {
+        return `AND sliv.LINK_ID NOT IN (${ignoreLinkIds
+          .map(id => `'${id}'`)
+          .join(",")})`;
+      }
+
+      return "";
+    };
+
     /*     const statusFilter = () => {
           if (status) {
             return `AND CONTRACT_HEADER_STATUS = '${status}' AND
@@ -326,7 +350,8 @@ exports.my_links = async (req, res, next, sendResponse = true) => {
         ${statusFilter()}
         ${lastMileTypeFilter()}
         ${endDateFilter()}
-        ${searchKeywordFilter()}`;
+        ${searchKeywordFilter()}
+        ${ignoreLinkIdsFilter()}`;
     // CONTRACT_HEADER_STATUS = 'ACTIVE' AND
     // CONTRACT_LINE_STATUS = 'ACTIVE' AND
     //EXPIRED
@@ -420,6 +445,7 @@ WHERE
     ${statusFilter()}
     ${endDateFilter()}
     ${searchKeywordFilter()}
+    ${ignoreLinkIdsFilter()}
     ORDER BY
     CONTRACT_HEADER_STATUS ASC, CONTRACT_LINE_STATUS ASC, CONTRACT_END_DATE ASC, LINK_ID ASC
     OFFSET ${offset} ROWS FETCH NEXT ${limit} ROWS ONLY
