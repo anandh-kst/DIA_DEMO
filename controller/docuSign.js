@@ -6,7 +6,7 @@ const axios = require("axios");
 const moment = require("moment");
 const common = require("../common");
 const https = require("https");
-mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const httpsAgent = new https.Agent({
   rejectUnauthorized: false,
 });
