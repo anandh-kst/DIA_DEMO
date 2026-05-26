@@ -331,10 +331,12 @@
           </div>
         </div>
       </div>
+      {{#unless isCXMCustomer}}
       <div class="main-heading2 top-address2">
         <p class="customer-name">This Document is Shared by {{cpCompany}} ({{customerName}}) and Account Manager :
           {{accountManagerName}}</p>
       </div>
+      {{/unless}}
       <div class="main-heading2">
         <h1>DIA Link Details:</h1>
       </div>
@@ -347,121 +349,121 @@
               <th scope="col">
                 <span>S.No</span>
               </th>
-<th>Location</th>
-<th>Link ID</th>
-<th>Link Type</th>
-<th>Order Type</th>
-<th>Description</th>
+              <th>Location</th>
+              <th>Link ID</th>
+              <th>Link Type</th>
+              <th>Order Type</th>
+              <th>Description</th>
 
-{{#if withPrice}}
-<th style="text-align:right;">Revised ARC</th>
-<th style="text-align:right;">Revised OTC</th>
-{{else}}
-<th style="text-align:right;">Revised ARC</th>
-<th style="text-align:right;">Revised OTC</th>
-{{/if}}
+              {{#if withPrice}}
+              <th style="text-align:right;">Revised ARC</th>
+              <th style="text-align:right;">Revised OTC</th>
+              {{else}}
+              <th style="text-align:right;">Revised ARC</th>
+              <th style="text-align:right;">Revised OTC</th>
+              {{/if}}
 
-</tr>
-</thead>
+            </tr>
+          </thead>
 
-<tbody>
+          <tbody>
 
-{{#each locationDetails}}
-{{#each basePlan}}
+            {{#each locationDetails}}
+            {{#each basePlan}}
 
-<tr>
+            <tr>
 
-<td>{{incSerial}}</td>
+              <td>{{incSerial}}</td>
 
-<td>
-{{../shippingAddress.address1}},
-{{../shippingAddress.address2}},
-{{../shippingAddress.address3}},
-{{../shippingAddress.city}},
-{{../shippingAddress.state}},
-{{../shippingAddress.pincode}}
-</td>
+              <td>
+                {{../shippingAddress.address1}},
+                {{../shippingAddress.address2}},
+                {{../shippingAddress.address3}},
+                {{../shippingAddress.city}},
+                {{../shippingAddress.state}},
+                {{../shippingAddress.pincode}}
+              </td>
 
-<td>{{../existingPlanDetails.linkId}}</td>
+              <td>{{../existingPlanDetails.linkId}}</td>
 
-<td>{{../connectionType}}</td>
+              <td>{{../connectionType}}</td>
 
-<td>{{../provisionType}}</td>
+              <td>{{../provisionType}}</td>
 
-<td>
-{{../provisionType}} from
-{{../existingPlanDetails.reqBandwidth}}
-{{../existingPlanDetails.reqBandwidthUOM}}
-to
-{{../reqBandwidth}}
-{{../reqBandwidthUOM}}
+              <td>
+                {{../provisionType}} from
+                {{../existingPlanDetails.reqBandwidth}}
+                {{../existingPlanDetails.reqBandwidthUOM}}
+                to
+                {{../reqBandwidth}}
+                {{../reqBandwidthUOM}}
 
-<br><br>
+                <br><br>
 
-{{#if ../mastHeight}}
-{{../mastType}} {{../mastHeight}} Meter
-{{/if}}
+                {{#if ../mastHeight}}
+                {{../mastType}} {{../mastHeight}} Meter
+                {{/if}}
 
-</td>
+              </td>
 
-{{#if ../../withPrice}}
+              {{#if ../../withPrice}}
 
-<td style="text-align:end;">
-₹ {{totalARC}}
-</td>
+              <td style="text-align:end;">
+                ₹ {{totalARC}}
+              </td>
 
-<td style="text-align:end;">
-₹ {{totalOTC}}
-</td>
+              <td style="text-align:end;">
+                ₹ {{totalOTC}}
+              </td>
 
-{{else}}
+              {{else}}
 
-<td style="text-align:end;">
-₹ {{totalARC}}
-</td>
+              <td style="text-align:end;">
+                ₹ {{totalARC}}
+              </td>
 
-<td style="text-align:end;">
-₹ {{totalOTC}}
-</td>
+              <td style="text-align:end;">
+                ₹ {{totalOTC}}
+              </td>
 
-{{/if}}
+              {{/if}}
 
-</tr>
+            </tr>
 
-{{/each}}
-{{/each}}
+            {{/each}}
+            {{/each}}
 
-</tbody>
+          </tbody>
 
-<tr class="sub-heading">
+          <tr class="sub-heading">
 
-<td colspan="6" style="text-align:end;">Total</td>
+            <td colspan="6" style="text-align:end;">Total</td>
 
-{{#if withPrice}}
+            {{#if withPrice}}
 
-<td style="text-align:end;">
-₹ {{totalARC}}
-</td>
+            <td style="text-align:end;">
+              ₹ {{totalARC}}
+            </td>
 
-<td style="text-align:end;">
-₹ {{totalOTC}}
-</td>
+            <td style="text-align:end;">
+              ₹ {{totalOTC}}
+            </td>
 
-{{else}}
+            {{else}}
 
-<td style="text-align:end;">
-₹ {{totalARC}}
-</td>
+            <td style="text-align:end;">
+              ₹ {{totalARC}}
+            </td>
 
-<td style="text-align:end;">
-₹ {{totalOTC}}
-</td>
+            <td style="text-align:end;">
+              ₹ {{totalOTC}}
+            </td>
 
-{{/if}}
+            {{/if}}
 
-</tr>
+          </tr>
 
-</table>
+        </table>
 
       </div>
       <!-- ******** TABLE ********* -->

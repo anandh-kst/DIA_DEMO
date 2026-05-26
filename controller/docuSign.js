@@ -6,6 +6,7 @@ const axios = require("axios");
 const moment = require("moment");
 const common = require("../common");
 const https = require("https");
+mongoose = require("mongoose");
 const httpsAgent = new https.Agent({
   rejectUnauthorized: false,
 });
@@ -256,6 +257,7 @@ const getPdfBuffer = async (quote, templateFile, pdfPath) => {
   quote.isFiber = isFiber;
   quote.isWireless = isWireless;
   quote.accountManagerName = companyData?.accountManager_name || "-";
+  quote.isCXMCustomer = quote?.parentRole?.toLowerCase().includes("cxm");
 
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + 15);
@@ -459,6 +461,8 @@ exports.get_modify_pd_doc = async (req, res, next) => {
     console.log("User:", cpUser);
     console.log("Company:", companyData);
     console.log("Company:", companyData.companyName);
+    quote.isCXMCustomer = quote?.parentRole?.toLowerCase().includes("cxm");
+    console.log("isCXMCustomer", quote?.isCXMCustomer);
     const htmlContent = template({ ...quote, towerOTC, cpCompany: companyData.companyName, withPrice, accountManagerName: companyDetails?.[0]?.accountManager_name || "-", companyDetails: companyDetails[0], companyName: quote.companyName.toUpperCase(), isFiber, isWireless, billingPattenLink: erpDatas.billingPattenLink, noticePeriod: erpDatas.noticePeriod });
 
     const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox"] });
@@ -490,12 +494,34 @@ exports.get_modify_pd_doc = async (req, res, next) => {
       }
     );
 
-    const { success, message } = await verifyOpportunity(reqId);
-    if (success) {
-      await updateOpportunityPrice(reqId);
-    }
-    else {
-      console.log(`Opportunity cancelled for reqId ${reqId}: ${message}`);
+
+    /// get companyId from quote
+    const quoteDoc = await Quote.findOne({ reqId }, { companyId: 1 });
+    const companyId = quoteDoc?.companyId;
+    if (!companyId) throw new Error("Company ID not found for the given reqId.");
+    const companyDataDoc = await loginDB.collection("companies").findOne({ _id: new mongoose.Types.ObjectId(companyId) });
+    const cxmEmail = companyDataDoc?.cxmEmail;
+    const userData = await loginDB
+      .collection("users")
+      .findOne(
+        { email: cxmEmail },
+        { projection: { parentRole: 1 } }
+      );
+
+    console.log("User Data:", userData);
+
+    const parentRole = userData?.parentRole;
+    if (!parentRole) throw new Error("Parent role not found for the user.");
+
+    if (!parentRole.toLowerCase().includes("cxm")) {
+
+      const { success, message } = await verifyOpportunity(reqId);
+      if (success) {
+        await updateOpportunityPrice(reqId);
+      }
+      else {
+        console.log(`Opportunity cancelled for reqId ${reqId}: ${message}`);
+      }
     }
 
     res.contentType("application/pdf");
@@ -684,9 +710,12 @@ exports.get_modify_sign_order = async (req, res, next) => {
     const companyData = await loginDB
       .collection("companies")
       .findOne({ _id: cpUser.companyId });
+
+    quote.isCXMCustomer = quote?.parentRole?.toLowerCase().includes("cxm");
     console.log("User:", cpUser);
     console.log("Company:", companyData);
     console.log("Company:", companyData.companyName);
+
     const htmlContent = template({ ...quote, towerOTC, cpCompany: companyData.companyName, accountManagerName: companyDetails[0]?.accountManager_name, withPrice: quote.withPrice, companyDetails: companyDetails[0], companyName: quote.companyName.toUpperCase(), isFiber, isWireless, billingPattenLink: erpDatas.billingPattenLink, noticePeriod: erpDatas.noticePeriod });
 
     const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox"] });

@@ -365,8 +365,10 @@
 
 
       <div class="main-heading2 top-address2">
+        {{#unless isCXMCustomer}}
         <p class="customer-name">This Document is Shared by {{cpCompany}} ({{customerName}}) and Accound Manager :
           {{accountManagerName}}</p>
+        {{/unless}}
         <p>We are pleased to share the following proposal details for your review.</p>
 
       </div>

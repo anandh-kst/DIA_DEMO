@@ -760,10 +760,14 @@
               </div>
             </div>
           </div>
+          {{#unless isCXMCustomer}}
           <div class="main-heading2 top-address2">
-            <p class="customer-name">This Document is Shared by {{cpCompany}} ({{customerName}}) and Accound Manager :
-              {{accountManagerName}}</p>
+            <p class="customer-name">
+              This Document is Shared by {{cpCompany}} ({{customerName}})
+              and Accound Manager : {{accountManagerName}}
+            </p>
           </div>
+          {{/unless}}
 
           <div class="main-heading2">
             <h1>Dedicated Internet Access New Connection(s) </h1>

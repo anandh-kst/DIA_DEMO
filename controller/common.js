@@ -13,6 +13,7 @@ const httpsAgent = new https.Agent({
   rejectUnauthorized: false,
 });
 const ExcelJS = require("exceljs");
+const mongoose = require("mongoose");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -1999,9 +2000,31 @@ exports.orm_view_validation = async (req, res, next) => {
     oracleDb = await common.getOracleDb();
     const { reqId, linkIds = [] } = req.body;
 
-    const { success, message } = await verifyOpportunity(parseInt(reqId));
-    if (!success) {
-      return res.status(200).send({ status: "Error", message: message });
+    if (!Quote) {
+      throw new Error("Quote model not found");
+    }
+    const quoteDoc = await Quote.findOne({ reqId });
+    const companyId = quoteDoc?.companyId;
+    if (!companyId) throw new Error("Company ID not found for the given reqId.");
+    const companyDataDoc = await loginDB.collection("companies").findOne({ _id: new mongoose.Types.ObjectId(companyId) });
+    const cxmEmail = companyDataDoc?.cxmEmail;
+    const userData = await loginDB
+      .collection("users")
+      .findOne(
+        { email: cxmEmail },
+        { projection: { parentRole: 1 } }
+      );
+
+    console.log("User Data:", userData);
+
+    const parentRole = userData?.parentRole;
+    if (!parentRole) throw new Error("Parent role not found for the user.");
+
+    if (!parentRole.toLowerCase().includes("cxm")) {
+      const { success, message } = await verifyOpportunity(parseInt(reqId));
+      if (!success) {
+        return res.status(200).send({ status: "Error", message: message });
+      }
     }
 
     let linkIdArray = linkIds;

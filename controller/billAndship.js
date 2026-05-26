@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const moment = require("moment");
 const fs = require("fs");
 const oracledb = require("oracledb");
+const mongoose = require("mongoose");
 const { updateOpportunity } = require("../common");
 const httpsAgent = new https.Agent({
   rejectUnauthorized: false,
@@ -1025,9 +1026,30 @@ exports.post_po_no = async (req, res, next) => {
     if (!reqId) throw new Error("Missing required parameters: reqId.");
 
     let poDateISO;
-    const { success, message } = await verifyOpportunity(reqId);
-    if (!success) {
-      return res.status(200).send({ status: "Error", message: message });
+
+    /// get companyId from quote
+    const quote = await Quote.findOne({ reqId }, { companyId: 1 });
+    const companyId = quote?.companyId;
+    if (!companyId) throw new Error("Company ID not found for the given reqId.");
+    const companyData = await loginDB.collection("companies").findOne({ _id: new mongoose.Types.ObjectId(companyId) });
+    const cxmEmail = companyData?.cxmEmail;
+    const userData = await loginDB
+      .collection("users")
+      .findOne(
+        { email: cxmEmail },
+        { projection: { parentRole: 1 } }
+      );
+
+    console.log("User Data:", userData);
+
+    const parentRole = userData?.parentRole;
+    if (!parentRole) throw new Error("Parent role not found for the user.");
+
+    if (!parentRole.toLowerCase().includes("cxm")) {
+      const { success, message } = await verifyOpportunity(reqId);
+      if (!success) {
+        return res.status(200).send({ status: "Error", message: message });
+      }
     }
 
     if (!isPoNo) {

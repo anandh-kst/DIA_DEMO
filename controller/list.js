@@ -3,6 +3,7 @@ const oracledb = require("oracledb");
 const ExcelJS = require("exceljs");
 const moment = require("moment");
 const common = require("../common");
+const mongoose = require("mongoose");
 
 exports.cxm_tower_feasibility = async (req, res, next) => {
   try {
@@ -128,6 +129,7 @@ exports.feasibility = async (req, res, next) => {
     const companyId = req.body.companyId ?? req.companyId;
     const pageNo = page - 1;
 
+
     // await common.update_feasibility(limit, page, companyId);
 
     const startDate = fromDate ? new Date(fromDate).setUTCHours(0, 0, 0, 0) : null;
@@ -140,10 +142,32 @@ exports.feasibility = async (req, res, next) => {
       if (endDate) dateRangeFilter.createdDate.$lte = new Date(endDate);
     }
 
+
+    let parentRole = req.body.parentRole ?? req.parentRole;
+
+    if (!parentRole) {
+      const companyData = await loginDB.collection("companies").findOne({ _id: new mongoose.Types.ObjectId(companyId) });
+      const cxmEmail = companyData?.cxmEmail;
+      const userData = await loginDB
+        .collection("users")
+        .findOne(
+          { email: cxmEmail },
+          { projection: { parentRole: 1 } }
+        );
+
+      console.log("User Data:", userData);
+
+      parentRole = userData?.parentRole;
+    }
+    console.log("Parent Role:", parentRole);
+
     let query = {
       isActive: true,
       companyId,
-      quoteType: "modifyBandwidth",
+      ...(parentRole?.includes("CXM")
+        ? { quoteType: { $in: ["New", "modifyBandwidth"] } }
+        : { quoteType: "modifyBandwidth" }
+      ),
       ...dateRangeFilter,
       ...(status && status.length !== 0 && { status: { $in: status } }),
       ...(searchKeyword && {
