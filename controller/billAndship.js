@@ -157,11 +157,15 @@ exports.get_address_info = async (req, res, next) => {
 
     const stateList = hasebsAccountNo ? await getShipToStates() : [];
     // const gstdetails = await Gstdetails.findOne({ companyId: req.companyId, companyName: req.companyName, state: shipTo.state.toUpperCase() });
-
+    const uniqueStateList = Array.from(
+      new Map(
+        stateList.map(item => [item.STATE, item])
+      ).values()
+    );
     res.send({
       status: "Success",
       shipTo,
-      stateList,
+      stateList: uniqueStateList,
     });
   } catch (err) {
     console.log(err);
