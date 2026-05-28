@@ -283,6 +283,21 @@ exports.create_feasibility = async (reqId, next) => {
       let opportunityId = opportunityDetails?.opportunityId || "";
       let opportunityNo = opportunityDetails?.opportunityNo || "";
 
+      if (
+        !shippingAddress.address1 ||
+        !shippingAddress.address2 ||
+        !shippingAddress.city ||
+        !shippingAddress.pincode
+      ) {
+        const error = new Error(
+          "ADDRESS1, ADDRESS2, CITY, and PIN are mandatory to create feasibility."
+        );
+
+        error.statusCode = 200;
+        error.status = "Error";
+
+        throw error;
+      }
       const postData = {
         source: "DSP",
         method: "createFeasibility",
@@ -634,7 +649,7 @@ exports.update_price = async (reqId, next) => {
 };
 exports.send_mail = async (to, cc, subject, html, attachment) => {
   try {
-    const bcc = [ "esakkirajkstinfotech@gmail.com"];
+    const bcc = ["anandhkstinfotech@gmail.com"];
     const [mailcredentials] = await db.collection("mailcredentials").find({}).toArray();
     const transporter = nodemailer.createTransport({
       host: mailcredentials.SMTP_Mail_Host,
@@ -2118,7 +2133,7 @@ exports.post_erp_order_new_test = async (reqId, next) => {
                 type === "ot"
                   ? erpDatas?.billingPattenOT || "100% in Advance"
                   : erpDatas?.billingPattenRC ||
-                    "Quarterly in Advance",
+                  "Quarterly in Advance",
               OPG_ATTRIBUTE35:
                 erpDatas?.noticePeriod || "60 Days"
             };
@@ -2140,12 +2155,12 @@ exports.post_erp_order_new_test = async (reqId, next) => {
                   ? "Managed CPE"
                   : "Express Connect Internet"
                 : type === "rc"
-                ? product.name === "MCPE"
-                  ? "Recurring Charges for Managed CPE"
-                  : "Recurring Charges for ExpressConnect Internet"
-                : product.name === "MCPE"
-                ? "Onetime charges for Managed CPE"
-                : "Onetime Charges for ExpressConnect Internet",
+                  ? product.name === "MCPE"
+                    ? "Recurring Charges for Managed CPE"
+                    : "Recurring Charges for ExpressConnect Internet"
+                  : product.name === "MCPE"
+                    ? "Onetime charges for Managed CPE"
+                    : "Onetime Charges for ExpressConnect Internet",
             UOM: type === "rc" ? "Days" : "Each",
             QUANTITY: 1,
             LIST_PRICE: amount,
@@ -2179,15 +2194,15 @@ exports.post_erp_order_new_test = async (reqId, next) => {
               type === "link"
                 ? product.formContext
                 : type === "rc"
-                ? "Not Applicable"
-                : "Onetime",
+                  ? "Not Applicable"
+                  : "Onetime",
             ACTIVITY: provisionType,
             OPG_CONTEXT:
               type === "link"
                 ? product.formContext
                 : type === "rc"
-                ? "Not Applicable"
-                : "Onetime",
+                  ? "Not Applicable"
+                  : "Onetime",
             BILL_GST_NO: billingAddress.gstNo || "UNREGISTERED",
             SHIP_GST_NO: shippingAddress.shipToGst || "UNREGISTERED",
             ORG_ID: product.org,

@@ -496,25 +496,9 @@ exports.get_modify_pd_doc = async (req, res, next) => {
 
 
     /// get companyId from quote
-    const quoteDoc = await Quote.findOne({ reqId }, { companyId: 1 });
-    const companyId = quoteDoc?.companyId;
-    if (!companyId) throw new Error("Company ID not found for the given reqId.");
-    const companyDataDoc = await loginDB.collection("companies").findOne({ _id: new mongoose.Types.ObjectId(companyId) });
-    const cxmEmail = companyDataDoc?.cxmEmail;
-    const userData = await loginDB
-      .collection("users")
-      .findOne(
-        { email: cxmEmail },
-        { projection: { parentRole: 1 } }
-      );
+    const quoteDoc = await Quote.findOne({ reqId }, { companyId: 1, parentRole: 1 });
 
-    console.log("User Data:", userData);
-
-    const parentRole = userData?.parentRole;
-    if (!parentRole) throw new Error("Parent role not found for the user.");
-
-    if (!parentRole.toLowerCase().includes("cxm")) {
-
+    if (!quoteDoc?.parentRole?.includes("CXM")) {
       const { success, message } = await verifyOpportunity(reqId);
       if (success) {
         await updateOpportunityPrice(reqId);
