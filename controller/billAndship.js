@@ -363,6 +363,11 @@ exports.post_new_address = async (req, res, next) => {
     if (!quote) throw new Error("Quote context not found");
     let { ebsAccountNo, quoteType, locationDetails } = quote;
 
+    if (!["Draft", "Awaiting Signature", "DRAFT", "Feasible"].includes(quote?.status)) {
+      res.send({ status: "Success", message: "Order already Signed/Order" });
+      return;
+    }
+
 
     const locationIndex = locationDetails.findIndex((item) => item.locationId === locationId);
     if (locationIndex === -1) throw new Error("Location details not found");
@@ -613,6 +618,10 @@ exports.post_po_no = async (req, res, next) => {
       if (!success) {
         return res.status(200).send({ status: "Error", message: message });
       }
+    }
+    if (!["Draft", "Awaiting Signature", "DRAFT", "Feasible"].includes(quote?.status)) {
+      res.send({ status: "Success", message: "Order already Signed/Order" });
+      return;
     }
     if (!isPoNo) {
       const path = `${appRoot}/public/uploaded_po/${reqId}.pdf`;
