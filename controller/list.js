@@ -141,7 +141,7 @@ exports.feasibility = async (req, res, next) => {
       if (startDate) dateRangeFilter.createdDate.$gte = new Date(startDate);
       if (endDate) dateRangeFilter.createdDate.$lte = new Date(endDate);
     }
-
+  
 
     let parentRole = req.body.parentRole ?? req.parentRole;
 

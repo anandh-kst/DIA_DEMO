@@ -113,6 +113,7 @@ exports.get_purchase_summary_by_linkid = async (req, res, next) => {
         sliv.product_type = 'EXPRESSCONNECT' AND
         sliv.ordered_code != 'LASTMILE-RC' AND
         sliv.bandwidth is not null AND
+        sliv.CONTRACT_HEADER_STATUS = 'ACTIVE' AND
         sliv.link_id = '${linkId}'`;
 
     let bandwidthData = [];

@@ -222,7 +222,11 @@ const send_placed_mail = async (reqID, quote, orderId, orderDate) => {
     let accountManagerEmail = accounManager[0]?.accountManager_email || "";
     console.log("accountManagerEmail", accountManagerEmail);
 
-    const toArray = [quote.customermail];
+    const toArray =
+      process.env.ENVIRONMENT === "PRODUCTION"
+        ? [quote.customermail, accountManagerEmail]
+        : [quote.customermail];
+
     // const toArray = ["technical@kstinfotech.com"];
     const subject = `One Sify - Request ID: ${reqID} - Your Order for DIA Services is confirmed with One Sify.`;
 
@@ -456,7 +460,10 @@ send_order_signed_mail = async (reqID, quote) => {
     console.log("accountManagerEmail", accountManagerEmail);
 
 
-    const toArray = [];
+    const toArray =
+      process.env.ENVIRONMENT === "PRODUCTION"
+        ? [accountManagerEmail]
+        : [];
     await common.sendMailUntilSuccess(reqID, toArray, [], subject, html, attachment, 5, 3000, isOrderSignedMail);
 
     return true;
@@ -477,8 +484,10 @@ const processOrderSigned = async (reqID) => {
     connectString: process.env.ORACAL_CONNECTIONSTRING_BLOB,
   };
 
-  // const oracalDb = await oracledb.getConnection(dbConfig);
-  const oracalDb = "";
+  const oracalDb =
+    process.env.ENVIRONMENT === "PRODUCTION"
+      ? await oracledb.getConnection(dbConfig)
+      : "";
   try {
     let quote = await Quote.findOne({
       reqId: reqID,
@@ -505,7 +514,7 @@ const processOrderSigned = async (reqID) => {
     };
 
     const postERP = await axios.post(`${process.env.POSTERP_URL}`, data, config);
-    console.log(postERP?.data);
+    console.log("postERP", postERP?.data);
 
     // const postERP = {
     //   data: {
@@ -514,7 +523,13 @@ const processOrderSigned = async (reqID) => {
     // };
 
     if (postERP.data.STATUS === "S") {
-      // const insertData = await insertFileAttachment(oracalDb, reqID, pdfData);
+      if (process.env.ENVIRONMENT === "PRODUCTION") {
+        const insertData = await insertFileAttachment(
+          oracalDb,
+          reqID,
+          pdfData
+        );
+      }
 
       const orderId = `OSPILL-${reqID}`;
       const orderDate = moment().format("DD-MMM-YYYY");
@@ -544,7 +559,8 @@ const processOrderSigned = async (reqID) => {
     }
   }
 };
-/* exports.post_blob_file = async (req, res, next) => {
+exports.post_blob_file = async (req, res, next) => {
+  console.log("post_blob_file called");
   const dbConfig = {
     user: "FLASHNET",
     password: "FLASHNET123",
@@ -605,8 +621,7 @@ const processOrderSigned = async (reqID) => {
       await oracalDb.close();
     }
   }
-} */
-
+};
 exports.get_quote = async (req, res, next) => {
   try {
     const { reqId } = req.body;
@@ -622,6 +637,7 @@ exports.get_quote = async (req, res, next) => {
   }
 };
 exports.change_quote_status = async (req, res, next) => {
+  console.log("change_quote_status called");
   try {
     const { reqId, status } = req.body;
     console.log("Received request body:", req.body);
@@ -635,19 +651,6 @@ exports.change_quote_status = async (req, res, next) => {
     const getStatus = await Quote.findOne({ reqId: reqID, isActive: true });
 
     if (getStatus.status === "Order Placed" || getStatus.status === "Order Signed") {
-      const fileName = `ILL-SO-${reqID}`;
-      const pdfPath = `${appRoot}/public/signedOrders/${fileName}.pdf`;
-
-      if (fs.existsSync(pdfPath)) {
-        console.log("fileName:", fileName);
-
-        // const pdfBuffer = fs.readFileSync(pdfPath);
-        // const base64Doc = pdfBuffer.toString("base64");
-
-        // await updateOscPoDoc(reqID, base64Doc, fileName);
-      } else {
-        console.log("Signed PDF not found:", pdfPath);
-      }
       res.send({ status: "Success" });
       return;
     }
@@ -663,7 +666,7 @@ exports.change_quote_status = async (req, res, next) => {
     }
 
     sendOpportunityUpdate(reqID);
-    common.updateOpportunity(parseInt(reqID));
+    await common.updateOpportunity(parseInt(reqID));
 
     logger.info(`${req.path} -- ${req.method} -- Success`);
     res.send({ status: "Success" });
@@ -1356,355 +1359,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
     next(error);
   }
 };
-// exports.post_updated_feasibility = async (req, res, next) => {
-//   try {
-//     const data = req.body;
-//     console.log("data");
-//     if (!data) {
-//       throw "No Data";
-//     }
-//     // {
-//     //   fcf_feasibility_id,
-//     //  fcf_date_time,
-//     //   fcfb_wireless_option,
-//     //   fcfb_mast_height,
-//     //   fcfb_mast_type,
-//     //   fcfb_building_height
-//     //   fcff_total_km,
-//     //   fcff_tot_opex,
-//     //   fcff_tot_capex
-//     //   }
 
-//     const { fcfb_cxm_feasibility_status: cxmFeasibilityStatus, fcfb_wireless_option: feasibilityOpt, fcf_date_time: feasibilityUpdatedDate, fcff_tot_opex: OPEX, fcff_tot_capex: CAPEX, fcfb_mast_height: TOWER_HEIGHT, fcfb_building_height: BUILDING_HEIGHT, fcfb_mast_type: mastType, fcf_feasibility_id: feasibilityId, fcff_fiber_selection: fiberStatus, fcff_fiber_details: fiberDetails } = data;
-//     console.log(data);
-//     const opex = OPEX ? parseInt(OPEX) : 0;
-//     const capex = CAPEX ? parseInt(CAPEX) : 0;
-//     const mastHeight = parseInt(TOWER_HEIGHT) || 0;
-//     const buildingHeight = parseInt(BUILDING_HEIGHT) || 0;
-//     const fusionFeasibilityStatus = feasibilityOpt || fiberDetails;
-//     console.log(typeof feasibilityId);
-//     const feasibilityIds = await db.collection("feasibilityids").findOne({ feasibilityId });
-//     console.log(feasibilityIds);
-
-//     const postTowerPrice = async (collectionName, quoteDocument) => {
-//       let cxmConformation = false;
-//       let additionalPrice = [];
-
-//       let { locationDetails, ebsAccountNo, partyId, hasRateCard, rateCode } = quoteDocument;
-//       const currentLocationDetails = locationDetails.find((item) => item.feasibilityId === feasibilityId);
-//       console.log(currentLocationDetails);
-//       const companies = loginDB.collection("companies");
-
-//       const companyDetails = await companies.find({ $or: [{ ebsaccountNo: ebsAccountNo }, { partyId: partyId }] }).toArray();
-//       let { iscxmFiberApproval = false, iscxmWirelessApproval = false } = companyDetails[0];
-
-//       const connectionType = currentLocationDetails.connectionType.toLowerCase();
-//       const isWireless = connectionType === "wireless";
-//       const isFiber = connectionType === "fiber" || connectionType === "other isp";
-//       console.log(connectionType, iscxmFiberApproval, iscxmWirelessApproval);
-//       console.log("bf", cxmConformation);
-//       const dbCollection = db.collection(hasRateCard ? "ratecardprices" : "baseprice");
-//       if (mastHeight) {
-//         const towerData = dbCollection.aggregate([
-//           {
-//             $match: {
-//               Model_Name: "Tower",
-//               Price_Sheet: hasRateCard && rateCode ? rateCode : "BASE",
-//             },
-//           },
-//           {
-//             $group: {
-//               _id: null,
-//               minTowerHeight: { $min: "$bandwidth" },
-//               maxTowerHeight: { $max: "$bandwidth" },
-//             },
-//           },
-//         ]);
-
-//         const towerHeight = towerData.length > 0 ? towerData : { minTowerHeight: 9, maxTowerHeight: 0 };
-//         console.log(towerHeight);
-//         if (mastHeight >= towerHeight.minTowerHeight) {
-//           const tower = await dbCollection
-//             .find({
-//               Model_Name: "Tower",
-//               bandwidth: mastHeight,
-//               Price_Sheet: hasRateCard && rateCode ? rateCode : "BASE",
-//             })
-//             .toArray();
-//           cxmConformation = true;
-//           console.log(tower);
-//           additionalPrice = [
-//             {
-//               priceType: "tower",
-//               arc: 0,
-//               otc: tower[0]?.Price || 0,
-//               actualARC: 0,
-//               actualOTC: tower[0]?.Price || 0,
-//               mastHeight: mastHeight,
-//               unit: tower[0]?.unit || "Meter",
-//               mastType: mastType,
-//             },
-//           ];
-
-//           // const currentLocationDetails = locationDetails.find((item) => item.feasibilityId === feasibilityId);
-//           // console.log(currentLocationDetails);
-//           // const companies = loginDB.collection("companies");
-
-//           // const companyDetails = await companies.find({ ebsaccountNo: ebsAccountNo }).toArray();
-//           // let { iscxmFiberApproval = false, iscxmWirelessApproval = false } = companyDetails[0];
-
-//           // const connectionType = currentLocationDetails.connectionType.toLowerCase();
-//           // const isWireless = connectionType === "wireless";
-//           // const isFiber = connectionType === "fiber";
-//           // console.log(connectionType, iscxmFiberApproval, iscxmWirelessApproval);
-//           console.log("bf", cxmConformation);
-//           if (isWireless) {
-//             console.log("in", iscxmWirelessApproval);
-//             cxmConformation = iscxmWirelessApproval;
-//           } else if (isFiber) {
-//             cxmConformation = iscxmFiberApproval;
-//           } else {
-//             cxmConformation = false;
-//           }
-//           console.log("af", cxmConformation);
-//         }
-//       } else if (opex || capex) {
-//         if (isWireless) {
-//           console.log("in", iscxmWirelessApproval);
-//           cxmConformation = iscxmWirelessApproval;
-//         } else if (isFiber) {
-//           cxmConformation = iscxmFiberApproval;
-//         } else {
-//           cxmConformation = false;
-//         }
-//         console.log("af", cxmConformation);
-//       }
-
-//       await db.collection(collectionName).findOneAndUpdate(
-//         { reqId: quoteDocument.reqId },
-//         {
-//           $set: { "locationDetails.$[elem].additionalPrice": additionalPrice },
-//         },
-//         {
-//           arrayFilters: [{ "elem.feasibilityId": feasibilityId }],
-//         }
-//       );
-
-//       return cxmConformation;
-//     };
-
-//     if (feasibilityIds.serviceType === "DIA" || (feasibilityIds.serviceType === "MPLS" && fusionFeasibilityStatus !== "Pending")) {
-//       const collectionName = feasibilityIds.serviceType === "DIA" ? "quoteills" : "quotempls";
-//       const query = {
-//         isActive: true,
-//         // locationDetails: {
-//         //   $elemMatch: {
-//         //     feasibilityId: feasibilityId,
-//         //     feasibilityStatus: { $in: ["CHECKING FEASIBILITY", "Pending"] },
-//         //   },
-//         // },
-//         "locationDetails.feasibilityId": feasibilityId,
-//       };
-//       console.log(query);
-
-//       const quoteDocument = await db.collection(collectionName).findOne(query);
-//       console.log("quoteDocument", quoteDocument);
-//       let hasRateCard = quoteDocument.hasRateCard;
-//       let actualStatus = quoteDocument.status;
-//       console.log("hasRateCard", hasRateCard);
-
-//       const cxmConformation = await postTowerPrice(collectionName, quoteDocument);
-//       const feasibilityStatus = hasRateCard ? (cxmConformation ? "CHECKING FEASIBILITY" : fusionFeasibilityStatus) : fusionFeasibilityStatus;
-
-//       console.log(hasRateCard ? "CHECKING FEASIBILITY" : fusionFeasibilityStatus);
-//       const updateQuote = await db.collection(collectionName).findOneAndUpdate(
-//         query,
-//         {
-//           $set: {
-//             "locationDetails.$[elem].actualFeasibilityStatus": fusionFeasibilityStatus,
-//             "locationDetails.$[elem].feasibilityStatus": feasibilityStatus,
-//             "locationDetails.$[elem].cxmFeasibilityStatus": cxmFeasibilityStatus,
-//             "locationDetails.$[elem].feasibilityUpdatedDate": feasibilityUpdatedDate,
-//             "locationDetails.$[elem].mastHeight": mastHeight,
-//             "locationDetails.$[elem].mastType": mastType,
-//             "locationDetails.$[elem].buildingHeight": buildingHeight,
-//             "locationDetails.$[elem].opex": opex,
-//             "locationDetails.$[elem].capex": capex,
-//             "locationDetails.$[elem].cxmConformation": cxmConformation,
-//           },
-//         },
-//         {
-//           arrayFilters: [{ "elem.feasibilityId": feasibilityId }],
-//           returnDocument: "after", // This option ensures the updated document is returned
-//         }
-//       );
-//       const { lastErrorObject, value: quote, ok } = updateQuote;
-//       const { locationDetails, reqId } = quote;
-
-//       if (lastErrorObject.n === 0) {
-//         throw "Error updating locationDetails";
-//       }
-
-//       const checkFeas = locationDetails.map((data) => data.feasibilityStatus);
-//       console.log(reqId, checkFeas);
-//       let status = "CHECKING FEASIBILITY";
-//       if (checkFeas.every((status) => status === "Feasible")) {
-//         status = "Feasible";
-//       } else if (checkFeas.every((status) => status === "CHECKING FEASIBILITY")) {
-//         status = "CHECKING FEASIBILITY";
-//       } else if (checkFeas.every((status) => status === "Not Feasible")) {
-//         status = "Not Feasible";
-//       } else if (checkFeas.some((status) => status === "Feasible")) {
-//         status = "Partially Feasible";
-//       }
-//       // console.log("status", status);
-//       // const notAllowed = ["Feasible", "CHECKING FEASIBILITY", "Partially Feasible"];
-//       // if (hasRateCard) {
-//       //   if (cxmConformation) {
-//       //     if (notAllowed.includes(status)) {
-//       //       status = "CHECKING FEASIBILITY";
-//       //     }
-//       //   }
-//       // }
-//       // console.log(status, { cxmCommonStatus: "CHECKING FEASIBILITY" });
-
-//       // console.log(`${actualStatus} === "Partially Feasible" && !${cxmConformation}`, actualStatus === "Partially Feasible" && !cxmConformation);
-
-//       // if (cxmConformation) {
-//       //   if (actualStatus !== "Partially Feasible") {
-//       //     const updateStatusFeab = await db.collection(collectionName).findOneAndUpdate({ reqId: quote.reqId }, { $set: { status: status, cxmCommonStatus: "CHECKING FEASIBILITY" } });
-//       //     console.log("updateStatusFeab In function", updateStatusFeab);
-//       //   }
-//       // } else {
-//       const updateStatusFeab = await db.collection(collectionName).findOneAndUpdate({ reqId: quote.reqId }, { $set: { status: status, cxmCommonStatus: "CHECKING FEASIBILITY" } });
-//       console.log("updateStatusFeab In function", updateStatusFeab);
-//       // }
-
-//       if (updateQuote) {
-//         try {
-//           const toArray = [quote.customermail];
-//           const subject = `One Sify - Request ID: ${quote.reqId} - Feasibility Update for ${feasibilityIds.serviceType} Services`;
-
-//           const templateSource = fs.readFileSync(`${appRoot}/template/Feasibility_Updated.hbs`, "utf-8");
-
-//           handlebars.registerHelper("add", function (a, b) {
-//             return (isNaN(a) ? 0 : a) + (isNaN(b) ? 0 : b);
-//           });
-//           handlebars.registerHelper("now", function (data) {
-//             const currentTime = new Date().toLocaleTimeString("en-US", { hour12: true, hour: "numeric", minute: "numeric" });
-//             const formattedTime = currentTime.replace(/:\d+ /, " $&IST ");
-//             const time = formattedTime;
-//             const currentDate = moment().format("DD-MMM-YYYY");
-//             const currentYear = moment().format("YYYY");
-//             if (data === "date") {
-//               return currentDate;
-//             } else if (data === "year") {
-//               return currentYear;
-//             } else if (data === "endDate") {
-//               const currentDate = new Date();
-//               currentDate.setDate(currentDate.getDate() + 15);
-//               const formattedDate = currentDate.toLocaleDateString("en-GB").split("/").join(" - ");
-
-//               return formattedDate;
-//             } else {
-//               return time;
-//             }
-//           });
-
-//           const template = handlebars.compile(templateSource);
-
-//           function capitalizeFirstLetter(str) {
-//             return str.replace(/\b\w/g, (char) => char.toUpperCase());
-//           }
-//           const templateData = {
-//             reqId: quote.reqId,
-//             // quoteType: capitalizeFirstLetter(quote.quoteType.replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase()),
-//             quoteType: quote.provisionType || quote.locationDetails[0].provisionType,
-//             customerName: quote.customerName,
-//             customerNumber: quote.customerNumber,
-//             locationDetails: quote.locationDetails,
-//             url: process.env.APP_PATH,
-//             isNew: quote.quoteType === "New",
-//           };
-//           const html = template(templateData);
-//           common.send_mail(toArray, (ccArray = []), subject, html, (attachments = null)).then(() => {
-//             console.log("Mail Triggered Successfully");
-//           });
-//         } catch {
-//           console.log("Error in send mail");
-//         }
-//       }
-
-//       await db.collection("opportunityDetails").findOneAndUpdate({ reqId }, { $set: { status, pageTracker: null, updatedDate: moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ") } });
-//       // await db.collection("opportunityDetails").findOneAndUpdate({ reqId }, { $set: { status, updatedDate: moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ") } });
-//       await db.collection("feasibilityids").findOneAndUpdate({ feasibilityId }, { $set: { status: "completed" } });
-
-//       res.send({ status: "Success" });
-//     } else if (feasibilityIds.serviceType === "P2P" && feasibilityIds.status === "Pending") {
-//       const getQuote = await db.collection("quotep2ps").findOne({
-//         $or: [
-//           {
-//             "feasibilityStatusNewConnectionA.feasibilityId": feasibilityId,
-//           },
-//           {
-//             "feasibilityStatusNewConnectionB.feasibilityId": feasibilityId,
-//           },
-//         ],
-//       });
-//       if (getQuote.feasibilityStatusNewConnectionA.feasibilityId === feasibilityId) {
-//         const updateQuote = await db.collection("quotep2ps").findOneAndUpdate(
-//           {
-//             reqId: getQuote.reqId,
-//           },
-//           {
-//             $set: {
-//               status: fusionFeasibilityStatus,
-//               feasibilityStatusNewConnectionA: {
-//                 ...getQuote.feasibilityStatusNewConnectionA,
-//                 feasOpt: fusionFeasibilityStatus,
-//                 feasUpdatededDate: updatedData,
-//                 req_Status: fusionFeasibilityStatus,
-//                 opex,
-//                 capex,
-//               },
-//             },
-//           }
-//         );
-//         if (!updateQuote) {
-//           const updateFeasibilityIds = await db.collection("feasibilityids").findOneAndUpdate({ feasibilityId }, { status: "completed" });
-//         }
-//         res.send({ status: "Success" });
-//       } else {
-//         const updateQuote = await db.collection("quotep2ps").findOneAndUpdate(
-//           {
-//             reqId: getQuote.reqId,
-//           },
-//           {
-//             $set: {
-//               status: fusionFeasibilityStatus,
-//               feasibilityStatusNewConnectionB: {
-//                 ...getQuote.feasibilityStatusNewConnectionB,
-//                 feasOpt: fusionFeasibilityStatus,
-//                 feasUpdatededDate: updatedData,
-//                 req_Status: fusionFeasibilityStatus,
-//                 opex,
-//                 capex,
-//               },
-//             },
-//           }
-//         );
-//       }
-//       if (!updateQuote) {
-//         const updateFeasibilityIds = await db.collection("feasibilityids").findOneAndUpdate({ feasibilityId }, { status: "completed" });
-//       }
-//       res.send({ status: "Success" });
-//     } else {
-//       throw new Error("Nothing To Update");
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 exports.get_erp_order_json = async (req, res, next) => {
   try {
     const { reqId } = req.body;
@@ -1716,7 +1371,12 @@ exports.get_erp_order_json = async (req, res, next) => {
       reqId,
     });
 
-    const data = quote.quoteType.toUpperCase() === "NEW" ? await common.post_erp_order_new_test(reqId) : await common.post_erp_order(reqId);
+    const data =
+      quote.quoteType.toUpperCase() === "NEW"
+        ? process.env.ENVIRONMENT === "PRODUCTION"
+          ? await common.post_erp_order_new(reqId)
+          : await common.post_erp_order_new_test(reqId)
+        : await common.post_erp_order(reqId);
 
     res.send({ status: "Success", data });
   } catch (error) {
@@ -2000,11 +1660,8 @@ exports.orm_view_validation = async (req, res, next) => {
     oracleDb = await common.getOracleDb();
     const { reqId, linkIds = [] } = req.body;
 
-    if (!Quote) {
-      throw new Error("Quote model not found");
-    }
     const quoteDoc = await Quote.findOne({ reqId });
-    
+
     if (!quoteDoc?.parentRole?.includes("CXM")) {
       const { success, message } = await verifyOpportunity(parseInt(reqId));
       if (!success) {
