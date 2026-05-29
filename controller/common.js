@@ -1661,7 +1661,7 @@ exports.orm_view_validation = async (req, res, next) => {
     const { reqId, linkIds = [] } = req.body;
 
     const quoteDoc = await Quote.findOne({ reqId });
-
+    
     if (!quoteDoc?.parentRole?.includes("CXM")) {
       const { success, message } = await verifyOpportunity(parseInt(reqId));
       if (!success) {
