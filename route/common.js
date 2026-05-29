@@ -16,6 +16,8 @@ routes.post("/get_erp_order_json", common.get_erp_order_json);
 routes.post("/orm_view_validation", common.orm_view_validation);
 routes.post("/get_export_excel", common.get_export_excel);
 routes.post("/updatae_page_tracker", auth, common.updatae_page_tracker);
-// routes.post("/post_blob_file",  common.post_blob_file);
+if (process.env.ENVIRONMENT === "PRODUCTION") {
+  routes.post("/post_blob_file", common.post_blob_file);
+}
 
 module.exports = routes;
