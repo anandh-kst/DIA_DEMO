@@ -285,7 +285,7 @@ const send_placed_mail = async (reqID, quote, orderId, orderDate) => {
     console.log(error);
   }
 };
-send_order_signed_mail = async (reqID, quote) => {
+const send_order_signed_mail = async (reqID, quote) => {
   console.log("send_order_signed_mail");
   try {
     const subject = `DIA - Order Signed Successfully - Request ID: ${reqID}`;
@@ -1661,7 +1661,7 @@ exports.orm_view_validation = async (req, res, next) => {
     const { reqId, linkIds = [] } = req.body;
 
     const quoteDoc = await Quote.findOne({ reqId });
-    
+
     if (!quoteDoc?.parentRole?.includes("CXM")) {
       const { success, message } = await verifyOpportunity(parseInt(reqId));
       if (!success) {

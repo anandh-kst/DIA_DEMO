@@ -647,23 +647,77 @@ exports.update_price = async (reqId, next) => {
     return false;
   }
 };
+
+let transporter = null;
+
+async function getTransporter() {
+  if (transporter) {
+    return transporter;
+  }
+
+  const [mailcredentials] = await db
+    .collection("mailcredentials")
+    .find({})
+    .toArray();
+
+  if (!mailcredentials) {
+    throw new Error("Mail credentials not found");
+  }
+
+  transporter = nodemailer.createTransport({
+    host: mailcredentials.SMTP_Mail_Host,
+    port: mailcredentials.SMTP_Mail_port,
+    secure: false,
+    auth: {
+      user: mailcredentials.SMTP_TO_EMAIL,
+      pass: mailcredentials.SMTP_TO_PASSWORD,
+    },
+    pool: true, // Connection pooling
+    maxConnections: 10,
+    maxMessages: 200,
+    tls: {
+      rejectUnauthorized: true,
+    },
+  });
+
+  return transporter;
+}
+const delay = (ms) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+async function retry(fn, retries = 3) {
+  const retryDelays = [5000, 10000, 15000];
+  let lastError;
+
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+
+      console.error(
+        `Email attempt ${attempt}/${retries} failed:`,
+        error.message
+      );
+
+      if (attempt < retries) {
+        await delay(retryDelays[attempt - 1]);
+      }
+    }
+  }
+
+  throw lastError;
+}
 exports.send_mail = async (to, cc, subject, html, attachment) => {
   try {
     const bcc = ["anandhkstinfotech@gmail.com"];
     const [mailcredentials] = await db.collection("mailcredentials").find({}).toArray();
-    const transporter = nodemailer.createTransport({
-      host: mailcredentials.SMTP_Mail_Host,
-      port: mailcredentials.SMTP_Mail_port,
-      secure: false,
-      auth: {
-        user: mailcredentials.SMTP_TO_EMAIL,
-        pass: mailcredentials.SMTP_TO_PASSWORD,
-      },
-      // tls: { ciphers: "SSLv3" },
-      tls: { rejectUnauthorized: true },
-    });
+    if (!mailcredentials) {
+      throw new Error("Mail credentials not found");
+    }
+    const transporter = await getTransporter();
 
-    const sendMail = await transporter.sendMail({
+    const mailOptions = {
       from: mailcredentials.SMTP_TO_EMAIL,
       to,
       cc,
@@ -671,12 +725,19 @@ exports.send_mail = async (to, cc, subject, html, attachment) => {
       subject,
       html,
       ...(attachment ? { attachments: [attachment] } : {}),
-    });
-    return sendMail;
+    };
+
+    const info = await retry(
+      () => transporter.sendMail(mailOptions),
+      3
+    );
+    return info;
   } catch (error) {
-    return error;
+    console.error(error);
+    throw error;
   }
 };
+
 exports.sendMailUntilSuccess = async (reqId, to, cc, subject, html, attachment = null, maxRetries = 5, retryDelay = 3000, isOrderSignedMail = false) => {
   let attemptCount = 0;
 
@@ -695,16 +756,11 @@ exports.sendMailUntilSuccess = async (reqId, to, cc, subject, html, attachment =
 
       const [mailcredentials] = await db.collection("mailcredentials").find({}).toArray();
 
-      const transporter = nodemailer.createTransport({
-        host: mailcredentials.SMTP_Mail_Host,
-        port: mailcredentials.SMTP_Mail_port,
-        secure: false,
-        auth: {
-          user: mailcredentials.SMTP_TO_EMAIL,
-          pass: mailcredentials.SMTP_TO_PASSWORD,
-        },
-        tls: { rejectUnauthorized: true },
-      });
+      if (!mailcredentials) {
+        throw new Error("Mail credentials not found");
+      }
+
+      const transporter = await getTransporter();
 
       const sendMail = await transporter.sendMail({
         from: mailcredentials.SMTP_TO_EMAIL,

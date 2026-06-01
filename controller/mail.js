@@ -236,564 +236,6 @@ exports.send_mail_to_all = async (req, res, next) => {
     next(error);
   }
 };
-/* exports.send_mail_to_sign = async (req, res, next) => {
-  const { to, cc, reqId } = req.body;
-  try {
-    if (to.length == 0) {
-      throw new Error("Error Missing Data");
-    }
-    const loginComapnayName = req.companyName;
-    const quote = await Quote.findOne({ reqId }).lean();
-    if (!quote) throw new Error(`Quote with reqId: ${reqId} not found or is inactive.`);
-
-    const currentYear = moment().format("YYYY");
-    const toArray = to.map((item) => item.mail);
-    const ccArray = cc.map((item) => item.mail);
-
-    const docuSignUrl = `${process.env.APP_PATH}/onesify/network/common/share_and_sign/${reqId}/${to[0].name}/${to[0].mail}`;
-    // const docuSignUrlForCc = `${process.env.APP_PATH}/onesify/network/docu_sign/view_sign_order/ILL-SO-${reqId}`;
-    const docuSignUrlForCc = `${process.env.APP_PATH}/onesify/network/docu_sign/${quote.quoteType === "New" ? "get_sign_order" : "get_modify_sign_order/false"}/ILL-SO-${reqId}`;
-
-    const subject = "Sign the Enclosed Document - Sify";
-    const html = `<html>
-        <head>
-            <title>ILL Purchase Order</title>
-        </head>
-        <body>
-            <div style="background-color:#ffffff; margin: 1px; font-size: 16px; color: #474747;font-family:'Myriad Pro', sans-serif" width="100%">
-                <br/>
-                <table align="center" border="0" cellpadding="0" cellspacing="0"
-                    width="70%" bgcolor="white" >
-                    <tbody>
-                        <tr style="border: none;
-                        background-color: #ffffff;
-                        height: 40px;
-                        color:white;
-                        padding-bottom: 20px;
-                        text-align: left;">
-                            <td height="50px" align="left">
-                            <a href="" style="border: 0; text-decoration:none;">
-                                    <!--[if mso]>
-                                    <table width="50%"><tr><td><img width="200" src="https://www.sifytechnologies.com/wp-content/uploads/2022/04/logo_007800781_2166.png" alt="One Sify" style="text-align: right; width: 207px; border: 0; text-decoration:none; vertical-align: baseline;"></td></tr></table>
-                                        <div style="display:none">
-                                        <![endif]-->
-                                        <!--[if mso]>
-                                        </div>
-                                    <![endif]-->
-                                    <!--[if !mso]>-->
-                                        <img  src="https://www.sifytechnologies.com/wp-content/uploads/2022/04/logo_007800781_2166.png" alt="One Sify" style="text-align: right; min-width: 50px; max-width: 207px; border: 0; text-decoration:none; vertical-align: baseline;">
-                                    <!--<![endif]-->
-                                </a>
-                                <hr/>
-                            </td>
-                        </tr>
-                        <tr style="display: inline-block;">
-                            <td style="
-                            border: none;
-                            background-color: white;
-                            padding-left: 25px;
-                            padding-right: 25px;">
-                                <p>Dear <span style="font-size: 18px; color: #0E3346;">${to[0].name}</span></p>
-                                <p>The user ${quote.customerName} from the company ${quote.companyName} has shared the document for your signature.</p>
-                                <br/>
-                            </td>
-                        </tr>
-        
-                        <!-- Green Card -->
-                        <tr style="display: inline-block;">
-                            <td style="height: 150px;
-                                    width: 100%;
-                                    padding-left: 25px;
-                                    padding-right: 25px;
-                                    border: none;
-                                    background-color: white;">
-                                    <!--[if mso]>
-                                        <table style="width: 100%;
-                                        height: 100px;
-                                        background: #E9EBEC;
-                                        padding: 25px;
-                                        box-sizing: border-box;
-                                        border-radius: 5px;
-                                        color: #FFF;">
-                                            <tr>
-                                                <td style="border-radius: 2px; text-align: left;">
-                                                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${docuSignUrl}"  style="background-color: #E9EBEC;
-            ">                                          color: #FFFFFF;
-                                                        padding: 20px;
-                                                        margin: 50px;
-                                                        padding-left: 50px;
-                                                        border-radius: 5px;
-                                                    <w:anchorlock/>
-                                                    <center style="background-color: #0E3346;
-                                                        border: none;
-                                                        border-radius: 5px;
-                                                        font-family: 'Myriad Pro', sans-serif;
-                                                        color: #fff;
-                                                        padding: 15px 32px;
-                                                        text-align: center;
-                                                        text-decoration: none;
-                                                        display: inline-block;
-                                                        font-size: 16px;
-                                                        margin: 20px 0px;
-                                                        cursor: pointer;">Click Here to Sign</center>
-                                                    </v:roundrect>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                <![endif]-->
-                                <!--[if !mso]>-->
-                                    <table style="width: 100%;
-                                        height: 100px;
-                                        background: #E9EBEC;
-                                        padding: 15px;
-                                        border-radius: 5px;
-                                        box-sizing: border-box;
-                                        color: #FFF;">
-                                        <tr>
-                                            <td style="border-radius: 2px; text-align: left;">
-                                                <a href="${docuSignUrl}" target="_blank" style="background-color: #0E3346;
-                                                            border: none;
-                                                            border-radius: 5px;
-                                                            font-family: 'Myriad Pro', sans-serif;
-                                                            color: #fff;
-                                                            padding: 15px 32px;
-                                                            text-align: center;
-                                                            text-decoration: none;
-                                                            display: inline-block;
-                                                            font-size: 16px;
-                                                            margin: 20px 0px;
-                                                            cursor: pointer;">
-                                                    Click Here to Sign
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                <!--<![endif]-->
-                                <h4>(or)</h4>
-                                <p style="margin-bottom: 0px;">Click the link</p>
-                                <p>
-                                <a href="${docuSignUrl}" class="link">${process.env.APP_PATH}</a>
-                                </p>
-                                <br>
-                                <p class="bestRegards">Best Regards,</p>
-                                <p>Sify Team</p>
-                                <p><a href="mailto:online.sales@sifycorp.com" target="_blank" class="link">online.sales@sifycorp.com</a>
-                                </p>
-                                <br>
-                                <p>If you do not recognize this activity or did not initiate the request, report to the above email id.</p>
-                                <br>
-                            </td>
-                        </tr>
-                        <tr style="display: inline-block;">
-                            <td style="height: 150px;
-                                    padding: 20px;
-                                    border: none;
-                                    background-color: white;">
-                                    <h4>Headquarters</h4>
-                                    <p>II Floor, TIDEL Park,<br/>
-                                    No.4, Rajiv Gandhi Salai, Taramani,<br/>
-                                    Chennai - 600 113, India</p>
-                                    <br>
-                            </td>
-                        </tr>
-                        <td style="
-                                font-size:16px; line-height:18px;
-                                color:#0A2134;" valign="top" align="center">
-                                <p>This is an auto generated mail. Please do not reply.<br>
-                                    Â© ${currentYear}
-         Sify Technologies Limited. All Rights Reserved.</p>
-                            </td>
-                        </tr>
-                </tbody>
-                </table>
-                <br/>
-                </div>
-        </body>
-    </html>`;
-
-    const subjectForCc = "The Enclosed Document - Sify";
-    const htmlForCc = `<html>
-        <head>
-            <title>ILL Purchase Order</title>
-        </head>
-        <body>
-            <div style="background-color:#ffffff; margin: 1px; font-size: 16px; color: #474747;font-family:'Myriad Pro', sans-serif" width="100%">
-                <br/>
-                <table align="center" border="0" cellpadding="0" cellspacing="0"
-                    width="70%" bgcolor="white" >
-                    <tbody>
-                        <tr style="border: none;
-                        background-color: #ffffff;
-                        height: 40px;
-                        color:white;
-                        padding-bottom: 20px;
-                        text-align: left;">
-                            <td height="50px" align="left">
-                            <a href="" style="border: 0; text-decoration:none;">
-                                    <!--[if mso]>
-                                    <table width="50%"><tr><td><img width="200" src="https://www.sifytechnologies.com/wp-content/uploads/2022/04/logo_007800781_2166.png" alt="One Sify" style="text-align: right; width: 207px; border: 0; text-decoration:none; vertical-align: baseline;"></td></tr></table>
-                                        <div style="display:none">
-                                        <![endif]-->
-                                        <!--[if mso]>
-                                        </div>
-                                    <![endif]-->
-                                    <!--[if !mso]>-->
-                                        <img  src="https://www.sifytechnologies.com/wp-content/uploads/2022/04/logo_007800781_2166.png" alt="One Sify" style="text-align: right; min-width: 50px; max-width: 207px; border: 0; text-decoration:none; vertical-align: baseline;">
-                                    <!--<![endif]-->
-                                </a>
-                                <hr/>
-                            </td>
-                        </tr>
-                        <tr style="display: inline-block;">
-                            <td style="
-                            border: none;
-                            background-color: white;
-                            padding-left: 25px;
-                            padding-right: 25px;">
-                                <p>Dear <span style="font-size: 18px; color: #0E3346;">${to[0].name}</span></p>
-                                <p>The user ${quote.customerName} from the company ${quote.companyName} has shared the document.</p>
-                                <br/>
-                            </td>
-                        </tr>
-        
-                        <!-- Green Card -->
-                        <tr style="display: inline-block;">
-                            <td style="height: 150px;
-                                    width: 100%;
-                                    padding-left: 25px;
-                                    padding-right: 25px;
-                                    border: none;
-                                    background-color: white;">
-                                    <!--[if mso]>
-                                        <table style="width: 100%;
-                                        height: 100px;
-                                        background: #E9EBEC;
-                                        padding: 25px;
-                                        box-sizing: border-box;
-                                        border-radius: 5px;
-                                        color: #FFF;">
-                                            <tr>
-                                                <td style="border-radius: 2px; text-align: left;">
-                                                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${docuSignUrlForCc}" style="background-color: #E9EBEC;
-            ">                                          color: #FFFFFF;
-                                                        padding: 20px;
-                                                        margin: 50px;
-                                                        padding-left: 50px;
-                                                        border-radius: 5px;
-                                                    <w:anchorlock/>
-                                                    <center style="background-color: #0E3346;
-                                                        border: none;
-                                                        border-radius: 5px;
-                                                        font-family: 'Myriad Pro', sans-serif;
-                                                        color: #fff;
-                                                        padding: 15px 32px;
-                                                        text-align: center;
-                                                        text-decoration: none;
-                                                        display: inline-block;
-                                                        font-size: 16px;
-                                                        margin: 20px 0px;
-                                                        cursor: pointer;">Click Here to View</center>
-                                                    </v:roundrect>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                <![endif]-->
-                                <!--[if !mso]>-->
-                                    <table style="width: 100%;
-                                        height: 100px;
-                                        background: #E9EBEC;
-                                        padding: 15px;
-                                        border-radius: 5px;
-                                        box-sizing: border-box;
-                                        color: #FFF;">
-                                        <tr>
-                                            <td style="border-radius: 2px; text-align: left;">
-                                                <a href="${docuSignUrlForCc}" target="_blank" style="background-color: #0E3346;
-                                                            border: none;
-                                                            border-radius: 5px;
-                                                            font-family: 'Myriad Pro', sans-serif;
-                                                            color: #fff;
-                                                            padding: 15px 32px;
-                                                            text-align: center;
-                                                            text-decoration: none;
-                                                            display: inline-block;
-                                                            font-size: 16px;
-                                                            margin: 20px 0px;
-                                                            cursor: pointer;">
-                                                    Click Here to View
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                <!--<![endif]-->
-                                <h4>(or)</h4>
-                                <p style="margin-bottom: 0px;">Click the link</p>
-                                <p>
-                                <a href="${docuSignUrlForCc}" class="link">${process.env.APP_PATH}</a>
-                                </p>
-                                <br>
-                                <p class="bestRegards">Best Regards,</p>
-                                <p>Sify Team</p>
-                                <p><a href="mailto:online.sales@sifycorp.com" target="_blank" class="link">online.sales@sifycorp.com</a>
-                                </p>
-                                <br>
-                                <p>If you do not recognize this activity or did not initiate the request, report to the above email id.</p>
-                                <br>
-                            </td>
-                        </tr>
-                        <tr style="display: inline-block;">
-                            <td style="height: 150px;
-                                    padding: 20px;
-                                    border: none;
-                                    background-color: white;">
-                                    <h4>Headquarters</h4>
-                                    <p>II Floor, TIDEL Park,<br/>
-                                    No.4, Rajiv Gandhi Salai, Taramani,<br/>
-                                    Chennai - 600 113, India</p>
-                                    <br>
-                            </td>
-                        </tr>
-                        <td style="
-                                font-size:16px; line-height:18px;
-                                color:#0A2134;" valign="top" align="center">
-                                <p>This is an auto generated mail. Please do not reply.<br>
-                                    Â© ${currentYear}
-         Sify Technologies Limited. All Rights Reserved.</p>
-                            </td>
-                        </tr>
-                </tbody>
-                </table>
-                <br/>
-                </div>
-        </body>
-    </html>`;
-
-    const subjectForCp = `Sify â€“ Channel Partner â€“ Enclosed Document for E-Signature`;
-    const htmlForCp = `<html>
-
-<head>
-  <title>Sify â€“ Channel Partner â€“ Document for E-Signature</title>
-</head>
-
-<body>
-  <div
-    style="background-color:#ffffff; margin: 1px; font-size: 16px; color: #474747; font-family:'Myriad Pro', sans-serif;"
-    width="100%">
-    <br />
-    <table align="center" border="0" cellpadding="0" cellspacing="0" width="70%" bgcolor="white">
-      <tbody>
-        <!-- Logo Header -->
-        <tr>
-          <td align="left" height="50px">
-            <a href="https://www.sifytechnologies.com" style="border: 0; text-decoration:none;">
-              <img src="https://www.sifytechnologies.com/wp-content/uploads/2022/04/logo_007800781_2166.png"
-                alt="One Sify"
-                style="text-align: right; min-width: 50px; max-width: 207px; border: 0; text-decoration:none; vertical-align: baseline;">
-            </a>
-            <hr />
-          </td>
-        </tr>
-
-        <!-- Greeting -->
-        <tr>
-          <td style="padding: 25px;">
-            <p>Dear <span style="font-size: 18px; color: #0E3346;">${to[0].name}</span>,</p>
-            <p>Greetings from Sify!</p>
-
-            <p><strong>${quote.customerName}</strong>, Sifyâ€™s Channel Partner from
-              <strong>${loginComapnayName}</strong>, has shared an order document for your review and signature.
-              Please find the order details below:</p>
-
-            <!-- Order Details -->
-            <p><strong>Order Details</strong></p>
-            <ul style="padding-left: 20px;">
-              <li><strong>Name of document:</strong> ILL-SO-${reqId}</li>
-              <li><strong>Request ID:</strong> ${reqId}</li>
-              <li><strong>Product name:</strong> DIA</li>
-            </ul>
-
-            <!-- Sign Button -->
-            <p>To proceed, kindly review and sign the document using <a href="${docuSignUrl}">this link</a> or below
-              button:</p>
-
-            <table style="width: 100%; background: #E9EBEC; padding: 15px; border-radius: 5px; box-sizing: border-box;">
-              <tr>
-                <td style="text-align: left;">
-                  <a href="${docuSignUrl}" target="_blank"
-                    style="background-color: #0E3346; border: none; border-radius: 5px; font-family: 'Myriad Pro', sans-serif; color: #fff; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; cursor: pointer;">
-                    Sign Order Document
-                  </a>
-                </td>
-              </tr>
-            </table>
-
-            <br />
-            <p>Please complete the signing process at your earliest convenience to avoid any delays in order processing.
-            </p>
-
-            <!-- Contact -->
-            <p>For any queries, feel free to reach out to <strong>${quote.customerName}</strong> at <a
-                href="mailto:${quote.customermail}">${quote.customermail}</a>, or write to us at <a
-                href="mailto:onesify@sifycorp.com">onesify@sifycorp.com</a></p>
-
-            <br />
-            <p>Thank you for choosing Sify.</p>
-
-            <!-- Closing -->
-            <p class="bestRegards">Best Regards,</p>
-            <p>Team Sify</p>
-            <p><a href="https://www.sifytechnologies.com" target="_blank">www.sifytechnologies.com</a></p>
-
-            <br />
-            <p>If you do not recognize this activity or did not initiate the request, report to the above email ID.</p>
-          </td>
-        </tr>
-
-        <!-- Footer -->
-        <tr>
-          <td style="font-size: 14px; color: #0A2134;" align="center">
-            <p>This is an auto-generated email. Please do not reply.<br />
-              Â© ${currentYear} Sify Technologies Limited. All Rights Reserved.</p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <br />
-  </div>
-</body>
-
-    </html>`;
-
-    const subjectForCcCp = `Sify â€“ Channel Partner â€“ The Enclosed Document`;
-    const htmlForCcCp = `<html>
-
-<head>
-  <title>Sify â€“ Channel Partner â€“ The Enclosed Document</title>
-</head>
-
-<body>
-  <div
-    style="background-color:#ffffff; margin: 1px; font-size: 16px; color: #474747; font-family:'Myriad Pro', sans-serif;"
-    width="100%">
-    <br />
-    <table align="center" border="0" cellpadding="0" cellspacing="0" width="70%" bgcolor="white">
-      <tbody>
-        <!-- Logo Header -->
-        <tr>
-          <td align="left" height="50px">
-            <a href="https://www.sifytechnologies.com" style="border: 0; text-decoration:none;">
-              <img src="https://www.sifytechnologies.com/wp-content/uploads/2022/04/logo_007800781_2166.png"
-                alt="One Sify"
-                style="text-align: right; min-width: 50px; max-width: 207px; border: 0; text-decoration:none; vertical-align: baseline;">
-            </a>
-            <hr />
-          </td>
-        </tr>
-
-        <!-- Greeting -->
-        <tr>
-          <td style="padding: 25px;">
-            <p>Dear <span style="font-size: 18px; color: #0E3346;">${to[0].name}</span>,</p>
-            <p>Greetings from Sify!</p>
-
-            <p><strong>${quote.customerName}</strong>, Sifyâ€™s Channel Partner from
-              <strong>${loginComapnayName}</strong>, has shared an order document for your review.
-              Please find the order details below:</p>
-
-            <!-- Order Details -->
-            <p><strong>Order Details</strong></p>
-            <ul style="padding-left: 20px;">
-              <li><strong>Name of document:</strong> ILL-SO-${reqId}</li>
-              <li><strong>Request ID:</strong> ${reqId}</li>
-              <li><strong>Product name:</strong> DIA</li>
-            </ul>
-
-            <!-- Sign Button -->
-            <p>To proceed, kindly review the document using <a href="${docuSignUrlForCc}">this link</a> or below
-              button:</p>
-
-            <table style="width: 100%; background: #E9EBEC; padding: 15px; border-radius: 5px; box-sizing: border-box;">
-              <tr>
-                <td style="text-align: left;">
-                  <a href="${docuSignUrlForCc}" target="_blank"
-                    style="background-color: #0E3346; border: none; border-radius: 5px; font-family: 'Myriad Pro', sans-serif; color: #fff; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; cursor: pointer;">
-                     Click Here to View
-                  </a>
-                </td>
-              </tr>
-            </table>
-
-            <br />
-
-            <!-- Contact -->
-            <p>For any queries, feel free to reach out to <strong>${quote.customerName}</strong> at <a
-                href="mailto:${quote.customermail}">${quote.customermail}</a>, or write to us at <a
-                href="mailto:onesify@sifycorp.com">onesify@sifycorp.com</a></p>
-
-            <br />
-            <p>Thank you for choosing Sify.</p>
-
-            <!-- Closing -->
-            <p class="bestRegards">Best Regards,</p>
-            <p>Team Sify</p>
-            <p><a href="https://www.sifytechnologies.com" target="_blank">www.sifytechnologies.com</a></p>
-
-            <br />
-            <p>If you do not recognize this activity or did not initiate the request, report to the above email ID.</p>
-          </td>
-        </tr>
-
-        <!-- Footer -->
-        <tr>
-          <td style="font-size: 14px; color: #0A2134;" align="center">
-            <p>This is an auto-generated email. Please do not reply.<br />
-              Â© ${currentYear} Sify Technologies Limited. All Rights Reserved.</p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <br />
-  </div>
-</body>
-
-    </html>`;
-
-    const withTimeout = (promise, timeout = 50000) => {
-      return Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error("Email sending operation timed out")), timeout))]);
-    };
-
-    let sendMail = null;
-    let sendMailToCc = null;
-    if (quote.parentRole === "CP + Customer") {
-      sendMail = await withTimeout(common.send_mail(toArray, [], subjectForCp, htmlForCp, (attachments = null)), 50000);
-      sendMailToCc = await withTimeout(common.send_mail(ccArray, [], subjectForCcCp, htmlForCcCp, (attachments = null)), 50000);
-    } else {
-      sendMail = await withTimeout(common.send_mail(toArray, [], subject, html, (attachments = null)), 50000);
-      sendMailToCc = await withTimeout(common.send_mail(ccArray, [], subjectForCc, htmlForCc, (attachments = null)), 50000);
-    }
-
-    await db.collection("mailToSignLogs").insertOne({
-      to,
-      cc,
-      reqId,
-      insertedAt: new Date(),
-      product: "DIA",
-      response: {
-        sendMail,
-        sendMailToCc,
-      },
-    });
-
-    console.log("sendMail", sendMail);
-    console.log("sendMailToCc", sendMailToCc);
-    if (sendMail && sendMailToCc) {
-      logger.info(`${req.path} -- ${req.method} -- Success`);
-      res.send({ status: "Success" });
-    }
-  } catch (error) {
-    next(error);
-  }
-}; */
 exports.send_mail_to_sign = async (req, res, next) => {
   try {
     const { to, cc, reqId } = req.body;
@@ -814,7 +256,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
     if (!quote) throw new Error(`Quote with reqId: ${reqId} not found or is inactive.`);
     console.log("quote", quote);
     console.log("quote.companyId", quote.companyId);
-  if (quote.status === "Order Signed" || quote.status === "Order Placed") {
+    if (quote.status === "Order Signed" || quote.status === "Order Placed") {
       res.send({
         status: "Error",
         message: `Order already signed for reqId: ${reqId}`,
@@ -823,19 +265,19 @@ exports.send_mail_to_sign = async (req, res, next) => {
     }
     let companyName = "";
 
-      let companyFilter = null;
+    let companyFilter = null;
 
-      if (ObjectId.isValid(quote.companyId)) {
-        companyFilter = { _id: new ObjectId(quote.companyId) };
-      } else {
-        companyFilter = { companyId: quote.companyId };
-      }
+    if (ObjectId.isValid(quote.companyId)) {
+      companyFilter = { _id: new ObjectId(quote.companyId) };
+    } else {
+      companyFilter = { companyId: quote.companyId };
+    }
 
-      const companyRecord = await loginDB.collection("companies").findOne(companyFilter);
-      console.log("companyRecord",companyRecord);
+    const companyRecord = await loginDB.collection("companies").findOne(companyFilter);
+    console.log("companyRecord", companyRecord);
 
-      if (companyRecord && companyRecord.companyName) {
-        companyName = companyRecord.companyName;
+    if (companyRecord && companyRecord.companyName) {
+      companyName = companyRecord.companyName;
 
     }
 
@@ -844,8 +286,12 @@ exports.send_mail_to_sign = async (req, res, next) => {
     }
 
     const currentYear = moment().format("YYYY");
-    const toArray = to.map((item) => item.mail);
-    const ccArray = cc.map((item) => item.mail);
+    const toArray = (to || []).map((item) => item.mail);
+    const ccArray = (cc || []).map((item) => item.mail);
+
+    if (!toArray.length) {
+      throw new Error("No recipients defined");
+    }
 
     const docuSignUrl = `${process.env.APP_PATH}/onesify/network/common/share_and_sign/${reqId}/${to[0].name}/${to[0].mail}`;
     const docuSignUrlForCc = `${process.env.APP_PATH}/onesify/network/docu_sign/view_sign_order/ILL-SO-${reqId}`;
@@ -1514,26 +960,43 @@ exports.send_mail_to_sign = async (req, res, next) => {
     let sendMailToCc = null;
 
     if (parentRole === "CP + Customer") {
-      sendMail = await withTimeout(
-        common.send_mail(toArray, [], subject, html, null),
-        50000
-      );
+      const ccEmails = [...ccArray];
 
-      // const ccEmails = [...ccArray,"kiran.sudharsan@sifycorp.com", "murali.janakiraman@sifycorp.com"];
-      const ccEmails = [...ccArray]
-      sendMailToCc = await withTimeout(
-        common.send_mail(ccEmails, [], subjectForCc, htmlForCc, null),
-        50000
-      );
+      const promises = [
+        withTimeout(
+          common.send_mail(toArray, [], subject, html, null),
+          50000
+        ),
+      ];
+
+      if (ccEmails.length > 0) {
+        promises.push(
+          withTimeout(
+            common.send_mail(ccEmails, [], subjectForCc, htmlForCc, null),
+            50000
+          )
+        );
+      }
+
+      [sendMail, sendMailToCc] = await Promise.all(promises);
     } else {
-      sendMail = await withTimeout(
-        common.send_mail(toArray, [], subject, html, null),
-        50000
-      );
-      sendMailToCc = await withTimeout(
-        common.send_mail(ccArray, [], subjectForCc, htmlForCc, null),
-        50000
-      );
+      const promises = [
+        withTimeout(
+          common.send_mail(toArray, [], subject, html, null),
+          50000
+        ),
+      ];
+
+      if (ccArray.length > 0) {
+        promises.push(
+          withTimeout(
+            common.send_mail(ccArray, [], subjectForCc, htmlForCc, null),
+            50000
+          )
+        );
+      }
+
+      [sendMail, sendMailToCc] = await Promise.all(promises);
     }
 
     await db.collection("mailToSignLogs").insertOne({
@@ -1550,9 +1013,16 @@ exports.send_mail_to_sign = async (req, res, next) => {
 
     console.log("sendMail", sendMail);
     console.log("sendMailToCc", sendMailToCc);
-    if (sendMail && sendMailToCc) {
+
+    if (sendMail) {
       logger.info(`${req.path} -- ${req.method} -- Success`);
-      res.send({ status: "Success" });
+      return res.send({ status: "Success" });
+    } else {
+      logger.error(`${req.path} -- ${req.method} -- Failed to send mail`);
+      return res.status(500).json({
+        status: "Error",
+        message: "Failed to send mail",
+      });
     }
   } catch (error) {
     next(error);
@@ -1779,7 +1249,7 @@ exports.send_proposal_mail = async (req, res, next) => {
     );
 
     if (sent) {
-       await  db.collection('quoteversions').updateOne(
+      await db.collection('quoteversions').updateOne(
         { reqId },
         {
           $push: {
@@ -1829,7 +1299,7 @@ exports.getSharedMails = async (req, res, next) => {
 
     if (!doc) {
       return res.status(404).json({
-        status:  'Error',
+        status: 'Error',
         message: `No quoteversions found for reqId=${reqId}`
       });
     }
@@ -1846,12 +1316,12 @@ exports.getSharedMails = async (req, res, next) => {
     const totalOTC = v.quote?.totalOTC ?? null;
 
     const createdDate = moment(doc.createdDate)
-      .format('MMM D,YYYY [at] HH.mm');  
+      .format('MMM D,YYYY [at] HH.mm');
 
     return res.json({
-      status:      'Success',
+      status: 'Success',
       reqId,
-      version:     version || 'all',
+      version: version || 'all',
       mails,
       totalARC,
       totalOTC,
