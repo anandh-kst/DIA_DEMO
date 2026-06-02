@@ -663,9 +663,9 @@ exports.get_modify_base_plan = async (req, res, next, sendResponse = true) => {
           additionalPrice.push({
             priceType: "tower",
             arc: 0,
-            otc: hasOtc ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
+            otc: hasOtc || isCxm ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             actualARC: 0,
-            actualOTC: hasOtc ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
+            actualOTC:hasOtc || isCxm  ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             mastHeight: data.mastHeight,
             unit: tower[0]?.unit || "Meter",
             mastType: data.mastType,
@@ -709,7 +709,7 @@ exports.get_modify_base_plan = async (req, res, next, sendResponse = true) => {
           capex = data.otherIspArc;
         }
         const calculatePrice = async (markupPrice, planType, property, noDiscount) => {
-          if (property === "otc" && !hasOtc) return 0;
+          if (property === "otc" && !hasOtc && !isCxm) return 0;
           const isFiberConnection = data.connectionType === "Fiber" || data.connectionType === "Other ISP";
           const baseValue = planType[property] - (noDiscount ? (planType[property] * discount[property]) / 100 : 0) + connectionTypePrice[property];
 
@@ -827,9 +827,9 @@ exports.get_modify_base_plan = async (req, res, next, sendResponse = true) => {
           additionalPrice.push({
             priceType: "tower",
             arc: 0,
-            otc: hasOtc ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
+            otc: hasOtc || isCxm  ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             actualARC: 0,
-            actualOTC: hasOtc ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
+            actualOTC: hasOtc || isCxm  ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             mastHeight: data.mastHeight,
             unit: tower[0]?.unit || "Meter",
             mastType: data.mastType,
@@ -856,7 +856,7 @@ exports.get_modify_base_plan = async (req, res, next, sendResponse = true) => {
           capex = data.otherIspArc;
         }
         const calculatePrice = async (markupPrice, planType, property, noDiscount) => {
-          if (property === "otc" && !hasOtc) return 0;
+          if (property === "otc" && !hasOtc && !isCxm) return 0;
           const isFiberConnection = data.connectionType === "Fiber" || data.connectionType === "Other ISP";
           const baseValue = planType[property] + connectionTypePrice[property];
 
