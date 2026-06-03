@@ -141,13 +141,14 @@ exports.feasibility = async (req, res, next) => {
       if (startDate) dateRangeFilter.createdDate.$gte = new Date(startDate);
       if (endDate) dateRangeFilter.createdDate.$lte = new Date(endDate);
     }
-  
-
-    let parentRole = req.body.parentRole ?? req.parentRole;
-
+    let parentRole = req.parentRole;
+    console.log("parentRole", parentRole);
+    // | complete req yuviony@icloud.com CXM + Customer
     if (!parentRole) {
       const companyData = await loginDB.collection("companies").findOne({ _id: new mongoose.Types.ObjectId(companyId) });
-      const cxmEmail = companyData?.cxmEmail;
+      const cxmEmail = Array.isArray(companyData?.cxmEmail)
+        ? companyData.cxmEmail[0]
+        : companyData?.cxmEmail;
       const userData = await loginDB
         .collection("users")
         .findOne(
