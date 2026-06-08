@@ -743,15 +743,21 @@ exports.sendMailUntilSuccess = async (reqId, to, cc, subject, html, attachment =
 
   async function trySendingMail() {
     try {
-      // Production
-      // let bcc = ["kiran.sudharsan@sifycorp.com","murali.janakiraman@sifycorp.com","yuvaraj.subramanian@sifycorp.com","ragupathi.ravichandran@sifycorp.com","gobala.manoharan@sifycorp.com","sudhakar.mani@sifycorp.com"];
-      // if (isOrderSignedMail) {
-      //   bcc.push("gomathi.sitaram@sifycorp.com");
-      // }
+      const isProd = process.env.ENVIRONMENT === "PRODUCTION";
 
-      let bcc = ["esakkirajkstinfotech@gmail.com"];
-      if (isOrderSignedMail) {
-        bcc.push("");
+      let bcc = isProd
+        ? [
+          "kiran.sudharsan@sifycorp.com",
+          "murali.janakiraman@sifycorp.com",
+          "yuvaraj.subramanian@sifycorp.com",
+          "ragupathi.ravichandran@sifycorp.com",
+          "gobala.manoharan@sifycorp.com",
+          "sudhakar.mani@sifycorp.com"
+        ]
+        : ["kiran.sudharsan@sifycorp.com", "anandhkstinfotech@gmail.com"];
+
+      if (isOrderSignedMail && isProd) {
+        bcc.push("gomathi.sitaram@sifycorp.com");
       }
 
       const [mailcredentials] = await db.collection("mailcredentials").find({}).toArray();
@@ -1712,8 +1718,8 @@ exports.post_erp_order = async (reqId, next) => {
 async function sendBookingMail({ reqId, soNumber, linkId }) {
   console.log("sendBookingMail called with:", { reqId, soNumber, linkId });
   try {
-    let toArray = ["esakkirajkstinfotech@gmail.com"];
-    let ccArray = ["esakkirajkstinfotech@gmail.com"];
+    let toArray = ["anandhkstinfotech@gmail.com"];
+    let ccArray = ["anandhkstinfotech@gmail.com"];
     //let toArray = process.env.MAIL_PLACEDTO?.split(",") || [];
     const quote = await Quote.findOne({ reqId });
     console.log("quote", quote)
