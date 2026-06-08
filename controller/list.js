@@ -145,27 +145,15 @@ exports.feasibility = async (req, res, next) => {
     console.log("parentRole", parentRole);
     // | complete req yuviony@icloud.com CXM + Customer
     if (!parentRole) {
-      const companyData = await loginDB.collection("companies").findOne({ _id: new mongoose.Types.ObjectId(companyId) });
-      const cxmEmail = Array.isArray(companyData?.cxmEmail)
-        ? companyData.cxmEmail[0]
-        : companyData?.cxmEmail;
-      const userData = await loginDB
-        .collection("users")
-        .findOne(
-          { email: cxmEmail },
-          { projection: { parentRole: 1 } }
-        );
+      res.status(400).send({ status: "Error", message: "parentRole is required in the request body" });
 
-      console.log("User Data:", userData);
-
-      parentRole = userData?.parentRole;
     }
     console.log("Parent Role:", parentRole);
 
     let query = {
       isActive: true,
       companyId,
-      ...(parentRole?.includes("CXM")
+      ...(!parentRole?.includes("CP")
         ? { quoteType: { $in: ["New", "modifyBandwidth"] } }
         : { quoteType: "modifyBandwidth" }
       ),

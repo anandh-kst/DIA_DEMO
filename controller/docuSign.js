@@ -257,7 +257,7 @@ const getPdfBuffer = async (quote, templateFile, pdfPath) => {
   quote.isFiber = isFiber;
   quote.isWireless = isWireless;
   quote.accountManagerName = companyData?.accountManager_name || "-";
-  quote.isCXMCustomer = quote?.parentRole?.toLowerCase().includes("cxm");
+  quote.isCXMCustomer = !quote?.parentRole?.toLowerCase().includes("cp");
 
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + 15);
@@ -461,7 +461,7 @@ exports.get_modify_pd_doc = async (req, res, next) => {
     console.log("User:", cpUser);
     console.log("Company:", companyData);
     console.log("Company:", companyData.companyName);
-    quote.isCXMCustomer = quote?.parentRole?.toLowerCase().includes("cxm");
+    quote.isCXMCustomer = !quote?.parentRole?.toLowerCase().includes("cp");
     console.log("isCXMCustomer", quote?.isCXMCustomer);
     const htmlContent = template({ ...quote, towerOTC, cpCompany: companyData.companyName, withPrice, accountManagerName: companyDetails?.[0]?.accountManager_name || "-", companyDetails: companyDetails[0], companyName: quote.companyName.toUpperCase(), isFiber, isWireless, billingPattenLink: erpDatas.billingPattenLink, noticePeriod: erpDatas.noticePeriod });
 
@@ -498,7 +498,7 @@ exports.get_modify_pd_doc = async (req, res, next) => {
     /// get companyId from quote
     const quoteDoc = await Quote.findOne({ reqId }, { companyId: 1, parentRole: 1 });
 
-    if (!quoteDoc?.parentRole?.includes("CXM")) {
+    if (quoteDoc?.parentRole?.includes("CP")) {
       const { success, message } = await verifyOpportunity(reqId);
       if (success) {
         await updateOpportunityPrice(reqId);
@@ -695,7 +695,7 @@ exports.get_modify_sign_order = async (req, res, next) => {
       .collection("companies")
       .findOne({ _id: cpUser.companyId });
 
-    quote.isCXMCustomer = quote?.parentRole?.toLowerCase().includes("cxm");
+    quote.isCXMCustomer = !quote?.parentRole?.toLowerCase().includes("cp");
     console.log("User:", cpUser);
     console.log("Company:", companyData);
     console.log("Company:", companyData.companyName);

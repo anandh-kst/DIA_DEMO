@@ -470,7 +470,7 @@ exports.get_connectiontype = async (req, res, next) => {
     if (!reqBandwidth) {
       let connectionType = await db.collection("conditionills").distinct("connectionType");
 
-      if (!restrictedRoles.includes(parentRole) || parentRole === "CXM + Customer") {
+      if (!restrictedRoles.includes(parentRole) || parentRole !== "CP + Customer") {
         connectionType = connectionType.filter((item) => item !== "Other ISP");
       }
 
@@ -514,7 +514,7 @@ exports.get_connectiontype = async (req, res, next) => {
       }
     }
 
-    if (!restrictedRoles.includes(parentRole) || parentRole === "CXM + Customer") {
+    if (!restrictedRoles.includes(parentRole) || parentRole !== "CP + Customer") {
       fallbackTypes = fallbackTypes.filter((item) => item !== "Other ISP");
     }
 

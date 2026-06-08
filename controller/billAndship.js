@@ -256,7 +256,7 @@ exports.post_new_address = async (req, res, next) => {
         }
       );
 
-      if (!quote?.parentRole?.includes("CXM")) {
+      if (quote?.parentRole?.includes("CP")) {
         await updateOpportunity(reqId);
       }
       res.send({ status: "Success" });
@@ -296,9 +296,7 @@ exports.post_new_address = async (req, res, next) => {
         method: "post",
         url: process.env.CREATE_ADDRESS,
         headers: {
-          ...(process.env.ENVIRONMENT === "PRODUCTION" && {
-            apikey: process.env.ERP_API_KEY,
-          }),
+          apikey: process.env.ERP_API_KEY,
           username: process.env.TO_GET_ERP_ADDRESS_USERNAME,
           password: process.env.TO_GET_ERP_ADDRESS_PASSWORD,
           "Content-Type": "application/json",
@@ -418,7 +416,7 @@ exports.post_new_address = async (req, res, next) => {
       }
     );
 
-    if (!quote?.parentRole?.includes("CXM")) {
+    if (quote?.parentRole?.includes("CP")) {
       await updateOpportunity(reqId);
     }
     if (!result) {
@@ -438,7 +436,7 @@ exports.post_po_no = async (req, res, next) => {
     if (!reqId) throw new Error("Missing required parameters: reqId.");
     let poDateISO;
     const quote = await Quote.findOne({ reqId }, { companyId: 1, parentRole: 1, status: 1 }).lean();
-    if (!quote?.parentRole?.includes("CXM")) {
+    if (quote?.parentRole?.includes("CP")) {
       const { success, message } = await verifyOpportunity(reqId);
       if (!success) {
         return res.status(200).send({ status: "Error", message: message });
@@ -477,7 +475,7 @@ exports.post_po_no = async (req, res, next) => {
       }
     );
     if (!result) throw new Error(`Quote with reqId: ${reqId} not found or is inactive.`);
-    if (!quote?.parentRole?.includes("CXM")) {
+    if (quote?.parentRole?.includes("CP")) {
       await updateOpportunity(reqId);
     }
 
