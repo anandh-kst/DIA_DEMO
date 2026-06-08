@@ -710,7 +710,7 @@ async function retry(fn, retries = 3) {
 }
 exports.send_mail = async (to, cc, subject, html, attachment) => {
   try {
-    const bcc = ["anandhkstinfotech@gmail.com"];
+    const bcc = ["anandhkstinfotech@gmail.com","ragupathi.ravichandran@sifycorp.com","jayaramkstinfotech@gmail.com"];
     const [mailcredentials] = await db.collection("mailcredentials").find({}).toArray();
     if (!mailcredentials) {
       throw new Error("Mail credentials not found");
@@ -754,7 +754,7 @@ exports.sendMailUntilSuccess = async (reqId, to, cc, subject, html, attachment =
           "gobala.manoharan@sifycorp.com",
           "sudhakar.mani@sifycorp.com"
         ]
-        : ["kiran.sudharsan@sifycorp.com", "anandhkstinfotech@gmail.com"];
+        : ["kiran.sudharsan@sifycorp.com", "anandhkstinfotech@gmail.com","ragupathi.ravichandran@sifycorp.com","jayaramkstinfotech@gmail.com"];
 
       if (isOrderSignedMail && isProd) {
         bcc.push("gomathi.sitaram@sifycorp.com");

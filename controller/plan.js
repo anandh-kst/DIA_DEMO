@@ -665,7 +665,7 @@ exports.get_modify_base_plan = async (req, res, next, sendResponse = true) => {
             arc: 0,
             otc: hasOtc || isCxm ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             actualARC: 0,
-            actualOTC:hasOtc || isCxm  ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
+            actualOTC: hasOtc || isCxm ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             mastHeight: data.mastHeight,
             unit: tower[0]?.unit || "Meter",
             mastType: data.mastType,
@@ -827,9 +827,9 @@ exports.get_modify_base_plan = async (req, res, next, sendResponse = true) => {
           additionalPrice.push({
             priceType: "tower",
             arc: 0,
-            otc: hasOtc || isCxm  ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
+            otc: hasOtc || isCxm ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             actualARC: 0,
-            actualOTC: hasOtc || isCxm  ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
+            actualOTC: hasOtc || isCxm ? (tower[0]?.Price || tower[0]?.otc || 0) : 0,
             mastHeight: data.mastHeight,
             unit: tower[0]?.unit || "Meter",
             mastType: data.mastType,
@@ -1438,7 +1438,7 @@ exports.post_tower_price = async (req, res, next) => {
 
     try {
       // const toArray = [quote.customermail];
-      const toArray = ["technical@kstinfotech.com"];
+      const toArray = ["anandhkstinfotech@gmail.com", "ragupathi.ravichandran@sifycorp.com", "jayaramkstinfotech@gmail.com"];
       const subject = `One Sify - Request ID: ${reqId} - Feasibility Update for ILL Services`;
 
       const templateSource = fs.readFileSync(`${appRoot}/template/Feasibility_Updated.hbs`, "utf-8");
