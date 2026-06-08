@@ -9,6 +9,8 @@ exports.get_purchase_summary_by_linkid = async (req, res, next) => {
     connectString: process.env.ORACAL_CONNECTIONSTRING,
   };
   const oracalDb = await oracledb.getConnection(dbConfig);
+  const isCP = req?.parentRole.toLowerCase().includes("cp");
+  console.log("parent role is ", req?.parentRole, "isCP value is ", isCP);
   try {
     if (!linkId) throw new Error("Missing LinkId");
 
@@ -110,7 +112,7 @@ exports.get_purchase_summary_by_linkid = async (req, res, next) => {
       FROM 
           ${process.env.ORACAL_INSTANCE} sliv
       WHERE  
-        sliv.product_type = 'EXPRESSCONNECT' AND
+       ${isCP ? " sliv.product_type = 'EXPRESSCONNECT'" : " sliv.product_type IN ('EXPRESSCONNECT', 'OTHER-ISP')"} AND
         sliv.ordered_code != 'LASTMILE-RC' AND
         sliv.bandwidth is not null AND
         (sliv.CONTRACT_HEADER_STATUS = 'ACTIVE' OR sliv.CONTRACT_HEADER_STATUS = 'SIGNED') AND

@@ -245,6 +245,10 @@ exports.my_links = async (req, res, next, sendResponse = true) => {
 
     oracalDb = await common.getOracleDb();
 
+    const isCP = (req?.parentRole || "").toLowerCase().includes("cp");
+
+    console.log("Parent Role:", req.parentRole, "isCP:", isCP);
+
     let ignoreLinkIds = [];
 
     if (reqId) {
@@ -356,7 +360,7 @@ exports.my_links = async (req, res, next, sendResponse = true) => {
     SELECT COUNT(*) AS total
     FROM ${process.env.ORACAL_INSTANCE} sliv
     WHERE
-        sliv.product_type = 'EXPRESSCONNECT' AND
+        ${isCP ? "sliv.product_type = 'EXPRESSCONNECT'" : " sliv.product_type IN ('EXPRESSCONNECT', 'OTHER-ISP')"} AND
         sliv.ordered_code != 'LASTMILE-RC' AND
         sliv.customer_code = '${ebsAccountNo || req.ebsAccountNo}' AND
         sliv.bandwidth is not null
@@ -450,7 +454,8 @@ exports.my_links = async (req, res, next, sendResponse = true) => {
 FROM
     ${process.env.ORACAL_INSTANCE} sliv
 WHERE
-    sliv.product_type = 'EXPRESSCONNECT' AND
+    
+    ${isCP ? "sliv.product_type = 'EXPRESSCONNECT'" : " sliv.product_type IN ('EXPRESSCONNECT', 'OTHER-ISP')"} AND
     sliv.ordered_code != 'LASTMILE-RC' AND
     sliv.customer_code = '${ebsAccountNo || req.ebsAccountNo}' AND
     sliv.bandwidth is not null
