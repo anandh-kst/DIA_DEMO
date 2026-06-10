@@ -450,10 +450,16 @@ exports.my_links = async (req, res, next, sendResponse = true) => {
       'Global Cloud Connect New', 'GCC',
       'Colo Internet', 'Colo Internet',
       'Cloud Internet', 'Cloud Internet'
-    ) AS "coveredProduct"
-FROM
-    ${process.env.ORACAL_INSTANCE} sliv
-WHERE
+    ) AS "coveredProduct",
+
+    CASE
+        WHEN sliv.product_type = 'OTHER-ISP' THEN 'false'
+        ELSE 'true'
+    END AS "isAllowed"
+
+    FROM
+        ${process.env.ORACAL_INSTANCE} sliv
+    WHERE
     
     ${isCP ? "sliv.product_type = 'EXPRESSCONNECT'" : " sliv.product_type IN ('EXPRESSCONNECT', 'OTHER-ISP')"} AND
     sliv.ordered_code != 'LASTMILE-RC' AND
@@ -555,10 +561,14 @@ WHERE
     //   const result = await oracalDb.execute(paginatedDataQuery, [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
     //   const data = result.rows;
 
-    console.log(paginatedDataQuery);
+    console.log("paginatedDataQuery", paginatedDataQuery);
     const result = await oracalDb.execute(paginatedDataQuery, [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
-    const data = result.rows;
-
+    // const data = result.rows;
+    const data = result.rows.filter(item => item.city !== null).map(item => ({
+      ...item,
+      isAllowed: item.isAllowed === "true",
+      reqBandwidthUOM: item.reqBandwidthUOM === "MBPS" ? "Mbps" : item.reqBandwidthUOM
+    }));
     if (sendResponse) {
       logger.info(`${req.path} -- ${req.method} -- Success`);
       res.send({ status: "Success", data, page, limit, total });

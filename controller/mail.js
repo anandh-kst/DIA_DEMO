@@ -287,11 +287,15 @@ exports.send_mail_to_sign = async (req, res, next) => {
 
     const currentYear = moment().format("YYYY");
     const toArray = (to || []).map((item) => item.mail);
-    const ccArray = (cc || []).map((item) => item.mail);
-
+    const ccArray = cc || [];
     if (!toArray.length) {
       throw new Error("No recipients defined");
     }
+    const renderTemplate = (template, data = {}) => {
+      return template.replace(/\{\{(\w+)\}\}/g, (_, key) => {
+        return data[key] ?? "";
+      });
+    };
 
     const docuSignUrl = `${process.env.APP_PATH}/onesify/network/common/share_and_sign/${reqId}/${to[0].name}/${to[0].mail}`;
     const docuSignUrlForCc = `${process.env.APP_PATH}/onesify/network/docu_sign/view_sign_order/ILL-SO-${reqId}`;
@@ -334,8 +338,8 @@ exports.send_mail_to_sign = async (req, res, next) => {
                           background-color: white;
                           padding-left: 25px;
                           padding-right: 25px;">
-                              <p>Dear <span style="font-size: 18px; color: #0E3346;">${to[0].name}</span></p>
-                              <p>The user ${req.firstName} ${req.lastName} from the company ${companyName} has shared the document for your signature.</p>
+                              <p>Dear <span style="font-size: 18px; color: #0E3346;">{{name}}</span></p>
+                              <p>The user {{firstName}} {{lastName}} from the company {{companyName}} has shared the document for your signature.</p>
                               <br/>
                           </td>
                       </tr>
@@ -357,7 +361,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
                                       color: #FFF;">
                                           <tr>
                                               <td style="border-radius: 2px; text-align: left;">
-                                                  <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${docuSignUrl}"  style="background-color: #E9EBEC;
+                                                  <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{docuSignUrl}}"  style="background-color: #E9EBEC;
           ">                                          color: #FFFFFF;
                                                       padding: 20px;
                                                       margin: 50px;
@@ -391,7 +395,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
                                       color: #FFF;">
                                       <tr>
                                           <td style="border-radius: 2px; text-align: left;">
-                                              <a href="${docuSignUrl}" target="_blank" style="background-color: #0E3346;
+                                              <a href="{{docuSignUrl}}" target="_blank" style="background-color: #0E3346;
                                                           border: none;
                                                           border-radius: 5px;
                                                           font-family: 'Myriad Pro', sans-serif;
@@ -412,7 +416,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
                               <h4>(or)</h4>
                               <p style="margin-bottom: 0px;">Click the link</p>
                               <p>
-                              <a href="${docuSignUrl}" class="link">${process.env.APP_PATH}</a>
+                              <a href="{{docuSignUrl}}" class="link">{{appPath}}</a>
                               </p>
                               <br>
                               <p class="bestRegards">Best Regards,</p>
@@ -440,7 +444,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
                               font-size:16px; line-height:18px;
                               color:#0A2134;" valign="top" align="center">
                               <p>This is an auto generated mail. Please do not reply.<br>
-                                  © ${currentYear}
+                                  © {{currentYear}}
        Sify Technologies Limited. All Rights Reserved.</p>
                           </td>
                       </tr>
@@ -479,8 +483,8 @@ exports.send_mail_to_sign = async (req, res, next) => {
                       background-color: white;
                       padding-left: 25px;
                       padding-right: 25px;">
-                          <p>Dear <span style="font-size: 18px; color: #0E3346;">${to[0].name}</span></p>
-                          <p>The user ${req.firstName} ${req.lastName} from the company ${companyName} has shared the document.</p>
+                          <p>Dear <span style="font-size: 18px; color: #0E3346;">{{name}}</span></p>
+                          <p>The user {{firstName}} {{lastName}} from the company {{companyName}} has shared the document.</p>
                           <br/>
                       </td>
                   </tr>
@@ -503,7 +507,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
                                   color: #FFF;">
                                       <tr>
                                           <td style="border-radius: 2px; text-align: left;">
-                                              <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${docuSignUrlForCc}"  style="background-color: #E9EBEC;
+                                              <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{docuSignUrlForCc}}"  style="background-color: #E9EBEC;
       ">                                          color: #FFFFFF;
                                                   padding: 20px;
                                                   margin: 50px;
@@ -537,7 +541,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
                                   color: #FFF;">
                                   <tr>
                                       <td style="border-radius: 2px; text-align: left;">
-                                          <a href="${docuSignUrlForCc}" target="_blank" style="background-color: #0E3346;
+                                          <a href="{{docuSignUrlForCc}}" target="_blank" style="background-color: #0E3346;
                                                       border: none;
                                                       border-radius: 5px;
                                                       font-family: 'Myriad Pro', sans-serif;
@@ -558,7 +562,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
                           <h4>(or)</h4>
                           <p style="margin-bottom: 0px;">Click the link</p>
                           <p>
-                          <a href="${docuSignUrlForCc}" class="link">${process.env.APP_PATH}</a>
+                          <a href="{{docuSignUrlForCc}}" class="link">{{appPath}}</a>
                           </p>
                           <br>
                           <p class="bestRegards">Best Regards,</p>
@@ -586,7 +590,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
                           font-size:16px; line-height:18px;
                           color:#0A2134;" valign="top" align="center">
                           <p>This is an auto generated mail. Please do not reply.<br>
-                              © ${currentYear}
+                              © {{currentYear}}
    Sify Technologies Limited. All Rights Reserved.</p>
                       </td>
                   </tr>
@@ -720,23 +724,23 @@ exports.send_mail_to_sign = async (req, res, next) => {
               </tr>
               <tr>
                 <td style="padding: 25px;">
-                  <p>Dear <span style="font-size: 18px; color: #0E3346;">${to[0].name}</span>,</p>
+                  <p>Dear <span style="font-size: 18px; color: #0E3346;">{{name}}</span>,</p>
                   <p>Greetings from Sify!</p>
-                  <p><strong>${req.firstName} ${req.lastName}</strong>, from 
-                    <strong>${companyRecord.cpcompanyName}</strong>, a trusted Channel Partner of Sify, has shared a document that requires  your review and signature.
+                  <p><strong>{{firstName}} {{lastName}}</strong>, from 
+                    <strong>{{companyName}}</strong>, a trusted Channel Partner of Sify, has shared a document that requires  your review and signature.
 
                   <p><strong>Order Details</strong></p>
                   <ul style="padding-left: 20px;">
-                    <li><strong>Name of document:</strong> ILL-SO-${reqId}</li>
-                    <li><strong>Request ID:</strong> ${reqId}</li>
+                    <li><strong>Name of document:</strong> ILL-SO-{{reqId}}</li>
+                    <li><strong>Request ID:</strong> {{reqId}}</li>
                     <li><strong>Product name:</strong> DIA</li>
                   </ul>
-                  <p>To proceed, kindly review and sign the document using <a href="${docuSignUrl}">DocuSign Link</a> or below
+                  <p>To proceed, kindly review and sign the document using <a href="{{docuSignUrl}}">DocuSign Link</a> or below
                     button:</p>
                   <table style="width: 100%; background: #E9EBEC; padding: 15px; border-radius: 5px; box-sizing: border-box;">
                     <tr>
                       <td style="text-align: left;">
-                        <a href="${docuSignUrl}" target="_blank"
+                        <a href="{{docuSignUrl}}" target="_blank"
                           style="background-color: #0E3346; border: none; border-radius: 5px; font-family: 'Myriad Pro', sans-serif; color: #fff; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; cursor: pointer;">
                           Sign Order Document
                         </a>
@@ -746,8 +750,8 @@ exports.send_mail_to_sign = async (req, res, next) => {
                   <br />
                   <p>Please complete the signing process at your earliest convenience to avoid any delays in order processing.
                   </p>
-                  <p>For any queries, feel free to reach out to <strong>${customerName}</strong> at <a
-                      href="mailto:${customerMail}">${customerMail}</a>, or write to us at <a
+                  <p>For any queries, feel free to reach out to <strong>{{customerName}}</strong> at <a
+                      href="mailto:{{customerMail}}">{{customerMail}}</a>, or write to us at <a
                       href="mailto:onesify@sifycorp.com">onesify@sifycorp.com</a></p>
                   <br />
                   <p>Thank you for choosing Sify.</p>
@@ -759,7 +763,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
               </tr>
               <tr>
                 <td style="font-size: 14px; color: #0A2134;" align="center">
-                    © ${currentYear} Sify Technologies Limited. All Rights Reserved.</p><br />
+                    © {{currentYear}} Sify Technologies Limited. All Rights Reserved.</p><br />
                     <p>This is an auto-generated email. Please do not reply.<br />
                 </td>
               </tr>
@@ -892,23 +896,23 @@ exports.send_mail_to_sign = async (req, res, next) => {
               </tr>
               <tr>
                 <td style="padding: 25px;">
-                  <p>Dear <span style="font-size: 18px; color: #0E3346;">${cc.length > 0 ? cc[0].name : "Recipient"}</span>,</p>
+                  <p>Dear <span style="font-size: 18px; color: #0E3346;">{{name}}</span>,</p>
                   <p>Greetings from Sify!</p>
-                  <p><strong>${customerName}</strong>, Sify's Channel Partner from
-                    <strong>${companyRecord.cpcompanyName}</strong>, has shared an order document for your review.
+                  <p><strong>{{customerName}}</strong>, Sify's Channel Partner from
+                    <strong>{{cpcompanyName}}</strong>, has shared an order document for your review.
                     Please find the order details below:</p>
                   <p><strong>Order Details</strong></p>
                   <ul style="padding-left: 20px;">
-                    <li><strong>Name of document:</strong> ILL-SO-${reqId}</li>
-                    <li><strong>Request ID:</strong> ${reqId}</li>
+                    <li><strong>Name of document:</strong> ILL-SO-{{reqId}}</li>
+                    <li><strong>Request ID:</strong> {{reqId}}</li>
                     <li><strong>Product name:</strong> DIA</li>
                   </ul>
-                  <p>To proceed, kindly review the document using <a href="${docuSignUrlForCc}">view the document</a> or below
+                  <p>To proceed, kindly review the document using <a href="{{docuSignUrlForCc}}">view the document</a> or below
                     button:</p>
                   <table style="width: 100%; background: #E9EBEC; padding: 15px; border-radius: 5px; box-sizing: border-box;">
                     <tr>
                       <td style="text-align: left;">
-                        <a href="${docuSignUrlForCc}" target="_blank"
+                        <a href="{{docuSignUrlForCc}}" target="_blank"
                           style="background-color: #0E3346; border: none; border-radius: 5px; font-family: 'Myriad Pro', sans-serif; color: #fff; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; cursor: pointer;">
                           Click Here to View
                         </a>
@@ -916,8 +920,8 @@ exports.send_mail_to_sign = async (req, res, next) => {
                     </tr>
                   </table>
                   <br />
-                  <p>For any queries, feel free to reach out to <strong>${customerName}</strong> at <a
-                      href="mailto:${customerMail}">${customerMail}</a>, or write to us at <a
+                  <p>For any queries, feel free to reach out to <strong>{{customerName}}</strong> at <a
+                      href="mailto:{{customerMail}}">{{customerMail}}</a>, or write to us at <a
                       href="mailto:onesify@sifycorp.com">onesify@sifycorp.com</a></p>
                   <br />
                   <p>Thank you for choosing Sify.</p>
@@ -930,7 +934,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
               <tr>
                 <td style="font-size: 14px; color: #0A2134;" align="center">
                   <p>This is an auto-generated email. Please do not reply.<br />
-                    © ${currentYear} Sify Technologies Limited. All Rights Reserved.</p>
+                    © {{currentYear}} Sify Technologies Limited. All Rights Reserved.</p>
                 </td>
               </tr>
             </tbody>
@@ -959,45 +963,60 @@ exports.send_mail_to_sign = async (req, res, next) => {
     let sendMail = null;
     let sendMailToCc = null;
 
-    if (parentRole === "CP + Customer") {
-      const ccEmails = [...ccArray];
+    const toData = {
+      name: to?.[0]?.name || "",
+      firstName: req?.firstName || "",
+      lastName: req?.lastName || "",
+      companyName: companyName || "",
+      cpcompanyName: companyRecord?.cpcompanyName || "",
+      docuSignUrl: docuSignUrl || "",
+      docuSignUrlForCc: docuSignUrlForCc || "",
+      appPath: process.env.APP_PATH || "",
+      currentYear: moment().format("YYYY"),
+      customerName: customerName || "",
+      customerMail: customerMail || "",
+      reqId: reqId || "",
+    };
 
-      const promises = [
-        withTimeout(
-          common.send_mail(toArray, [], subject, html, null),
-          50000
-        ),
-      ];
+    const htmlForTo = renderTemplate(html, toData);
 
-      if (ccEmails.length > 0) {
-        promises.push(
-          withTimeout(
-            common.send_mail(ccEmails, [], subjectForCc, htmlForCc, null),
-            50000
-          )
-        );
-      }
+    const sendMailPromise = withTimeout(
+      common.send_mail(toArray, [], subject, htmlForTo, null),
+      50000
+    );
 
-      [sendMail, sendMailToCc] = await Promise.all(promises);
-    } else {
-      const promises = [
-        withTimeout(
-          common.send_mail(toArray, [], subject, html, null),
-          50000
-        ),
-      ];
+    const ccPromise =
+      ccArray?.length > 0
+        ? Promise.allSettled(
+          ccArray.map((ccUser) => {
+            const htmlForCc = renderTemplate(htmlForCc, {
+              name: ccUser.name,
+              firstName: req.firstName,
+              lastName: req.lastName,
+              companyName,
+              docuSignUrlForCc,
+              appPath: process.env.APP_PATH,
+              currentYear,
+            });
 
-      if (ccArray.length > 0) {
-        promises.push(
-          withTimeout(
-            common.send_mail(ccArray, [], subjectForCc, htmlForCc, null),
-            50000
-          )
-        );
-      }
+            return withTimeout(
+              common.send_mail(
+                [ccUser.mail],
+                [],
+                subjectForCc,
+                htmlForCc,
+                null
+              ),
+              50000
+            );
+          })
+        )
+        : Promise.resolve([]);
 
-      [sendMail, sendMailToCc] = await Promise.all(promises);
-    }
+    [sendMail, sendMailToCc] = await Promise.all([
+      sendMailPromise,
+      ccPromise,
+    ]);
 
     await db.collection("mailToSignLogs").insertOne({
       to,
