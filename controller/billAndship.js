@@ -225,7 +225,7 @@ exports.post_new_address = async (req, res, next) => {
 
     const quote = await Quote.findOne({ reqId });
     let { ebsAccountNo, quoteType, locationDetails } = quote;
-    if (!["Draft", "Awaiting Signature", "DRAFT", "Feasible"].includes(quote?.status)) {
+    if (!["Draft", "Awaiting Signature", "DRAFT", "Feasible","Partially Feasible"].includes(quote?.status)) {
       res.send({ status: "Success", message: "Order already Signed/Order" });
       return;
     }
@@ -442,7 +442,7 @@ exports.post_po_no = async (req, res, next) => {
         return res.status(200).send({ status: "Error", message: message });
       }
     }
-    if (!["Draft", "Awaiting Signature", "DRAFT", "Feasible"].includes(quote?.status)) {
+    if (!["Draft", "Awaiting Signature", "DRAFT", "Feasible" ,"Partially Feasible"].includes(quote?.status)) {
       res.send({ status: "Success", message: "Order already Signed/Order" });
       return;
     }

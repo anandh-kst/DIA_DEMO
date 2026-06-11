@@ -222,10 +222,29 @@ const send_placed_mail = async (reqID, quote, orderId, orderDate) => {
     let accountManagerEmail = accounManager[0]?.accountManager_email || "";
     console.log("accountManagerEmail", accountManagerEmail);
 
-    const toArray =
-      process.env.ENVIRONMENT === "PRODUCTION"
-        ? [quote.customermail, accountManagerEmail]
-        : [quote.customermail];
+    const isProduction = process.env.ENVIRONMENT === "PRODUCTION";
+    const isCPUser = quote?.parentRole?.includes("CP");
+    const company = accounManager?.[0];
+
+    let toArray = [quote?.customermail, accountManagerEmail].filter(Boolean);
+    console.log("Initial cxmMails", company?.cxmEmail);
+    if (isProduction && !isCPUser) {
+      const cxmMails = Array.isArray(company?.cxmEmail)
+        ? company.cxmEmail
+        : [company?.cxmEmail].filter(Boolean);
+
+      if (cxmMails.length) {
+        toArray.push(
+          ...cxmMails
+            .map(({ email }) => email?.trim())
+            .filter(Boolean)
+        );
+      }
+    }
+
+    toArray = [...new Set(toArray.map((email) => email.trim()))];
+
+    console.log("Final toArray for sending email:", toArray);
 
     // const toArray = ["technical@kstinfotech.com"];
     const subject = `One Sify - Request ID: ${reqID} - Your Order for DIA Services is confirmed with One Sify.`;
@@ -454,16 +473,36 @@ const send_order_signed_mail = async (reqID, quote) => {
       filename: `ILL-SO-${reqID}.pdf`,
       content: fs.createReadStream(`${appRoot}/public/signedOrders/ILL-SO-${reqID}.pdf`),
     };
+
     const accounManager = await loginDB.collection("companies").find({ companyName: quote.companyName }).toArray();
     console.log("accounManager", accounManager);
     let accountManagerEmail = accounManager[0]?.accountManager_email || "";
     console.log("accountManagerEmail", accountManagerEmail);
 
+    const isProduction = process.env.ENVIRONMENT === "PRODUCTION";
+    const isCPUser = quote?.parentRole?.includes("CP");
+    const company = accounManager?.[0];
 
-    const toArray =
-      process.env.ENVIRONMENT === "PRODUCTION"
-        ? [accountManagerEmail]
-        : [];
+    let toArray = [quote?.customermail, accountManagerEmail].filter(Boolean);
+    console.log("Initial cxmMails", company?.cxmEmail);
+    if (isProduction && !isCPUser) {
+      const cxmMails = Array.isArray(company?.cxmEmail)
+        ? company.cxmEmail
+        : [company?.cxmEmail].filter(Boolean);
+
+      if (cxmMails.length) {
+        toArray.push(
+          ...cxmMails
+            .map(({ email }) => email?.trim())
+            .filter(Boolean)
+        );
+      }
+    }
+
+    toArray = [...new Set(toArray.map((email) => email.trim()))];
+
+    console.log("Final toArray for sending email:", toArray);
+
     await common.sendMailUntilSuccess(reqID, toArray, [], subject, html, attachment, 5, 3000, isOrderSignedMail);
 
     return true;
@@ -1002,7 +1041,29 @@ exports.post_updated_feasibility = async (req, res, next) => {
           let accountManagerEmail = accountManager[0]?.accountManager_email || "";
           console.log("accountManagerEmail", accountManagerEmail);
 
-          const toArray = [quote.customermail, accountManagerEmail].filter(Boolean);
+          const isProduction = process.env.ENVIRONMENT === "PRODUCTION";
+          const isCPUser = req?.parentRole?.includes("CP");
+          const company = accounManager?.[0];
+
+          let toArray = [quote?.customermail, accountManagerEmail].filter(Boolean);
+          console.log("Initial cxmMails", company?.cxmEmail);
+          if (isProduction && !isCPUser) {
+            const cxmMails = Array.isArray(company?.cxmEmail)
+              ? company.cxmEmail
+              : [company?.cxmEmail].filter(Boolean);
+
+            if (cxmMails.length) {
+              toArray.push(
+                ...cxmMails
+                  .map(({ email }) => email?.trim())
+                  .filter(Boolean)
+              );
+            }
+          }
+
+          toArray = [...new Set(toArray.map((email) => email.trim()))];
+
+          console.log("Final toArray for sending email:", toArray);
 
           let templateSource;
 

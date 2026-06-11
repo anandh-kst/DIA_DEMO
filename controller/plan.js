@@ -1437,8 +1437,36 @@ exports.post_tower_price = async (req, res, next) => {
     await common.update_quote_common_status(updatedQuote);
 
     try {
-      // const toArray = [quote.customermail];
-      const toArray = ["anandhkstinfotech@gmail.com", "ragupathi.ravichandran@sifycorp.com", "jayaramkstinfotech@gmail.com"];
+
+      const { companyName } = updatedQuote;
+      const accounManager = await loginDB.collection("companies").find({ companyName: companyName }).toArray();
+      console.log("accounManager", accounManager);
+      let accountManagerEmail = accounManager[0]?.accountManager_email || "";
+      console.log("accountManagerEmail", accountManagerEmail);
+
+      const isProduction = process.env.ENVIRONMENT === "PRODUCTION";
+      const isCPUser = req?.parentRole?.includes("CP");
+      const company = accounManager?.[0];
+
+      let toArray = [updatedQuote?.customermail, accountManagerEmail].filter(Boolean);
+      console.log("Initial Cxm Mails:", company?.cxmEmail);
+      if (isProduction && !isCPUser) {
+        const cxmMails = Array.isArray(company?.cxmEmail)
+          ? company.cxmEmail
+          : [company?.cxmEmail].filter(Boolean);
+
+        if (cxmMails.length) {
+          toArray.push(
+            ...cxmMails
+              .map(({ email }) => email?.trim())
+              .filter(Boolean)
+          );
+        }
+      }
+
+      toArray = [...new Set(toArray.map((email) => email.trim()))];
+
+      console.log("Final toArray for sending email:", toArray);
       const subject = `One Sify - Request ID: ${reqId} - Feasibility Update for ILL Services`;
 
       const templateSource = fs.readFileSync(`${appRoot}/template/Feasibility_Updated.hbs`, "utf-8");

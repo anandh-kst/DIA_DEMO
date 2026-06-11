@@ -710,7 +710,8 @@ async function retry(fn, retries = 3) {
 }
 exports.send_mail = async (to, cc, subject, html, attachment) => {
   try {
-    const bcc = ["anandhkstinfotech@gmail.com","ragupathi.ravichandran@sifycorp.com","jayaramkstinfotech@gmail.com"];
+    const isProd = process.env.ENVIRONMENT === "PRODUCTION";
+    let bcc = isProd ? JSON.parse(process.env.PROD_BCC_MAILS || '[]') : JSON.parse(process.env.DEMO_BCC_MAILS || '[]');
     const [mailcredentials] = await db.collection("mailcredentials").find({}).toArray();
     if (!mailcredentials) {
       throw new Error("Mail credentials not found");
@@ -746,15 +747,8 @@ exports.sendMailUntilSuccess = async (reqId, to, cc, subject, html, attachment =
       const isProd = process.env.ENVIRONMENT === "PRODUCTION";
 
       let bcc = isProd
-        ? [
-          "kiran.sudharsan@sifycorp.com",
-          "murali.janakiraman@sifycorp.com",
-          "yuvaraj.subramanian@sifycorp.com",
-          "ragupathi.ravichandran@sifycorp.com",
-          "gobala.manoharan@sifycorp.com",
-          "sudhakar.mani@sifycorp.com"
-        ]
-        : ["kiran.sudharsan@sifycorp.com", "anandhkstinfotech@gmail.com","ragupathi.ravichandran@sifycorp.com","jayaramkstinfotech@gmail.com"];
+        ? JSON.parse(process.env.PROD_BCC_MAILS || '[]')
+        : JSON.parse(process.env.DEMO_BCC_MAILS || '[]');
 
       if (isOrderSignedMail && isProd) {
         bcc.push("gomathi.sitaram@sifycorp.com");
@@ -1718,8 +1712,8 @@ exports.post_erp_order = async (reqId, next) => {
 async function sendBookingMail({ reqId, soNumber, linkId }) {
   console.log("sendBookingMail called with:", { reqId, soNumber, linkId });
   try {
-    let toArray = ["anandhkstinfotech@gmail.com"];
-    let ccArray = ["anandhkstinfotech@gmail.com"];
+    let toArray = [];
+    let ccArray = [];
     //let toArray = process.env.MAIL_PLACEDTO?.split(",") || [];
     const quote = await Quote.findOne({ reqId });
     console.log("quote", quote)
@@ -1736,28 +1730,29 @@ async function sendBookingMail({ reqId, soNumber, linkId }) {
     console.log("accountManagerEmail", accountManagerEmail);
 
 
-    console.log("usermail", usermail)
-    // let toArray = process.env.PLACED_MAILTO
-    //   ? process.env.PLACED_MAILTO.split(",").map(m => m.trim())
-    //   : [];
+    const isProduction = process.env.ENVIRONMENT === "PRODUCTION";
+    const isCPUser = quote?.parentRole?.includes("CP");
+    const company = accounManager?.[0];
 
-    if (usermail?.email && !toArray.includes(usermail.email)) {
-      toArray.push(usermail.email);
+    toArray = [quote?.customermail, accountManagerEmail].filter(Boolean);
+    console.log("CxmMails initial", company?.cxmEmail);
+    if (isProduction && !isCPUser) {
+      const cxmMails = Array.isArray(company?.cxmEmail)
+        ? company.cxmEmail
+        : [company?.cxmEmail].filter(Boolean);
+
+      if (cxmMails.length) {
+        toArray.push(
+          ...cxmMails
+            .map(({ email }) => email?.trim())
+            .filter(Boolean)
+        );
+      }
     }
 
-    if (accountManagerEmail && !toArray.includes(accountManagerEmail)) {
-      toArray.push(accountManagerEmail);
-    }
+    toArray = [...new Set(toArray.map((email) => email.trim()))];
 
-    // let ccArray = process.env.PLACED_MAILCC
-    //   ? process.env.PLACED_MAILCC.split(",").map(m => m.trim())
-    //   : [];
-
-    toArray = [...new Set(toArray)];
-    ccArray = [...new Set(ccArray)];
-
-    console.log("toArray =", toArray);
-    console.log("ccArray =", ccArray);
+    console.log("Final toArray for sending email:", toArray);
 
     /* const pdfData = await downloadAndSavePDF(reqID);
     console.log("PDF downloaded:", pdfData.length, "bytes"); */

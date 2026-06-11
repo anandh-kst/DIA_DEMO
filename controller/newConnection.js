@@ -106,7 +106,7 @@ const send_feasibility_mail = async (reqId, toArray) => {
   console.log("send_feasibility_mail called with reqId:", reqId, "toArray:", toArray);
   try {
     const quote = await Quote.findOne({ reqId }).lean();
-    const { locationDetails, customerNumber, customerName,companyName, quoteType, parentRole } = quote;
+    const { locationDetails, customerNumber, customerName, companyName, quoteType, parentRole } = quote;
     console.log("quote", quote);
     // let subject,templateSource;
     let templateSource;
@@ -118,7 +118,7 @@ const send_feasibility_mail = async (reqId, toArray) => {
     }
 
     if (parentRole === "CP + Customer") {
-       templateSource = fs.readFileSync(`${appRoot}/template/FeasibilityRaisedCp.hbs`, "utf-8");
+      templateSource = fs.readFileSync(`${appRoot}/template/FeasibilityRaisedCp.hbs`, "utf-8");
     } else {
       templateSource = fs.readFileSync(`${appRoot}/template/Feasibility_Raised.hbs`, "utf-8");
 
@@ -777,7 +777,7 @@ exports.get_new_connection_list = async (req, res, next) => {
       data.push(baseObject);
       console.log("baseObject", baseObject)
     }
-   console.log("cxmCommonStatus", cxmCommonStatus)
+    console.log("cxmCommonStatus", cxmCommonStatus)
 
     const response = {
       status: "Success",
@@ -821,19 +821,35 @@ exports.post_feasibility = async (req, res, next) => {
 
     const quote = await Quote.findOne({ reqId, isActive: true }).lean();
     if (!quote) throw new Error(`Quote with reqId: ${reqId} not found.`);
-
-    const {companyName} = quote;
-
-    const accounManager = await loginDB.collection("companies").find({ companyName: companyName}).toArray();
+    const { companyName } = quote;
+    const accounManager = await loginDB.collection("companies").find({ companyName: companyName }).toArray();
     console.log("accounManager", accounManager);
     let accountManagerEmail = accounManager[0]?.accountManager_email || "";
     console.log("accountManagerEmail", accountManagerEmail);
-    
 
+    const isProduction = process.env.ENVIRONMENT === "PRODUCTION";
+    const isCPUser = req?.parentRole?.includes("CP");
+    const company = accounManager?.[0];
 
+    let toArray = [quote?.customermail, accountManagerEmail].filter(Boolean);
+    console.log("CxmMails initial", company?.cxmEmail);
+    if (isProduction && !isCPUser) {
+      const cxmMails = Array.isArray(company?.cxmEmail)
+        ? company.cxmEmail
+        : [company?.cxmEmail].filter(Boolean);
 
-    const toArray = [req.customermail,accountManagerEmail];
+      if (cxmMails.length) {
+        toArray.push(
+          ...cxmMails
+            .map(({ email }) => email?.trim())
+            .filter(Boolean)
+        );
+      }
+    }
 
+    toArray = [...new Set(toArray.map((email) => email.trim()))];
+
+    console.log("Final toArray for sending email:", toArray);
     const create_feasibility = await common.create_feasibility(reqId, next);
 
     if (create_feasibility) {
