@@ -357,7 +357,7 @@ exports.create_feasibility = async (reqId, next) => {
       };
       console.log("Post Data:", postData);
 
-      const createFeasibility = await axios.post(`${process.env.CREATE_FEASIBILITY}`, postData/* , config */ /* Production */);
+      const createFeasibility = await axios.post(`${process.env.CREATE_FEASIBILITY}`, postData , process.env.ENVIRONMENT === "PRODUCTION" ? config : {} );
       console.log("Create Feasibility Response:", createFeasibility.data);
 
       if (!createFeasibility) {

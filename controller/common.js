@@ -279,7 +279,7 @@ const send_placed_mail = async (reqID, quote, orderId, orderDate) => {
 
     const templateData = {
       reqId: reqID,
-      quoteType: quote.quoteType === "New" ? "New-Link" : quote.provisionType,
+      quoteType: quote.quoteType === "New" ? "New-Link" : "Modify-Link",
       status: "Order Placed",
       orderId,
       orderDate,

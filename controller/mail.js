@@ -989,7 +989,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
       ccArray?.length > 0
         ? Promise.allSettled(
           ccArray.map((ccUser) => {
-            const htmlForCc = renderTemplate(htmlForCc, {
+            const RenderedHtmlForCc = renderTemplate(htmlForCc, {
               name: ccUser.name,
               firstName: req.firstName,
               lastName: req.lastName,
@@ -1004,7 +1004,7 @@ exports.send_mail_to_sign = async (req, res, next) => {
                 [ccUser.mail],
                 [],
                 subjectForCc,
-                htmlForCc,
+                RenderedHtmlForCc,
                 null
               ),
               50000
