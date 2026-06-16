@@ -713,6 +713,181 @@ exports.change_quote_status = async (req, res, next) => {
     next(err);
   }
 };
+const cxmFeasibilityMail = async ({ user, feasibilityId, feasQuote }) => {
+  try {
+    console.log("cxmFeasibilityMail called");
+    const to = user?.email;
+    if (!to) return;
+    const collection = feasQuote.serviceType === "DIA" ? "quoteills" : "quotempls";
+    const quoteDocument = await db.collection(collection).findOne({ isActive: true, "locationDetails.feasibilityId": feasibilityId });
+
+    const userName = user?.firstName ? `${user.firstName} ${user.lastName || ""}`.trim() : to;
+    const companyName = quoteDocument?.companyName || "-";
+    const customerCode = quoteDocument?.ebsAccountNo || "-";
+    const reqId = quoteDocument?.reqId || "-";
+    const serviceType = quoteDocument?.serviceType || "DIA";
+
+    const locationDetails = quoteDocument?.locationDetails || [];
+    const feasLocation = locationDetails.find(l => l.feasibilityId === feasibilityId);
+    const feasibilityStatus = feasLocation?.feasibilityStatus || feasLocation?.cxmFeasibilityStatus || "-";
+
+    const statusColor =
+      feasibilityStatus === "Feasible" ? "#1a7f37" :
+        feasibilityStatus === "Not Feasible" ? "#cf222e" :
+          feasibilityStatus === "Partially Feasible" ? "#b08800" : "#0E3346";
+
+    const basePlan = Array.isArray(feasLocation?.basePlan) ? feasLocation.basePlan[0] : feasLocation?.basePlan || {};
+    const otc = basePlan?.bandwidthOTC || feasLocation?.otherIspOtc || null;
+    const arc = basePlan?.bandwidthARC || feasLocation?.otherIspArc || null;
+    const priceRow = (otc || arc) ? `
+      <tr>
+        <td style="padding:10px 14px; font-size:14px; color:#555; border-bottom:1px solid #e8e8e8; font-weight:600;">Price Update</td>
+        <td style="padding:10px 14px; font-size:14px; color:#1E2122; border-bottom:1px solid #e8e8e8;">
+          ${otc ? `OTC: <strong>Rs ${otc}</strong>` : ""}${otc && arc ? " &nbsp;|&nbsp; " : ""}${arc ? `ARC: <strong>Rs ${arc}</strong>` : ""}
+        </td>
+      </tr>` : "";
+
+    const currentYear = new Date().getFullYear();
+    const subject = `One Sify - Action Required for Feasibility ${feasibilityId} | Req ID: ${reqId}`;
+
+    const html = `<!DOCTYPE html>
+            <html>
+
+            <head>
+                <meta charset="utf-8">
+                <title>One Sify - Feasibility Update</title>
+            </head>
+
+            <body style="margin:0;padding:0;background:#f4f4f4;font-family:Arial,sans-serif;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:30px 0;">
+                    <tr>
+                        <td align="center">
+                            <table width="600" cellpadding="0" cellspacing="0"
+                                style="background:#ffffff;border-radius:6px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+
+                                <!-- Header with logo -->
+                                <tr>
+                                    <td align="right" style="padding:20px 30px 15px 30px;">
+                                        <img src="https://www.sifytechnologies.com/wp-content/uploads/2022/04/logo_007800781_2166.png"
+                                            alt="Sify Technologies" width="120"
+                                            style="display:block;border:0;outline:none;text-decoration:none;" />
+                                    </td>
+                                </tr>
+                                <!-- Blue accent bar -->
+                                <tr>
+                                    <td style="background:#d1e06d;height:4px;"></td>
+                                </tr>
+
+                                <!-- Body -->
+                                <tr>
+                                    <td style="padding:30px 30px 20px;">
+                                        <p style="font-size:15px;color:#1E2122;margin:0 0 6px;">Dear <strong
+                                                style="color:#0E3346;">${userName}</strong>,</p>
+                                        <p style="font-size:14px;color:#555;margin:0 0 20px;line-height:1.6;">
+                                            The feasibility process has been completed and the below request has been marked as
+                                            Feasible.
+                                            Please review the request details and enable the Fusion Charges option in the Action
+                                            Required tab of the One Sify portal to proceed further..
+                                        </p>
+
+                                        <!-- Details table -->
+                                        <table width="100%" cellpadding="0" cellspacing="0"
+                                            style="border:1px solid #e8e8e8;border-radius:4px;overflow:hidden;margin-bottom:20px;">
+                                            <tr style="background:#f7f9fa;">
+                                                <td colspan="2"
+                                                    style="padding:10px 14px;font-size:13px;font-weight:700;color:#0E3346;border-bottom:1px solid #e8e8e8;letter-spacing:0.3px;">
+                                                    FEASIBILITY REQUEST DETAILS</td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="padding:10px 14px;font-size:14px;color:#555;border-bottom:1px solid #e8e8e8;font-weight:600;width:45%;">
+                                                    Company Name</td>
+                                                <td
+                                                    style="padding:10px 14px;font-size:14px;color:#1E2122;border-bottom:1px solid #e8e8e8;">
+                                                    ${companyName}</td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="padding:10px 14px;font-size:14px;color:#555;border-bottom:1px solid #e8e8e8;font-weight:600;">
+                                                    Customer Code</td>
+                                                <td
+                                                    style="padding:10px 14px;font-size:14px;color:#1E2122;border-bottom:1px solid #e8e8e8;">
+                                                    ${customerCode}</td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="padding:10px 14px;font-size:14px;color:#555;border-bottom:1px solid #e8e8e8;font-weight:600;">
+                                                    Request ID</td>
+                                                <td
+                                                    style="padding:10px 14px;font-size:14px;color:#1E2122;border-bottom:1px solid #e8e8e8;">
+                                                    ${reqId}</td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="padding:10px 14px;font-size:14px;color:#555;border-bottom:1px solid #e8e8e8;font-weight:600;">
+                                                    Feasibility ID</td>
+                                                <td
+                                                    style="padding:10px 14px;font-size:14px;color:#1E2122;border-bottom:1px solid #e8e8e8;">
+                                                    ${feasibilityId}</td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="padding:10px 14px;font-size:14px;color:#555;border-bottom:1px solid #e8e8e8;font-weight:600;">
+                                                    Service Type</td>
+                                                <td
+                                                    style="padding:10px 14px;font-size:14px;color:#1E2122;border-bottom:1px solid #e8e8e8;">
+                                                    ${serviceType}</td>
+                                            </tr>
+                                            ${priceRow}
+                                        </table>
+
+                                        <p style="font-size:14px;color:#555;margin:0 0 20px;line-height:1.6;">
+                                            Please log in to <strong>One Sify</strong> and complete the required action.
+                                        </p>
+
+                                        <!-- CTA Button -->
+                                        <table cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+                                            <tr>
+                                                <td style="background:#0E3346;border-radius:5px;">
+                                                    <a href="${process.env.APP_PATH || '#'}" target="_blank"
+                                                        style="display:inline-block;padding:12px 28px;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;">
+                                                        Login to One Sify
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <p style="font-size:14px;color:#555;margin:0 0 4px;">Best Regards,</p>
+                                        <p style="font-size:14px;color:#0E3346;font-weight:700;margin:0;">Team One Sify</p>
+                                    </td>
+                                </tr>
+
+                                <!-- Footer -->
+                                <tr>
+                                    <td style="background:#f7f9fa;padding:16px 30px;border-top:1px solid #e8e8e8;">
+                                        <p style="font-size:12px;color:#888;margin:0 0 4px;">Sify Technologies Limited</p>
+                                        <p style="font-size:12px;color:#888;margin:0 0 8px;">II Floor, TIDEL Park, No.4, Rajiv
+                                            Gandhi Salai, Taramani, Chennai - 600 113</p>
+                                        <p style="font-size:11px;color:#aaa;margin:0;">This is an auto-generated mail. Please do not
+                                            reply. &copy; ${currentYear} Sify Technologies Limited. All Rights Reserved.</p>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+
+            </html>`;
+
+    const response = await common.send_mail([to], [], subject, html, null);
+    console.log("CXM feasibility mail response:", response);
+    return response;
+  } catch (error) {
+    console.log("Error sending CXM feasibility mail:", error);
+  }
+};
 exports.post_updated_feasibility = async (req, res, next) => {
   try {
     const data = req.body;
@@ -721,7 +896,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
     const { fcf_feasibility_id: feasibilityId } = data;
     console.log(typeof feasibilityId);
     const feasibilityIds = await db.collection("feasibilityids").findOne({ feasibilityId });
-    console.log(feasibilityIds);
+    console.log("feasibilityIds", feasibilityIds);
 
     // If feasibility ID not found, forward to third-party API
     if (!feasibilityIds) {
@@ -948,6 +1123,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
 
     // If feasibility ID exists, proceed with normal flow
     if ((feasibilityIds.serviceType === "DIA" || feasibilityIds.serviceType === "MPLS") && feasibilityIds.status === "Pending") {
+      console.log("feasibilityIds***", feasibilityIds);
       const collectionName = feasibilityIds.serviceType === "DIA" ? "quoteills" : "quotempls";
       const query = { isActive: true, "locationDetails.feasibilityId": feasibilityId };
       const quoteDocument = await db.collection(collectionName).findOne(query);
@@ -1029,10 +1205,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
       console.log("updateStatusFeab In function", updateStatusFeab);
 
       const allFeasibilityStatus = quote.locationDetails.every((e) => e.feasibilityStatus !== "CHECKING FEASIBILITY");
-      console.log(
-        "Feasibility Status:",
-        quote.locationDetails.map((i) => i.feasibilityStatus)
-      );
+      console.log("Feasibility Status:", quote.locationDetails.map((i) => i.feasibilityStatus));
 
       if (updateQuote && !cxmConformation && allFeasibilityStatus) {
         try {
@@ -1043,7 +1216,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
 
           const isProduction = process.env.ENVIRONMENT === "PRODUCTION";
           const isCPUser = req?.parentRole?.includes("CP");
-          const company = accounManager?.[0];
+          const company = accountManager?.[0];
 
           let toArray = [quote?.customermail, accountManagerEmail].filter(Boolean);
           console.log("Initial cxmMails", company?.cxmEmail);
@@ -1146,6 +1319,29 @@ exports.post_updated_feasibility = async (req, res, next) => {
         { feasibilityId },
         { $set: { status: "completed" } }
       );
+
+      const feasQuote = await db.collection("feasibilityids").findOne({ feasibilityId });
+      console.log("feasQuote", feasQuote);
+      if (["DIA", "MPLS"].includes(feasQuote.serviceType) && feasQuote.status !== "Pending") {
+        console.log("Feasibility update for DIA/MPLS");
+        const collection = feasQuote.serviceType === "DIA" ? "quoteills" : "quotempls";
+        const quoteDoc = await db.collection(collection).findOne({ isActive: true, "locationDetails.feasibilityId": feasibilityId });
+        console.log("quoteDoc found", !!quoteDoc);
+        console.log("quoteDoc", quoteDoc);
+        if (!quoteDoc) return console.log("Quote document not found");
+
+        if (["Customer", "CXM + Customer"].includes(quoteDoc.parentRole)) {
+          const company = await loginDB.collection("companies").findOne({ ebsaccountNo: quoteDoc.ebsAccountNo });
+          console.log("company", company);
+          if (company?.cxmEmail) {
+            const cxmEmails = Array.isArray(company.cxmEmail) ? company.cxmEmail : [company.cxmEmail];
+            console.log("cxmEmails", cxmEmails);
+            const users = await loginDB.collection("users").find({ email: { $in: cxmEmails }, adminPortalRole: "CXM + Customer" }).toArray();
+            console.log("users count", users.length);
+            await Promise.all(users.map(user => cxmFeasibilityMail({ user, feasibilityId, feasQuote })));
+          }
+        }
+      }
 
       res.send({ status: "Success" });
 

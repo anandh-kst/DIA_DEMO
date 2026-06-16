@@ -160,7 +160,16 @@ exports.multiple_create_feasibility = async (reqId, next) => {
       await exports.errorLog({ stack: createFeasibility?.data?.WSerror, message: `Error in feasibility API: ${process.env.CREATE_FEASIBILITY} payload: ${JSON.stringify(postData)}`, filter: "feasibility" }, reqId);
       logger.error({ statusCode: 200, status: "Error", message: `Error in feasibility API: ${process.env.CREATE_FEASIBILITY} payload: ${JSON.stringify(postData)}` });
       console.error("Error calling multipleCreateFeasibility API:", createFeasibility?.data?.WSerror);
-      throw new Error(createFeasibility?.data?.WSerror);
+
+      //throw new Error(createFeasibility?.data?.WSerror);
+      const city = REQUESTS[0]?.CITY;
+      const state = data?.shippingAddress?.state || "";
+
+      const errorMessage =
+        createFeasibility?.data?.WSerror === "Not a Sify Feasible City"
+          ? `City '${city}'${state ? `, ${state}` : ""} is Not a Sify Feasible City.`
+          : createFeasibility?.data?.WSerror;
+      throw new Error(errorMessage);
     }
 
     const feasibilityIdList = createFeasibility.data;
@@ -250,6 +259,7 @@ exports.create_feasibility = async (reqId, next) => {
     }
 
     const checkFeas = [];
+    const errorMessages = [];
     for await (const data of locationDetails) {
       let { reqBandwidth, reqBandwidthUOM, connectionType, serviceProvider = null, contactDetails, shippingAddress, provisionType } = data;
       console.log("data", { reqBandwidth, reqBandwidthUOM, connectionType, serviceProvider, contactDetails, shippingAddress, provisionType });
@@ -356,18 +366,37 @@ exports.create_feasibility = async (reqId, next) => {
 
       if (createFeasibility?.data?.WSstatus || createFeasibility.data.WSstatus === "Error") {
         checkFeas.push("Not Feasible");
-        // await Quote.findOneAndUpdate(
-        //   { reqId },
-        //   {
-        //     status: "Not Feasible",
-        //     feasibilityInitiatedDate: new Date(),
-        //   }
-        // );
         await exports.errorLog({ stack: createFeasibility?.data?.WSerror, message: `Error in feasibility API: ${process.env.CREATE_FEASIBILITY} payload: ${JSON.stringify(postData)}`, filter: "feasibility" }, reqId);
         logger.error({ statusCode: 200, status: "Error", message: `Error in feasibility API: ${process.env.CREATE_FEASIBILITY} payload: ${JSON.stringify(postData)}` });
         console.error("Error calling createFeasibility API:", createFeasibility?.data?.WSerror);
-        throw new Error(createFeasibility?.data?.WSerror);
-        // throw new Error("Temporary service outage. Please try again later.");
+        console.log("Post Data:", createFeasibility.data);
+
+        const city = postData?.CITY || "Unknown City";
+        const state = data?.shippingAddress?.state || "";
+        const isSifyFeasibleCityError = createFeasibility?.data?.WSerror === "Not a Sify Feasible City";
+        const errorMessage = isSifyFeasibleCityError ? `City '${city}'${state ? `, ${state}` : ""} is Not a Sify Feasible City.` : createFeasibility?.data?.WSerror;
+
+        // If error is "Not a Sify Feasible City", mark location as Not Feasible and continue
+        if (isSifyFeasibleCityError) {
+          await Quote.findOneAndUpdate(
+            { reqId },
+            {
+              $set: {
+                "locationDetails.$[elem].feasibilityStatus": "Not Feasible",
+                "locationDetails.$[elem].cxmFeasibilityStatus": "Not Feasible",
+              },
+            },
+            {
+              arrayFilters: [{ "elem.locationId": data.locationId }],
+            }
+          );
+          console.log(`Location ${data.locationId} marked as Not Feasible: ${errorMessage}`);
+          errorMessages.push(errorMessage);
+          continue;
+        }
+
+        // For other errors, throw immediately
+        throw new Error(errorMessage);
       }
 
       let feasibilityData;
@@ -459,6 +488,11 @@ exports.create_feasibility = async (reqId, next) => {
       }
     );
     if (!updateStatusFeab) throw new Error("Unable To Update Status");
+
+    // Throw the first error message if any "Not a Sify Feasible City" errors were collected
+    if (errorMessages.length > 0) {
+      throw new Error(errorMessages[0]);
+    }
 
     return true;
   } catch (error) {

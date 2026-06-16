@@ -200,7 +200,16 @@ exports.get_purchase_summary_by_linkid = async (req, res, next) => {
 
     const data = {
       status: "Success",
-      data: output,
+      data: {
+        ...output,
+        bandwidth: output.bandwidth.map(item => ({
+          ...item,
+          reqBandwidthUOM:
+            item.reqBandwidthUOM === "MBPS"
+              ? "Mbps"
+              : item.reqBandwidthUOM
+        }))
+      }
     };
 
     logger.info(`${req.path} -- ${req.method} -- Success`);
