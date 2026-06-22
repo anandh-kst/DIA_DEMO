@@ -495,16 +495,21 @@ exports.get_modify_pd_doc = async (req, res, next) => {
     );
 
 
-    /// get companyId from quote
-    const quoteDoc = await Quote.findOne({ reqId }, { companyId: 1, parentRole: 1 });
+    const quoteDoc = await Quote.findOne({ reqId });
+    const parentRole = quoteDoc?.parentRole;
 
-    if (quoteDoc?.parentRole?.includes("CP")) {
-      const { success, message } = await verifyOpportunity(reqId);
+    if (parentRole && parentRole.toLowerCase().includes("cp")) {
+      const { success, message } = await verifyOpportunity(parseInt(reqId));
       if (success) {
-        await updateOpportunityPrice(reqId);
-      }
-      else {
-        console.log(`Opportunity cancelled for reqId ${reqId}: ${message}`);
+        void updateOpportunityPrice(reqId)
+          .then(() =>
+            console.log(`updateOpportunityPrice completed for ${reqId}`)
+          )
+          .catch((err) =>
+            console.error(`updateOpportunityPrice failed for ${reqId}`, err)
+          );
+      } else {
+        console.log(`Opportunity Cancelled for ${reqId} due to ${message}`);
       }
     }
 
@@ -725,7 +730,22 @@ exports.get_modify_sign_order = async (req, res, next) => {
 
     const pdfBuffer = fs.readFileSync(`${pdfPath}`);
 
-    updateOpportunityDate(reqId);
+    const parentRole = quote?.parentRole;
+    if (parentRole && parentRole.toLowerCase().includes("cp")) {
+      const { success, message } = await verifyOpportunity(parseInt(reqId));
+      if (success) {
+        void updateOpportunityDate(reqId)
+          .then(() =>
+            logger.info(`updateOpportunityDate completed for ${reqId}`)
+          )
+          .catch((err) =>
+            logger.error(`updateOpportunityDate failed for ${reqId}`, err)
+          );
+      } else {
+        logger.info(`Opportunity Cancelled for ${reqId} due to ${message}`);
+      }
+    }
+
     res.contentType("application/pdf");
     logger.info(`${req.path} -- ${req.method} -- Success`);
     res.send(pdfBuffer);
