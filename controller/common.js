@@ -881,9 +881,8 @@ const cxmFeasibilityMail = async ({ user, feasibilityId, feasQuote }) => {
 
             </html>`;
 
-    const response = await common.send_mail([to], [], subject, html, null);
-    console.log("CXM feasibility mail response:", response);
-    return response;
+    common.sendMailUntilSuccess(reqId, [to], [], subject, html, null);
+    console.log("CXM feasibility mail queued for:", to);
   } catch (error) {
     console.log("Error sending CXM feasibility mail:", error);
   }
@@ -1338,7 +1337,9 @@ exports.post_updated_feasibility = async (req, res, next) => {
             console.log("cxmEmails", cxmEmails);
             const users = await loginDB.collection("users").find({ email: { $in: cxmEmails }, adminPortalRole: "CXM + Customer" }).toArray();
             console.log("users count", users.length);
-            await Promise.all(users.map(user => cxmFeasibilityMail({ user, feasibilityId, feasQuote })));
+            Promise.all(users.map(user => cxmFeasibilityMail({ user, feasibilityId, feasQuote }))).catch((err) =>
+              console.log("Error sending CXM feasibility mails:", err)
+            );
           }
         }
       }

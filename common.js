@@ -264,7 +264,10 @@ exports.create_feasibility = async (reqId, next) => {
       let { reqBandwidth, reqBandwidthUOM, connectionType, serviceProvider = null, contactDetails, shippingAddress, provisionType } = data;
       console.log("data", { reqBandwidth, reqBandwidthUOM, connectionType, serviceProvider, contactDetails, shippingAddress, provisionType });
       console.log(connectionType);
-      if (data?.feasibilityId) continue; // Skip if feasibilityId already exists
+      if (data?.feasibilityId) {
+        checkFeas.push(data.cxmFeasibilityStatus || data.feasibilityStatus);
+        continue;
+      }
       const type = connectionType?.toLowerCase()?.trim();
 
       const isFiber = type === "fiber" || type === "ethernet drop";
@@ -357,7 +360,7 @@ exports.create_feasibility = async (reqId, next) => {
       };
       console.log("Post Data:", postData);
 
-      const createFeasibility = await axios.post(`${process.env.CREATE_FEASIBILITY}`, postData , process.env.ENVIRONMENT === "PRODUCTION" ? config : {} );
+      const createFeasibility = await axios.post(`${process.env.CREATE_FEASIBILITY}`, postData, process.env.ENVIRONMENT === "PRODUCTION" ? config : {});
       console.log("Create Feasibility Response:", createFeasibility.data);
 
       if (!createFeasibility) {
