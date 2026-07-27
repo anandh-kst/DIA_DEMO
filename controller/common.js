@@ -1938,7 +1938,7 @@ exports.orm_view_validation = async (req, res, next) => {
     if (quoteDoc?.parentRole?.includes("CP")) {
       const { success, message } = await verifyOpportunity(parseInt(reqId));
       if (!success) {
-        return res.status(200).send({ status: "Error", message: message });
+     //   return res.status(200).send({ status: "Error", message: message });
       }
     }
 
