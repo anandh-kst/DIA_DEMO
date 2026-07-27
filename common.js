@@ -9,6 +9,31 @@ const httpsAgent = new https.Agent({
 });
 const logger = require("./config/winston");
 const { scheduleJob } = require("node-schedule");
+const { buildFeasibilityPayload } = require("./helpers/buildFeasibilityPayload");
+
+function toKbps(bw, uom) {
+  const val = parseFloat(bw) || 0;
+  switch ((uom || "").toLowerCase()) {
+    case "gbps": return val * 1000 * 1000;
+    case "mbps": return val * 1000;
+    case "kbps": return val;
+    default: return val * 1000; // assume Mbps
+  }
+}
+
+function resolveRequestType(location, quoteType) {
+  if (!quoteType || quoteType === "New") return "New";
+
+  const newBw = toKbps(location.reqBandwidth, location.reqBandwidthUOM);
+  const oldBw = toKbps(
+    location.existingPlanDetails?.reqBandwidth,
+    location.existingPlanDetails?.reqBandwidthUOM
+  );
+
+  if (newBw > oldBw) return "Upgrade";
+  if (newBw < oldBw) return "Downgrade";
+  throw Object.assign(new Error("New bandwidth is the same as the existing bandwidth. Please select a different bandwidth to proceed."), { statusCode: 200, status: "Error" });
+}
 
 const createOpportunity = async (reqId) => {
   let apiUrl, payload;
@@ -254,14 +279,13 @@ exports.create_feasibility = async (reqId, next) => {
         if (!updateStatusFeab.value) throw new Error("Unable To Update Status");
       } else {
         console.error(`[create_feasibility] Opportunity not created for reqId ${reqId}.`);
-        throw new Error("Opportunity creation failed");
+      //  throw new Error("Opportunity creation failed");
       }
     }
 
     const checkFeas = [];
     const errorMessages = [];
-    for (let locIndex = 0; locIndex < locationDetails.length; locIndex++) {
-      const data = locationDetails[locIndex];
+    for await (const data of locationDetails) {
       let { reqBandwidth, reqBandwidthUOM, connectionType, serviceProvider = null, contactDetails, shippingAddress, provisionType } = data;
       console.log("data", { reqBandwidth, reqBandwidthUOM, connectionType, serviceProvider, contactDetails, shippingAddress, provisionType });
       console.log(connectionType);
@@ -361,77 +385,78 @@ exports.create_feasibility = async (reqId, next) => {
       };
       console.log("Post Data:", postData);
 
-      let feasibilityId, feasibilityStatus, feasibilityReqStatus, OPEX, CAPEX, TOWER_HEIGHT, mastType, requestedDate;
-      let usedFallback = false;
+      const createFeasibility = await axios.post(`${process.env.CREATE_FEASIBILITY}`, postData, process.env.ENVIRONMENT === "PRODUCTION" ? config : {});
+      console.log("Create Feasibility Response:", createFeasibility.data);
 
-      try {
-        const createFeasibility = await axios.post(`${process.env.CREATE_FEASIBILITY}`, postData, process.env.ENVIRONMENT === "PRODUCTION" ? config : {});
-        console.log("Create Feasibility Response:", createFeasibility.data);
+      if (!createFeasibility) {
+        throw new Error("Temporary service outage. Please try again later.");
+      }
 
-        const isApiError = createFeasibility?.data?.WSstatus === "Error" || createFeasibility?.data?.WSerror;
+      if (createFeasibility?.data?.WSstatus || createFeasibility.data.WSstatus === "Error") {
+        checkFeas.push("Not Feasible");
+        await exports.errorLog({ stack: createFeasibility?.data?.WSerror, message: `Error in feasibility API: ${process.env.CREATE_FEASIBILITY} payload: ${JSON.stringify(postData)}`, filter: "feasibility" }, reqId);
+        logger.error({ statusCode: 200, status: "Error", message: `Error in feasibility API: ${process.env.CREATE_FEASIBILITY} payload: ${JSON.stringify(postData)}` });
+        console.error("Error calling createFeasibility API:", createFeasibility?.data?.WSerror);
+        console.log("Post Data:", createFeasibility.data);
 
-        if (isApiError) {
-          const city = postData?.CITY || "Unknown City";
-          const state = data?.shippingAddress?.state || "";
-          const isSifyFeasibleCityError = createFeasibility?.data?.WSerror === "Not a Sify Feasible City";
+        const city = postData?.CITY || "Unknown City";
+        const state = data?.shippingAddress?.state || "";
+        const isSifyFeasibleCityError = createFeasibility?.data?.WSerror === "Not a Sify Feasible City";
+        const errorMessage = isSifyFeasibleCityError ? `City '${city}'${state ? `, ${state}` : ""} is Not a Sify Feasible City.` : createFeasibility?.data?.WSerror;
 
-          await exports.errorLog({ stack: createFeasibility?.data?.WSerror, message: `Error in feasibility API: ${process.env.CREATE_FEASIBILITY} payload: ${JSON.stringify(postData)}`, filter: "feasibility" }, reqId);
-          logger.error({ statusCode: 200, status: "Error", message: `Error in feasibility API: ${process.env.CREATE_FEASIBILITY} payload: ${JSON.stringify(postData)}` });
-          console.error("Error calling createFeasibility API:", createFeasibility?.data?.WSerror);
-
-          if (isSifyFeasibleCityError) {
-            await Quote.findOneAndUpdate(
-              { reqId },
-              { $set: { "locationDetails.$[elem].feasibilityStatus": "Not Feasible", "locationDetails.$[elem].cxmFeasibilityStatus": "Not Feasible" } },
-              { arrayFilters: [{ "elem.locationId": data.locationId }] }
-            );
-            checkFeas.push("Not Feasible");
-            errorMessages.push(`City '${city}'${state ? `, ${state}` : ""} is Not a Sify Feasible City.`);
-            continue;
-          }
-
-          // For other API errors (e.g. ORA-00904), use fallback random feasibility ID
-          console.warn("Feasibility API error — using fallback random feasibility ID for demo.", createFeasibility?.data?.WSerror);
-          usedFallback = true;
-        } else {
-          let feasibilityData;
-          switch (type) {
-            case "wireless":
-              feasibilityData = createFeasibility.data.Wireless?.[0];
-              break;
-            case "fiber":
-            case "ethernet drop":
-              feasibilityData = createFeasibility.data.Fiber?.[0];
-              break;
-            default: {
-              const offnetData = createFeasibility.data.Offnet;
-              const match = serviceProvider?.match(/\[(.*?)\]/);
-              offnetData?.forEach((element) => {
-                if (element["BSO"] === match?.[1]) feasibilityData = element;
-              });
-              break;
+        // If error is "Not a Sify Feasible City", mark location as Not Feasible and continue
+        if (isSifyFeasibleCityError) {
+          await Quote.findOneAndUpdate(
+            { reqId },
+            {
+              $set: {
+                "locationDetails.$[elem].feasibilityStatus": "Not Feasible",
+                "locationDetails.$[elem].cxmFeasibilityStatus": "Not Feasible",
+              },
+            },
+            {
+              arrayFilters: [{ "elem.locationId": data.locationId }],
             }
-          }
-
-          if (!feasibilityData) {
-            console.warn("No feasibility data in response — using fallback random feasibility ID for demo.");
-            usedFallback = true;
-          } else {
-            ({ FEAS_OPT: feasibilityStatus, req_Status: feasibilityReqStatus, OPEX, CAPEX, TOWER_HEIGHT, TOWER_TYPE: mastType, CREATED_DATE: requestedDate, FEASIBILITY_ID: feasibilityId } = feasibilityData);
-          }
+          );
+          console.log(`Location ${data.locationId} marked as Not Feasible: ${errorMessage}`);
+          errorMessages.push(errorMessage);
+          continue;
         }
-      } catch (apiErr) {
-        console.warn("Feasibility API call failed — using fallback random feasibility ID for demo.", apiErr.message);
-        await exports.errorLog({ stack: apiErr.stack, message: `Feasibility API exception: ${apiErr.message}`, filter: "feasibility" }, reqId);
-        usedFallback = true;
+
+        // For other errors, throw immediately
+        throw new Error(errorMessage);
       }
 
-      if (usedFallback) {
-        feasibilityId = String(reqId) + "0" + String(locIndex);
-        feasibilityStatus = "Pending";
-        feasibilityReqStatus = "2";
-        OPEX = 0; CAPEX = 0; TOWER_HEIGHT = 0; mastType = ""; requestedDate = new Date().toISOString();
+      let feasibilityData;
+
+
+      switch (type) {
+        case "wireless":
+          feasibilityData = createFeasibility.data.Wireless?.[0];
+          break;
+        case "fiber":
+        case "ethernet drop":
+          feasibilityData = createFeasibility.data.Fiber?.[0];
+          break;
+        default:
+          {
+            const offnetData = createFeasibility.data.Offnet;
+
+            const str = serviceProvider;
+            const match = str.match(/\[(.*?)\]/);
+
+            offnetData.forEach((element) => {
+              if (element["BSO"] === match[1]) {
+                feasibilityData = element;
+              }
+            });
+          }
+          break;
       }
+
+      if (!feasibilityData) throw new Error("Temporary service outage. Please try again later.");
+
+      const { FEAS_OPT: feasibilityStatus, req_Status: feasibilityReqStatus, OPEX, CAPEX, TOWER_HEIGHT, TOWER_TYPE: mastType, CREATED_DATE: requestedDate, FEASIBILITY_ID: feasibilityId } = feasibilityData;
 
       const opex = isFiber ? parseInt(OPEX) : 0;
       const capex = isFiber ? parseInt(CAPEX) : 0;
@@ -472,6 +497,35 @@ exports.create_feasibility = async (reqId, next) => {
       if (!updateFeasibilityIds) throw new Error("Failed to insert");
 
       if (!updateQuote) throw new Error("Temporary service outage. Please try again later.");
+
+      // ServiceNow integration per location
+      try {
+        const snPayloads = await buildFeasibilityPayload(reqId, "DIA");
+        const snPayload = snPayloads[locIndex];
+        if (snPayload) {
+          const snRes = await axios.post(
+            "https://sifydev.service-now.com/api/x_sitl_telco_sify/frdb/createFeasibility",
+            snPayload,
+            {
+              headers: {
+                Authorization: `Bearer ${process.env.SERVICENOW_BEARER_TOKEN}`,
+                "Content-Type": "application/json",
+              },
+              httpsAgent,
+            }
+          );
+          const { number, sysId } = snRes.data?.result || {};
+          console.log(`ServiceNow feasibility created for location ${data.locationId}:`, { number, sysId });
+          await Quote.updateOne(
+            { reqId },
+            { $set: { "locationDetails.$[elem].snNumber": number || "", "locationDetails.$[elem].snSysId": sysId || "", "locationDetails.$[elem].feasibilityId_n": snPayload?.feasibilityId ||"" } },
+            { arrayFilters: [{ "elem.locationId": data.locationId }] }
+          );
+        }
+      } catch (snErr) {
+        console.warn(`ServiceNow API failed for location ${data.locationId}:`, snErr.message);
+        await exports.errorLog({ stack: snErr.stack, message: `ServiceNow feasibility failed for reqId: ${reqId}, locationId: ${data.locationId}`, filter: "servicenow" }, reqId);
+      }
     }
     let quoteStatus;
     console.log("checkFeas", checkFeas);
@@ -2319,6 +2373,64 @@ exports.post_erp_order_new_test = async (reqId, next) => {
 };
 
 
+exports.create_servicenow_feasibility = async (reqId, product, next) => {
+  try {
+    if (!reqId || !product) throw new Error("Missing required parameters: reqId, product.");
+    const payloads = await buildFeasibilityPayload(reqId, product);
+
+    const collectionMap = { DIA: "quoteills", MPLS: "qoutempls", P2P: "quotep2ps" };
+    const collectionName = collectionMap[product?.toUpperCase()] || "quoteills";
+
+    const results = [];
+
+    for (let i = 0; i < payloads.length; i++) {
+      const payload = payloads[i];
+      const locationId = i + 1;
+      console.log(`Sending payload for location ${product?.toUpperCase()}: ${reqId} :${locationId}:`, payload);
+      try {
+        const snRes = await axios.post(
+          "https://sifydev.service-now.com/api/x_sitl_telco_sify/frdb/createFeasibility",
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.SERVICENOW_BEARER_TOKEN || "mdgrcz-W666bLCetT_Pz9QTNklH-mdqXVLIJgdhZJjHs-pj_Dex8w6cAb7WJdoXgY14d9zu8x29SjWDVovtznw"}`,
+              "Content-Type": "application/json",
+            },
+            httpsAgent,
+          }
+        );
+
+        const { number, sysId } = snRes.data?.result || {};
+        console.log(`ServiceNow feasibility created for location ${locationId}:`, { number, sysId });
+
+        await db.collection(collectionName).updateOne(
+          { reqId: parseInt(reqId), "locationDetails.locationId": locationId },
+          {
+            $set: {
+              "locationDetails.$.snNumber": number || "",
+              "locationDetails.$.snSysId": sysId || "",
+              "locationDetails.$.feasibilityId_n": payload?.feasibilityId || "",
+            },
+          }
+        );
+
+        results.push({ locationId, number, sysId, status: "Success" });
+      } catch (locErr) {
+        console.error(`ServiceNow API failed for location ${locationId}:`, locErr.message);
+        await exports.errorLog(
+          { stack: locErr.stack, message: `ServiceNow feasibility failed for reqId: ${reqId}, location: ${locationId}`, filter: "servicenow" },
+          reqId
+        );
+        results.push({ locationId, status: "Error", message: locErr.message });
+      }
+    }
+
+    return results;
+  } catch (error) {
+    next(error);
+    return null;
+  }
+};
 exports.modifyIrDate = async (req, res, next) => {
   console.log("Entered modifyIrDate");
 

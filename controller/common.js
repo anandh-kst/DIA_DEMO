@@ -1411,9 +1411,18 @@ exports.post_updated_feasibility = async (req, res, next) => {
         status = "CHECKING FEASIBILITY";
       }
 
-      if (updatedQuote) {
+      if (updatedQuote && updatedQuote.feasibilityStatusA !== "CHECKING FEASIBILITY" && updatedQuote.feasibilityStatusB !== "CHECKING FEASIBILITY") {
         try {
-          const toArray = [customermail].filter(Boolean);
+
+          const accountManager = await loginDB.collection("companies").find({ companyName: updatedQuote.companyName }).toArray();
+          console.log("accountManager", accountManager);
+          let accountManagerEmail = accountManager[0]?.accountManager_email || "";
+          console.log("accountManagerEmail", accountManagerEmail);
+
+          const isProduction = process.env.ENVIRONMENT === "PRODUCTION";
+          const company = accountManager?.[0];
+
+          let toArray = [updatedQuote?.customerMail, isProduction ? accountManagerEmail : null].filter(Boolean);
 
           const subject = `One Sify - Request ID: ${reqId} - Feasibility Update for ${feasibilityIds.serviceType} Services`;
 
@@ -1458,6 +1467,9 @@ exports.post_updated_feasibility = async (req, res, next) => {
                 reqBandwidth: reqBandwidth,
                 reqBandwidthUOM: reqBandwidthUOM,
                 feasibilityStatus: updatedQuote.feasibilityStatusA,
+                feasibilityId: newConnectionA?.selectDataCenter === "Custom"
+                  ? updatedQuote?.feasibilityStatusNewConnectionA?.feasibilityId || "-"
+                  : "N/A",
               },
               {
                 city: newConnectionB.city,
@@ -1465,6 +1477,9 @@ exports.post_updated_feasibility = async (req, res, next) => {
                 reqBandwidth: reqBandwidth,
                 reqBandwidthUOM: reqBandwidthUOM,
                 feasibilityStatus: updatedQuote.feasibilityStatusB,
+                 feasibilityId: newConnectionB?.selectDataCenter === "Custom"
+                  ? updatedQuote?.feasibilityStatusNewConnectionB?.feasibilityId || "-"
+                  : "N/A",
               },
             ],
             url: process.env.APP_PATH,
@@ -2239,6 +2254,17 @@ exports.ORDER_NUMBER = async (req, res, next) => {
   }
 };
 
+exports.create_servicenow_feasibility = async (req, res, next) => {
+  try {
+    const { reqId, product } = req.body;
+    const results = await common.create_servicenow_feasibility(reqId, product, next);
+    if (results === null) return;
+    logger.info(`${req.path} -- ${req.method} -- Success`);
+    res.send({ status: "Success", data: results });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.remove_poDoc = async (req, res, next) => {
   const { reqId } = req.params;
 

@@ -9,6 +9,7 @@ routes.post("/post_updated_feasibility", common.post_updated_feasibility);
 routes.post("/get_erp_order_json", common.get_erp_order_json);
 routes.post("/post_po_doc", auth, common.post_po_doc);
 routes.post("/view_upload_po/:reqId", auth, common.view_upload_po);
+routes.post("/create_servicenow_feasibility", common.create_servicenow_feasibility);
 routes.post("/remove_poDoc/:reqId", auth, common.remove_poDoc);
 routes.get("/share_and_sign/:reqId/:name/:mail", common.share_and_sign);
 routes.post("/get_booking_no", common.ORDER_NUMBER);
