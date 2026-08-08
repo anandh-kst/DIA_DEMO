@@ -1512,7 +1512,7 @@ exports.post_tower_price = async (req, res, next) => {
       };
       const html = template(templateData);
 
-      common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null);
+      common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null, undefined, undefined, undefined, "Feasibility Raised");
     } catch (error) {
       console.log("Error in send mail", error);
     }

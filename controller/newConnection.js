@@ -170,7 +170,7 @@ const send_feasibility_mail = async (reqId, toArray) => {
     };
     const html = template(templateData);
 
-    common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null);
+    common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null, undefined, undefined, undefined, "Feasibility Raised");
   } catch (error) {
     logger.error({ statusCode: error.statusCode || 200, status: "Error", message: error });
     console.log(error);

@@ -799,6 +799,12 @@ async function retry(fn, retries = 3) {
 
   throw lastError;
 }
+const getMailSubject = (subject) => {
+  if (!subject) return subject;
+  if (process.env.ENVIRONMENT !== "DEVELOPMENT") return subject;
+  return subject.startsWith("Demo : ") ? subject : `Demo : ${subject}`;
+};
+
 exports.send_mail = async (to, cc, subject, html, attachment) => {
   try {
     const isProd = process.env.ENVIRONMENT === "PRODUCTION";
@@ -808,6 +814,7 @@ exports.send_mail = async (to, cc, subject, html, attachment) => {
       throw new Error("Mail credentials not found");
     }
     const transporter = await getTransporter();
+    subject = getMailSubject(subject);
 
     const mailOptions = {
       from: mailcredentials.SMTP_TO_EMAIL,
@@ -818,7 +825,7 @@ exports.send_mail = async (to, cc, subject, html, attachment) => {
       html,
       ...(attachment ? { attachments: [attachment] } : {}),
     };
-
+ 
     const info = await retry(
       () => transporter.sendMail(mailOptions),
       3
@@ -830,8 +837,32 @@ exports.send_mail = async (to, cc, subject, html, attachment) => {
   }
 };
 
-exports.sendMailUntilSuccess = async (reqId, to, cc, subject, html, attachment = null, maxRetries = 5, retryDelay = 3000, isOrderSignedMail = false) => {
+exports.insertMailLog = async ({ reqId = null, to, cc = [], bcc = [], subject, status, error = null, trigger = null, response = null,product="DIA"}) => {
+  try {
+    await db.collection("mailLogs").insertOne({
+      reqId,
+      to,
+      cc,
+      bcc,
+      subject,
+      trigger,
+      status,
+      error: error ? (error.message || String(error)) : null,
+      response,
+      product: product,
+      insertedAt: new Date(),
+    });
+  } catch (logErr) {
+    console.error("Failed to insert mail log:", logErr.message);
+  }
+};
+
+exports.sendMailUntilSuccess = async (reqId, to, cc, subject, html, attachment = null, maxRetries = 5, retryDelay = 3000, isOrderSignedMail = false, trigger = null,product=null) => {
   let attemptCount = 0;
+  subject = getMailSubject(subject);
+
+  const normalizedTo = Array.isArray(to) ? to : to ? [to] : [];
+  const normalizedCc = Array.isArray(cc) ? cc : cc ? [cc] : [];
 
   async function trySendingMail() {
     try {
@@ -863,20 +894,46 @@ exports.sendMailUntilSuccess = async (reqId, to, cc, subject, html, attachment =
         ...(attachment ? { attachments: [attachment] } : {}),
       });
       console.log("Mail Triggered Successfully:", sendMail);
+
+      await exports.insertMailLog({
+        reqId,
+        to: normalizedTo,
+        cc: normalizedCc,
+        bcc,
+        subject,
+        status: "Success",
+        trigger,
+        product: product || "DIA",
+      });
+
+      return sendMail;
     } catch (error) {
       attemptCount++;
       if (attemptCount < maxRetries) {
         console.log(`Error in sending mail, retrying... Attempt ${attemptCount} of ${maxRetries}`);
-        setTimeout(trySendingMail, retryDelay);
-      } else {
-        await exports.errorLog({ stack: error.stack, message: `Error in sending mail for: ${subject}`, filter: "mail" }, reqId);
-        logger.error({ statusCode: 200, status: "Error", message: `Error in sending mail after ${maxRetries} attempts.` });
-        console.log(`Error in sending mail after ${maxRetries} attempts.`);
+        await delay(retryDelay);
+        return trySendingMail();
       }
+
+      await exports.insertMailLog({
+        reqId,
+        to: normalizedTo,
+        cc: normalizedCc,
+        bcc: [],
+        subject,
+        status: "Failed",
+        error,
+        trigger,
+      });
+
+      await exports.errorLog({ stack: error.stack, message: `Error in sending mail for: ${subject}`, filter: "mail" }, reqId);
+      logger.error({ statusCode: 200, status: "Error", message: `Error in sending mail after ${maxRetries} attempts.` });
+      console.log(`Error in sending mail after ${maxRetries} attempts.`);
+      throw error;
     }
   }
 
-  trySendingMail();
+  return trySendingMail();
 };
 exports.update_quote_common_status = async (quote) => {
   const { reqId, locationDetails } = quote;

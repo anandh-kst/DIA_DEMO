@@ -1029,7 +1029,17 @@ exports.send_mail_to_sign = async (req, res, next) => {
         sendMailToCc,
       },
     });
-
+    await common.insertMailLog({
+      reqId,
+      to: toArray,
+      cc: ccArray,
+      bcc: [],
+      subject,
+      status: sendMail ? "Success" : "Failed",
+      error: sendMail ? null : new Error("Failed to send mail"),
+      trigger: "Share and Sign",
+      response: { sendMail, sendMailToCc },
+    });
     console.log("sendMail", sendMail);
     console.log("sendMailToCc", sendMailToCc);
 

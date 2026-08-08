@@ -296,7 +296,17 @@ const send_placed_mail = async (reqID, quote, orderId, orderDate) => {
     const html = template(templateData);
     console.log(toArray);
     common.send_mail(toArray, [], subject, html, attachment).then(() => {
+
       console.log("Mail Triggered Successfully");
+    });
+    await common.insertMailLog({
+      reqId: reqID,
+      to: toArray,
+      cc: [],
+      bcc: [],
+      subject,
+      status: "Success",
+      trigger: "Order Placed",
     });
     // const sendMail = await common.send_mail(toArray, (ccArray = []), subject, html, attachment, next);
   } catch (error) {
@@ -503,7 +513,7 @@ const send_order_signed_mail = async (reqID, quote) => {
 
     console.log("Final toArray for sending email:", toArray);
 
-    await common.sendMailUntilSuccess(reqID, toArray, [], subject, html, attachment, 5, 3000, isOrderSignedMail);
+    await common.sendMailUntilSuccess(reqID, toArray, [], subject, html, attachment, 5, 3000, isOrderSignedMail, "Order Signed");
 
     return true;
   } catch (error) {
@@ -598,6 +608,28 @@ const processOrderSigned = async (reqID) => {
     }
   }
 };
+
+//mail logs 
+exports.insertMailLog = async ({ reqId = null, to, cc = [], bcc = [], subject, status, error = null, trigger = null }) => {
+  try {
+    await db.collection("mailLogs").insertOne({
+      reqId,
+      to,
+      cc,
+      bcc,
+      subject,
+      trigger,
+      status,
+      error: error ? (error.message || String(error)) : null,
+      product: "DIA",
+      insertedAt: new Date(),
+    });
+  } catch (logErr) {
+    console.error("Failed to insert mail log:", logErr.message);
+  }
+};
+
+
 exports.post_blob_file = async (req, res, next) => {
   console.log("post_blob_file called");
   const dbConfig = {
@@ -881,7 +913,7 @@ const cxmFeasibilityMail = async ({ user, feasibilityId, feasQuote }) => {
 
             </html>`;
 
-    common.sendMailUntilSuccess(reqId, [to], [], subject, html, null);
+    common.sendMailUntilSuccess(reqId, [to], [], subject, html, null, undefined, undefined, undefined, "CXM Feasibility");
     console.log("CXM feasibility mail queued for:", to);
   } catch (error) {
     console.log("Error sending CXM feasibility mail:", error);
@@ -1302,7 +1334,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
 
           // Assuming common.sendMailUntilSuccess is available
           if (typeof common !== 'undefined' && common.sendMailUntilSuccess) {
-            common.sendMailUntilSuccess(quote.reqId, toArray, [], subject, html, null);
+            common.sendMailUntilSuccess(quote.reqId, toArray, [], subject, html, null, undefined, undefined, undefined, "Feasibility Update",feasibilityIds.serviceType);
           }
         } catch (error) {
           console.log("Error in send mail", error);
@@ -1370,6 +1402,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
         feasOpt: fusionFeasibilityStatus,
         feasUpdatededDate: feasibilityUpdatedDate,
         req_Status: fusionFeasibilityStatus,
+        cxmFeasibilityStatus: cxmFeasibilityStatus,
         opex,
         capex,
         mastHeight,
@@ -1477,7 +1510,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
                 reqBandwidth: reqBandwidth,
                 reqBandwidthUOM: reqBandwidthUOM,
                 feasibilityStatus: updatedQuote.feasibilityStatusB,
-                 feasibilityId: newConnectionB?.selectDataCenter === "Custom"
+                feasibilityId: newConnectionB?.selectDataCenter === "Custom"
                   ? updatedQuote?.feasibilityStatusNewConnectionB?.feasibilityId || "-"
                   : "N/A",
               },
@@ -1489,7 +1522,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
           const html = template(templateData);
 
           if (typeof common !== 'undefined' && common.sendMailUntilSuccess) {
-            common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null);
+            common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null, undefined, undefined, undefined, "Feasibility Update",feasibilityIds.serviceType);
           }
         } catch (error) {
           console.log("Error in send mail", error);
@@ -1605,7 +1638,7 @@ exports.post_updated_feasibility = async (req, res, next) => {
           const html = template(templateData);
 
           if (typeof common !== 'undefined' && common.sendMailUntilSuccess) {
-            common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null);
+            common.sendMailUntilSuccess(reqId, toArray, [], subject, html, null, undefined, undefined, undefined, "Feasibility Update",feasibilityIds.serviceType);
           }
         } catch (error) {
           console.log("Error in send mail", error);
@@ -1938,7 +1971,7 @@ exports.orm_view_validation = async (req, res, next) => {
     if (quoteDoc?.parentRole?.includes("CP")) {
       const { success, message } = await verifyOpportunity(parseInt(reqId));
       if (!success) {
-     //   return res.status(200).send({ status: "Error", message: message });
+        return res.status(200).send({ status: "Error", message: message });
       }
     }
 

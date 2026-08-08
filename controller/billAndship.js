@@ -439,7 +439,7 @@ exports.post_po_no = async (req, res, next) => {
     if (quote?.parentRole?.includes("CP")) {
       const { success, message } = await verifyOpportunity(reqId);
       if (!success) {
-       // return res.status(200).send({ status: "Error", message: message });
+        return res.status(200).send({ status: "Error", message: message });
       }
     }
     if (!["Draft", "Awaiting Signature", "DRAFT", "Feasible" ,"Partially Feasible"].includes(quote?.status)) {
